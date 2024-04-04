@@ -23,6 +23,8 @@ export class User {
   @Prop()
   avatar?: string;
   @Prop()
+  phone?: string;
+  @Prop()
   dob?: Date;
   @Prop()
   dateTraining?: Date;

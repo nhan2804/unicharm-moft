@@ -19,6 +19,7 @@ import {
 } from 'src/app/pipes/validation.pipe';
 import { Types } from 'mongoose';
 import SortPaginate from 'src/app/types/sort-paginate';
+import { Public } from 'src/auth/guards/public';
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -31,6 +32,7 @@ export class ProductsController {
   createBulk(@Body() createProductDto: CreateProductDto[]) {
     return this.productsService.createArray(createProductDto);
   }
+  @Public()
   @Get()
   findAll(
     @Query()

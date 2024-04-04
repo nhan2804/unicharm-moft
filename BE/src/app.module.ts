@@ -44,6 +44,7 @@ import { RatingsModule } from './ratings/ratings.module';
 import { DepartmentsModule } from './departments/departments.module';
 import { Groupimage } from './groupimages/entities/groupimages.entity';
 import { GroupimagesModule } from './groupimages/groupimages.module';
+import { GiftClientsModule } from './gift-clients/gift-clients.module';
 import { PoliciesModule } from './policys/policys.module';
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { PoliciesModule } from './policys/policys.module';
       isGlobal: true,
     }),
     CheckinModule,
+    GiftClientsModule,
     OptionsModule,
     SubmitsModule,
     UploadModule,
