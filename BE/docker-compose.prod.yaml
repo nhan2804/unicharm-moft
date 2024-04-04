@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: bayer-local
+    image: nhan2804/pg-heineken-v2:v1.0.0
+    pull_policy: always
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: 'node dist/main.js'
+    ports:
+      - 5022:4008
+    networks:
+      - nesjs-network
+    volumes:
+      # - ./dist:/var/www/html/dist
+      # - ./public:/usr/src/app/public
+      - ./.env:/usr/src/app/.env
+      # - /etc/hosts:/etc/hosts
+      # - /var/www/html/node_modules
+    # environment:
+    #   - MODE=LIVE
+    restart: unless-stopped
+
+networks:
+  nesjs-network:

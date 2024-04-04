@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" class="w-full h-full" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="https://www.unicharm.vn/content/dam/sites/www_unicharm_vn/images/common/logo-company.svg"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unicharm App</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Actor&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      window.global = window;
+    </script>
+    <script>
+      let agent = navigator.userAgent;
+      if (agent.includes("Zalo")) {
+        alert(
+          "Không hỗ trợ chạy trực tiếp trên Zalo, vui lòng copy link sang trình duyệt Google Chrome và thử lại"
+        );
+        window.close();
+        window.location.href = "https://www.google.com/";
+        // document.write("<h2>Không hỗ trợ chạy trực tiếp trên Zalo, vui lòng copy link sang trình duyệt Google Chrome và thử lại</h2>");
+        // document.querySelector("body").innerHTML="Không hỗ trợ chạy trực tiếp trên Zalo, vui lòng copy link sang trình duyệt Google Chrome và thử lại";
+      }
+    </script>
+    <script
+      defer
+      src="https://kit.fontawesome.com/26ac62eb53.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="w-full h-full">
+    <div id="root" class="h-full overflow-auto"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

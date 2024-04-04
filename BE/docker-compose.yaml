@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  app:
+    container_name: bayer-local
+    image: nhan2804/pg-heineken-v2:v1.0.0
+    pull_policy: if_not_present
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: 'node dist/main.js'
+    ports:
+      - 5000:5000
+    networks:
+      - nesjs-network
+    volumes:
+      # - ./dist:/var/www/html/dist
+      - ./public:/usr/src/app/public
+      - ./.env:/usr/src/app/.env
+      # - /etc/hosts:/etc/hosts
+      # - /var/www/html/node_modules
+    environment:
+      - MODE=LIVE
+      - MONGODB=mongodb://root:Nnn2804..!@mongo:27017
+      - HOST_API_URL=https://bayer-local.168-work.space
+    restart: unless-stopped
+  mongo:
+    image: mongo
+    restart: always
+    networks:
+      - nesjs-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Nnn2804..!
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+volumes:
+  mongodb:
+networks:
+  nesjs-network:
