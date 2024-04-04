@@ -19,29 +19,29 @@ const items = [
   {
     to: "image",
     icon: <CameraTwoTone className="text-6xl" size={"large"} />,
-    title: "Hình ảnh",
+    title: "Hình POSM",
   },
-  {
-    to: "sup",
-    icon: <CameraTwoTone className="text-6xl" size={"large"} />,
-    title: "Hình ảnh Sup",
-    forSup: true,
-  },
-  {
-    to: "sale",
-    icon: <FundTwoTone className="text-6xl" size={"large"} />,
-    title: "Số bán",
-  },
-  {
-    to: "gift-exchange-summary",
-    icon: <CalendarTwoTone className="text-6xl" size={"large"} />,
-    title: "Tổng đổi quà",
-  },
-  {
-    to: "gift-exchange",
-    icon: <ShoppingTwoTone className="text-6xl" size={"large"} />,
-    title: "Đổi quà",
-  },
+  // {
+  //   to: "sup",
+  //   icon: <CameraTwoTone className="text-6xl" size={"large"} />,
+  //   title: "Hình ảnh Sup",
+  //   forSup: true,
+  // },
+  // {
+  //   to: "sale",
+  //   icon: <FundTwoTone className="text-6xl" size={"large"} />,
+  //   title: "Số bán",
+  // },
+  // {
+  //   to: "gift-exchange-summary",
+  //   icon: <CalendarTwoTone className="text-6xl" size={"large"} />,
+  //   title: "Tổng đổi quà",
+  // },
+  // {
+  //   to: "gift-exchange",
+  //   icon: <ShoppingTwoTone className="text-6xl" size={"large"} />,
+  //   title: "Đổi quà",
+  // },
 
   {
     to: "gift",
