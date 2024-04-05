@@ -1,10 +1,8 @@
 import SingleImageUpload from "@components/SingleImageUpload";
-import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
 import { Button, Collapse, Form, Input } from "antd";
-import CollapsePanel from "antd/es/collapse/CollapsePanel";
 import React from "react";
 
-const FormOTP = ({ onFinish, form, isLoading }) => {
+const FormUpdateClientImage = ({ onFinish, form, isLoading }) => {
   return (
     <div>
       <Form
@@ -14,18 +12,15 @@ const FormOTP = ({ onFinish, form, isLoading }) => {
         }}
         labelAlign="left"
         labelWrap={true}
-        // layout="inline"
+        layout="vertical"
         onFinish={onFinish}
         form={form}
       >
-        <Form.Item
-          required
-          rules={[{ required: true, message: "Vui lòng nhập OTP!" }]}
-          label="OTP"
-          name="otp"
-        >
-          <Input placeholder="Vui lòng nhập mã xác nhận"></Input>
-        </Form.Item>
+        <SingleImageUpload
+          rules={[{ required: true, message: "Vui lòng chụp ảnh nhận quà!" }]}
+          name="imgClient"
+          label="Ảnh nhận quà"
+        />
 
         <div className="flex justify-center mt-2">
           <Button loading={isLoading} type="primary" htmlType="submit">
@@ -37,4 +32,4 @@ const FormOTP = ({ onFinish, form, isLoading }) => {
   );
 };
 
-export default FormOTP;
+export default FormUpdateClientImage;

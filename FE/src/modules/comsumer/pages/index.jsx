@@ -191,7 +191,7 @@ const LoginComsumer = () => {
             <SingleImageUpload
               rules={[{ required: true, message: "Vui lòng chụp ảnh bill!" }]}
               label="Ảnh bill"
-              name="imageBill"
+              name="imgBill"
             ></SingleImageUpload>
           )}
 

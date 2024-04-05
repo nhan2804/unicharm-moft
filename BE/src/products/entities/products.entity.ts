@@ -33,6 +33,10 @@ export class Product {
   isSampling: boolean;
   @Prop()
   isOos: boolean;
+  @IsString()
+  @IsOptional()
+  @Prop()
+  image?: string;
 
   @Prop({ default: true })
   isActive: boolean;

@@ -14,7 +14,17 @@ const GiftOtpPage = () => {
       onSuccess: (giftClients) => {
         const gift = giftClients?.data?.[0];
         if (gift) {
-          nav(`/staff/stores/${gift?.storeId}/show-gift/${gift?._id}`);
+          if (gift?.status === "DONE") {
+            toast.error(
+              "Mã xác nhận này đã nhận quà, vui lòng không nhận lại!"
+            );
+            return;
+          }
+          if (gift?.type === "SAMPLING") {
+            nav(`/staff/stores/${gift?.storeId}/show-gift/${gift?._id}`);
+          } else if (gift?.type === "SELLING") {
+            nav(`/staff/stores/${gift?.storeId}/update-image/${gift?._id}`);
+          }
         } else {
           toast.error("OTP không hợp lệ, vui lòng kiểm tra lại!");
         }

@@ -1,3 +1,4 @@
+import SingleImageUpload from "@components/SingleImageUpload";
 import { Button, Checkbox, Form, Input, Select, Switch } from "antd";
 import React, { useState } from "react";
 
@@ -60,6 +61,7 @@ const ProductFormCreate = ({
       >
         <Input placeholder="Nhập Mã SP" />
       </Form.Item>
+      <SingleImageUpload label="Ảnh sản phẩm" name="image" />
 
       <div className="grid grid-cols-3">
         <Form.Item label="Số bán" valuePropName="checked" name={"isSale"}>
