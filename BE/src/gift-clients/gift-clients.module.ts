@@ -9,7 +9,7 @@ import { StoresModule } from 'src/stores/stores.module';
 import { GiftClientsbillController } from './gift-clients.bill.controller';
 
 @Module({
-  controllers: [GiftClientsController, GiftClientsbillController],
+  controllers: [GiftClientsbillController, GiftClientsController],
   providers: [GiftClientsService],
   imports: [
     MongooseModule.forFeature([

@@ -42,6 +42,13 @@ export class User {
   projectId: Types.ObjectId;
   @Prop({ default: Math.floor(Math.random() * 1000) })
   otp?: string;
+
+  @Prop({ default: 0 })
+  annoucement?: number;
+  @Prop({ default: 0 })
+  totalPoint?: number;
+  @Prop({ default: 0 })
+  point?: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

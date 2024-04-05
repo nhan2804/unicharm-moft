@@ -46,8 +46,12 @@ import { Groupimage } from './groupimages/entities/groupimages.entity';
 import { GroupimagesModule } from './groupimages/groupimages.module';
 import { GiftClientsModule } from './gift-clients/gift-clients.module';
 import { PoliciesModule } from './policys/policys.module';
+import { CacheModule } from '@nestjs/cache-manager';
 @Module({
   imports: [
+    CacheModule.register({
+      isGlobal: true,
+    }),
     ProjectsModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

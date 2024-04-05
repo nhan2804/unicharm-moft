@@ -106,9 +106,9 @@ const AppLayout = () => {
                       Câu hỏi đánh giá
                     </Link>
                   </Menu.Item>
-                  <Menu.Item icon={<AuditOutlined />} key="question-policy">
+                  {/* <Menu.Item icon={<AuditOutlined />} key="question-policy">
                     <Link to={`/manager/question-policy`}>Câu hỏi Policy</Link>
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Item
                     icon={<InsertRowLeftOutlined />}
                     key="form-schemas"
@@ -162,36 +162,36 @@ const AppLayout = () => {
             <Menu.Item icon={<FileDoneOutlined />} key="checkin">
               <Link to={`/manager/report/checkin`}>Report checkin</Link>
             </Menu.Item>
-            <Menu.Item icon={<FileDoneOutlined />} key="sale">
+            {/* <Menu.Item icon={<FileDoneOutlined />} key="sale">
               <Link to={`/manager/report/sale`}>Report số bán</Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item icon={<FileDoneOutlined />} key="oos">
               <Link to={`/manager/report/oos`}>Report OOS</Link>
             </Menu.Item>
-            <Menu.Item icon={<FileDoneOutlined />} key="gift">
+            {/* <Menu.Item icon={<FileDoneOutlined />} key="gift">
               <Link to={`/manager/report/gift`}>Report quà tặng</Link>
-            </Menu.Item>
-            <Menu.Item icon={<FileDoneOutlined />} key="sampling">
+            </Menu.Item> */}
+            {/* <Menu.Item icon={<FileDoneOutlined />} key="sampling">
               <Link to={`/manager/report/sampling`}>Report sampling</Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item icon={<FileDoneOutlined />} key="image">
               <Link to={`/manager/report/image`}>Report hình ảnh</Link>
             </Menu.Item>
-            <Menu.Item icon={<FileDoneOutlined />} key="sup-image">
+            {/* <Menu.Item icon={<FileDoneOutlined />} key="sup-image">
               <Link to={`/manager/report/sup-image`}>Report Sup hình ảnh</Link>
             </Menu.Item>
             <Menu.Item icon={<FileDoneOutlined />} key="checkin-sup">
               <Link to={`/manager/report/checkin-sup`}>Report Sup Checkin</Link>
-            </Menu.Item>
-            <Menu.Item icon={<FileDoneOutlined />} key="gift-exchange">
+            </Menu.Item> */}
+            {/* <Menu.Item icon={<FileDoneOutlined />} key="gift-exchange">
               <Link to={`/manager/report/gift-exchange`}>Report đổi quà</Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item icon={<CarryOutOutlined />} key="rating">
               <Link to={`/manager/report/rating`}>Report đánh giá</Link>
             </Menu.Item>
-            <Menu.Item icon={<CarryOutOutlined />} key="policy">
+            {/* <Menu.Item icon={<CarryOutOutlined />} key="policy">
               <Link to={`/manager/report/policy`}>Report Policy</Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item icon={<CarryOutOutlined />} key="question">
               <Link to={`/manager/report/question`}>Report câu hỏi</Link>
             </Menu.Item>

@@ -31,6 +31,7 @@ import useRole from "@hooks/useRole";
 import useGetBill from "../hooks/query/useGetBill";
 import useUpdateBill from "../hooks/mutate/useUpdateBill";
 import useGetStore from "@modules/manager/stores/hooks/query/useGetStore";
+import FormAcceptBill from "../components/FormBill";
 
 const ManagerBill = () => {
   const userId = useAppSelector((s) => s?.auth?.user?._id);
@@ -70,17 +71,19 @@ const ManagerBill = () => {
   const [selected, setSelected] = useState();
   const { mutate: update, isLoading } = useUpdateBill();
   const __ = useRole();
+
+  const onAcceptBill = (v) => {};
   const columns = [
-    {
-      title: "Số điện thoại",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "Code",
-      dataIndex: "fromCode",
-      key: "fromCode",
-    },
+    // {
+    //   title: "Số điện thoại",
+    //   dataIndex: "phone",
+    //   key: "phone",
+    // },
+    // {
+    //   title: "Code",
+    //   dataIndex: "fromCode",
+    //   key: "fromCode",
+    // },
     {
       title: "Trạng thái",
       dataIndex: "status",
@@ -96,8 +99,8 @@ const ManagerBill = () => {
     tab === "DENY"
       ? {
           title: "Lý do",
-          dataIndex: "reason",
-          key: "reason",
+          dataIndex: "reasonBill",
+          key: "reasonBill",
         }
       : undefined,
     tab === "ACCEPTED"
@@ -114,23 +117,29 @@ const ManagerBill = () => {
       key: "place",
       render: (text) => text?.name,
     },
-    {
-      title: "Mã giới thiệu",
-      dataIndex: "staff",
-      key: "staff",
-      render: (text) => text?.ref,
-    },
-    {
-      title: "Nhân viên",
-      dataIndex: "staff",
-      key: "staff",
-      render: (text) => text?.fullName,
-    },
+    // {
+    //   title: "Mã giới thiệu",
+    //   dataIndex: "staff",
+    //   key: "staff",
+    //   render: (text) => text?.ref,
+    // },
+    // {
+    //   title: "Nhân viên",
+    //   dataIndex: "staff",
+    //   key: "staff",
+    //   render: (text) => text?.fullName,
+    // },
     {
       title: "Ngày tạo",
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => dayjs(text).format("DD/MM/YYYY H:m:s"),
+    },
+    {
+      title: "Kiểm tra lần cuối",
+      dataIndex: "dateCheckingBill",
+      key: "dateCheckingBill",
+      render: (text) => (text ? dayjs(text).format("DD/MM/YYYY HH:mm:ss") : ""),
     },
     {
       title: "Mã bill",
@@ -155,29 +164,30 @@ const ManagerBill = () => {
       render: (text, record) => (
         <div className="flex gap-x-1">
           {/* && record?.status === "PENDING" */}
-          {__.canEditBill && record?.status === "PENDING" && (
+          {record?.status === "PENDING" && (
             <>
               <Button
                 type="primary"
                 loading={isLoading}
                 onClick={() => {
                   // update({ _id: record?._id, status: "ACCEPTED" });
-                  setSelected(record);
+                  setSelected({ ...record, type: "ACCEPTED" });
                   ref?.current?.open?.();
                 }}
               >
                 Duyệt
               </Button>
-              <CustomDrawer
-                button={({ open }) => (
-                  <Button onClick={open} type="primary" danger>
-                    Từ chối
-                  </Button>
-                )}
-                title={"Từ chối"}
+              <Button
+                onClick={() => {
+                  // update({ _id: record?._id, status: "ACCEPTED" });
+                  setSelected({ ...record, type: "DENY" });
+                  ref?.current?.open?.();
+                }}
+                type="primary"
+                danger
               >
-                {({ close }) => <>c</>}
-              </CustomDrawer>
+                Từ chối
+              </Button>
             </>
           )}
         </div>
@@ -200,7 +210,7 @@ const ManagerBill = () => {
         data,
         dateBill: dayjs(value?.dateBill)?.format("DD-MM-YYYY"),
         _id: selected?._id,
-        status: "ACCEPTED",
+        // status: "ACCEPTED",
       },
       { onSuccess: c }
     );
@@ -312,9 +322,13 @@ const ManagerBill = () => {
       <CustomDrawer width={560} ref={ref} noButton title={"Đồng ý duyệt bill"}>
         {({ close }) => (
           <>
+            <FormAcceptBill
+              selected={selected}
+              onFinish={(v) => handleAcceptBill(v, close)}
+            />
             <div className="overflow-hidden">
               <PrismaZoom>
-                <img alt="" className="w-full" src={selected?.bill} />
+                <img alt="" className="w-full" src={selected?.imgBill} />
               </PrismaZoom>
             </div>
           </>

@@ -41,6 +41,13 @@ export class GiftClient {
   codeBill?: string;
   @Prop()
   dateBill?: string;
+  @Prop()
+  keyCodeBill?: string;
+  @Prop()
+  reasonBill?: string;
+
+  @Prop({ type: Types.ObjectId, ref: User.name })
+  updatorId?: Types.ObjectId;
 }
 
 export const GiftClientSchema = SchemaFactory.createForClass(GiftClient);

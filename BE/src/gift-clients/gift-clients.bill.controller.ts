@@ -8,6 +8,8 @@ import {
   Delete,
   Query,
   BadRequestException,
+  Inject,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { GiftClientsService } from './gift-clients.service';
 import { CreateGiftClientDto } from './dto/create-gift-client.dto';
@@ -26,7 +28,10 @@ import { UsersService } from 'src/users/users.service';
 import { AuthService } from 'src/auth/auth.service';
 import { StoresService } from 'src/stores/stores.service';
 import { customAlphabet, nanoid } from 'nanoid';
-import { User } from 'src/users/entities/user.entity';
+import { User, UserDocument } from 'src/users/entities/user.entity';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { UserLoggin } from 'src/auth/decorators/user';
+import axios from 'axios';
 @Controller('gift-clients/bill')
 export class GiftClientsbillController {
   constructor(
@@ -34,6 +39,7 @@ export class GiftClientsbillController {
     private readonly userService: UsersService,
     private readonly authService: AuthService,
     private readonly storeService: StoresService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   @Public()
@@ -149,11 +155,118 @@ export class GiftClientsbillController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateGiftClientDto: UpdateGiftClientDto,
+    @UserLoggin() user: UserDocument,
   ) {
-    return this.giftClientsService.updateOne(id, updateGiftClientDto);
+    const idString = id?.toString();
+    const processing = await this.cacheManager.get(idString);
+    if (processing) {
+      throw new BadRequestException(
+        'Bill đang được duyệt từ nơi khác, vui lòng thử lại!',
+      );
+    } else {
+      await this.cacheManager.set(idString, '1', 1000 * 15);
+    }
+    const bill = await this.giftClientsService.findOne({
+      _id: new Types.ObjectId(id),
+    });
+    if (bill?.status !== 'PENDING') {
+      throw new BadRequestException('Bill đã được duyệt, vui lòng thử lại');
+    }
+
+    const keyCode = `${updateGiftClientDto?.codeBill
+      ?.normalize?.()
+      ?.trim()
+      ?.toUpperCase()}-${
+      updateGiftClientDto?.dateBill
+    }-${bill?.storeId?.toString()}`;
+
+    bill.status = updateGiftClientDto?.status;
+    // const isNightTime = this.isNightTime(bill?.createdAt);
+    // const isOverFiveMinutesCheckBill = dayjs(bill?.createdAt)
+    //   .add(5, 'minute')
+    //   .isBefore(dayjs());
+    // if (!isNightTime && isOverFiveMinutesCheckBill) {
+    //   bill.dateChecking = this.generateRandomDateFromNow(bill?.createdAt);
+    // } else {
+    bill.dateCheckingBill = new Date();
+    // }
+
+    // console.log({ updateGiftClientDto });
+
+    const consumer = await this.userService.findOne({
+      _id: new Types.ObjectId(bill?.consumerId),
+    });
+    if (!consumer) {
+      throw new BadRequestException('Không tìm thấy consumer này!');
+    }
+
+    bill.updatorId = new Types.ObjectId(user?._id);
+    try {
+      if (updateGiftClientDto?.status === 'ACCEPTED') {
+        if (!updateGiftClientDto?.codeBill || !updateGiftClientDto?.dateBill) {
+          throw new BadRequestException('Permission Deny');
+        }
+        const checkCodeBillExist = await this.giftClientsService.findOne({
+          keyCodeBill: keyCode,
+          //đợi confirm
+        });
+
+        if (checkCodeBillExist) {
+          throw new BadRequestException(
+            'Mã của bill của siêu thị này đã được duyệt trong ngày, vui lòng xem lại danh sách bill đã duyệt',
+          );
+        }
+        // if (updateGiftClientDto?.data) {
+        //   bill.data = updateGiftClientDto?.data;
+        // }
+        // if (updateGiftClientDto?.shift) {
+        //   bill.shift = updateGiftClientDto?.shift;
+        // }
+
+        bill.keyCodeBill = keyCode;
+        bill.codeBill = updateGiftClientDto?.codeBill;
+        bill.dateBill = updateGiftClientDto?.dateBill;
+
+        consumer.point = (consumer.point || 0) + 1;
+        consumer.totalPoint = (consumer.totalPoint || 0) + 1;
+        consumer.annoucement += 1;
+        await consumer.save();
+      }
+
+      if (updateGiftClientDto?.status === 'DENY') {
+        if (!updateGiftClientDto?.reasonBill) {
+          throw new BadRequestException('Vui lòng nhập lý do!');
+        }
+        // await this.codeService.update(bill?.codeId, {
+        //   status: 'PENDING',
+        // });
+        bill.reasonBill = updateGiftClientDto?.reasonBill;
+        consumer.annoucement += 1;
+        await consumer.save();
+      }
+      await bill.save();
+      return bill;
+    } catch (error) {
+      if (error?.status === 400) {
+        throw new BadRequestException(error?.message);
+      } else {
+        const dataMess = {
+          text: `Có lỗi xảy ra, vui lòng liên hệ admin gấp, code:90001`,
+          chat_id: `-1001730347331`,
+          reply_markup: '',
+        };
+        await axios.post(
+          'https://api.telegram.org/bot5204298058:AAHSCujWdQdsN24F8in3sCHqcZrlYxbishM/sendMessage',
+          dataMess,
+        );
+        throw new InternalServerErrorException(
+          'Có lỗi xảy ra, vui lòng thử lại. Vui lòng báo lại lỗi này với admin',
+        );
+      }
+    }
   }
 
   @Delete(':id')
