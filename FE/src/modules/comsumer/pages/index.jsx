@@ -168,7 +168,15 @@ const LoginComsumer = () => {
           {watchType === "SAMPLING" && (
             <Form.Item
               label="Quà"
-              name="productId"
+              name="products"
+              getValueFromEvent={(event) => {
+                return { [event]: 1 };
+              }}
+              getValueProps={(value) => {
+                if (value) {
+                  return Object.keys(value)?.[0];
+                }
+              }}
               rules={[{ required: true, message: "Vui lòng chọn quà tặng!" }]}
             >
               <Select

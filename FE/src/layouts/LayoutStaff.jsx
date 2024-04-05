@@ -140,7 +140,6 @@ const StaffLayout = () => {
                 })
                 .map((_, i) => {
                   const { icon: ICon } = _;
-                  console.log({ ICon });
                   return {
                     label: (
                       <span>
