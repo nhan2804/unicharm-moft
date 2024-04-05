@@ -1,5 +1,6 @@
 import { IRoute } from "@routes/route.interface";
 import { lazy } from "react";
+const ManagerBill = lazy(() => import("../bill/pages/manager"));
 const ReportCheckinSupPage = lazy(() => import("../reports/checkin-sup"));
 const ReportQuestion = lazy(() => import("../reports/question"));
 const ReportPolicy = lazy(() => import("../reports/policy"));
@@ -182,6 +183,21 @@ const managerRoutes: IRoute[] = [
       {
         component: ReportQuestion,
         path: "report/question",
+        isPrivate: true,
+        exact: true,
+      },
+    ],
+  },
+  {
+    component: AppLayout,
+    path: "/bill-management/",
+    isPrivate: true,
+    exact: true,
+    accessRole: ["SUPER_ADMIN", "BILL_MANAGER"],
+    children: [
+      {
+        component: ManagerBill,
+        path: "",
         isPrivate: true,
         exact: true,
       },

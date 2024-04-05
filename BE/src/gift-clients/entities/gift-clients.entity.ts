@@ -31,6 +31,16 @@ export class GiftClient {
   storeId?: Types.ObjectId;
   @Prop({ type: Object })
   products: object;
+  @Prop()
+  imgClient: string;
+  @Prop()
+  imgBill: string;
+  @Prop()
+  dateCheckingBill: Date;
+  @Prop({ index: true })
+  codeBill?: string;
+  @Prop()
+  dateBill?: string;
 }
 
 export const GiftClientSchema = SchemaFactory.createForClass(GiftClient);

@@ -6,9 +6,10 @@ import { GiftClient, GiftClientSchema } from './entities/gift-clients.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { StoresModule } from 'src/stores/stores.module';
+import { GiftClientsbillController } from './gift-clients.bill.controller';
 
 @Module({
-  controllers: [GiftClientsController],
+  controllers: [GiftClientsController, GiftClientsbillController],
   providers: [GiftClientsService],
   imports: [
     MongooseModule.forFeature([

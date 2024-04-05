@@ -22,7 +22,7 @@ import {
   WarningOutlined,
   CarryOutOutlined,
   UsergroupAddOutlined,
-  SnippetsOutlined,
+  BarcodeOutlined,
   AuditOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -140,6 +140,15 @@ const AppLayout = () => {
                       </Menu.Item>
                     </>
                   </SubMenu> */}
+                </>
+              </SubMenu>
+            )}
+            {user?.type === "SUPER_ADMIN" && (
+              <SubMenu title="Quản lý duyệt bill" icon={<BarcodeOutlined />}>
+                <>
+                  <Menu.Item icon={<BarcodeOutlined />} key="stores">
+                    <Link to={`/bill-management`}>Duyệt bill khách hàng</Link>
+                  </Menu.Item>
                 </>
               </SubMenu>
             )}
