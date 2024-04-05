@@ -7,7 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 export type GiftClientDocument = GiftClient & Document;
 
 @Schema({
-  collection: 'giftClients',
+  collection: 'gift-clients',
   timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
@@ -29,6 +29,8 @@ export class GiftClient {
   status?: string;
   @Prop({ type: SchemaTypes.ObjectId, ref: Store.name, index: true })
   storeId?: Types.ObjectId;
+  @Prop({ type: Object })
+  products: object;
 }
 
 export const GiftClientSchema = SchemaFactory.createForClass(GiftClient);

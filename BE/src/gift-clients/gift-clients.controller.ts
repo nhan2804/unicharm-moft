@@ -45,7 +45,7 @@ export class GiftClientsController {
       storeId: string;
       fullName: string;
       type: 'SELLING' | 'SAMPLING';
-      productId?: string;
+      products?: object;
       imageBill?: string;
     },
   ) {
@@ -73,15 +73,21 @@ export class GiftClientsController {
     }
     let extraData = {};
     if (data?.type === 'SAMPLING') {
-      extraData = { productId: data?.productId };
+      extraData = { products: data?.products };
       const existGift = await this.giftClientsService.findOne({
         phone: data?.phone,
         type: 'SAMPLING',
       });
-      if (existGift)
-        throw new BadRequestException(
-          'Không đủ điều kiện tham gia chương trình Sampling!',
-        );
+      if (existGift) {
+        if (existGift?.status === 'PENDING')
+          throw new BadRequestException(
+            'Vui lòng kiểm tra OTP đã được gửi vào số điện thoại của bạn!',
+          );
+        else
+          throw new BadRequestException(
+            'Không đủ điều kiện tham gia chương trình Sampling!',
+          );
+      }
     }
     const otp = customAlphabet('1234567890qwertyuioplkjhgfdsaxxcvbnm', 6);
     const giftClient = await this.giftClientsService.create({
@@ -91,7 +97,7 @@ export class GiftClientsController {
       storeId: new Types.ObjectId(data?.storeId),
       type: data?.type,
       ...extraData,
-    });
+    } as GiftClient);
 
     const token = await this.authService.login(user);
     return { login: token, justLogin: true, giftClient };
