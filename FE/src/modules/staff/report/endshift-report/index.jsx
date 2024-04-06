@@ -35,14 +35,14 @@ const EndShiftReportPage = () => {
         }
       }
       if (record?.type === "SELLING") {
-        const productsBill = record?.productsBill;
-        for (const key in productsBill) {
+        record?.productsBill?.map((e) => {
+          const key = e?.product;
           if (endShiftSales[key]) {
-            endShiftSales[key] += productsBill[key];
+            endShiftSales[key] += e?.quantity;
           } else {
-            endShiftSales[key] = productsBill[key];
+            endShiftSales[key] = e?.quantity;
           }
-        }
+        });
       }
     });
     return { endShiftSamplings, endShiftGiftExternals, endShiftSales };
