@@ -52,35 +52,35 @@ const ConsumerLayout = () => {
   const annoucement = user?.annoucement;
   const ref = useRef();
   // const { mutateAsync: empty } = useEmptyNoti();
-  useEffect(() => {
-    console.log({ annoucement });
-    if (annoucement > 0) {
-      Modal.destroyAll();
+  // useEffect(() => {
+  //   console.log({ annoucement });
+  //   if (annoucement > 0) {
+  //     Modal.destroyAll();
 
-      Modal.info({
-        onOk: async () => {
-          // await empty();
-          nav(`/consumer/bill`);
-          Modal.destroyAll();
-        },
-        type: "info",
-        title: "Bạn có thông báo mới",
-        centered: true,
-        content: (
-          <div>
-            <p className="text-blue-500 text-2xl">
-              Đã có kết quả duyệt hóa đơn của bạn, vui lòng kiểm tra kết quả
-              {/* Bạn có <b className="text-red-500">{annoucement}</b> thông báo */}
-            </p>
-          </div>
-        ),
-        okText: "Xem kết quả",
-        // closable: true,
-        // maskClosable: true,
-        // closeIcon: <div>X</div>,
-      });
-    }
-  }, [annoucement, nav]);
+  //     Modal.info({
+  //       onOk: async () => {
+  //         // await empty();
+  //         nav(`/consumer/bill`);
+  //         Modal.destroyAll();
+  //       },
+  //       type: "info",
+  //       title: "Bạn có thông báo mới",
+  //       centered: true,
+  //       content: (
+  //         <div>
+  //           <p className="text-blue-500 text-2xl">
+  //             Đã có kết quả duyệt hóa đơn của bạn, vui lòng kiểm tra kết quả
+  //             {/* Bạn có <b className="text-red-500">{annoucement}</b> thông báo */}
+  //           </p>
+  //         </div>
+  //       ),
+  //       okText: "Xem kết quả",
+  //       // closable: true,
+  //       // maskClosable: true,
+  //       // closeIcon: <div>X</div>,
+  //     });
+  //   }
+  // }, [annoucement, nav]);
 
   const consumer = useAppSelector((s) => s?.auth?.user);
 

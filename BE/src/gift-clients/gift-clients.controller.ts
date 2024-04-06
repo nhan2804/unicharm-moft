@@ -27,6 +27,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { StoresService } from 'src/stores/stores.service';
 import { customAlphabet, nanoid } from 'nanoid';
 import { User } from 'src/users/entities/user.entity';
+import { ProductsService } from 'src/products/products.service';
 @Controller('gift-clients')
 export class GiftClientsController {
   constructor(
@@ -34,6 +35,7 @@ export class GiftClientsController {
     private readonly userService: UsersService,
     private readonly authService: AuthService,
     private readonly storeService: StoresService,
+    private readonly productService: ProductsService,
   ) {}
 
   @Public()
@@ -110,6 +112,42 @@ export class GiftClientsController {
   @Post()
   create(@Body() createGiftClientDto: CreateGiftClientDto) {
     return this.giftClientsService.create(createGiftClientDto);
+  }
+  @Post('roll/:id')
+  async roll(
+    @Body() createGiftClientDto: CreateGiftClientDto,
+    @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
+  ) {
+    const bill = await this.giftClientsService.findOne({ _id: id });
+    if (!bill) throw new BadRequestException('Bill not found');
+    if (bill?.type === 'SAMPLING' || bill?.status !== 'ACCEPTED') {
+      throw new BadRequestException('Bill không hợp lệ');
+    }
+    const gift = (
+      await this.productService.findAll(
+        {
+          isGiftExternal: true,
+        },
+        { name: 1, _id: 1, current: 1, quantity: 1 },
+      )
+    ).filter((e) => {
+      return e.current < e.quantity;
+    });
+    const giftSelected = gift?.[Math.floor(Math.random() * gift?.length)];
+    if (!giftSelected) {
+      throw new BadRequestException('Đã hết quà, vui lòng quay lại sau!');
+    }
+    bill.status = 'DONE';
+    bill.products = {
+      [giftSelected?._id]: 1,
+    };
+    bill.save();
+    this.productService.updateOne(giftSelected?._id, {
+      $inc: {
+        current: 1,
+      },
+    });
+    return bill;
   }
   @Post('bulk/create')
   createBulk(@Body() createGiftClientDto: CreateGiftClientDto[]) {

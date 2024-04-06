@@ -1,5 +1,13 @@
 import SingleImageUpload from "@components/SingleImageUpload";
-import { Button, Checkbox, Form, Input, Select, Switch } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Select,
+  Switch,
+  InputNumber,
+} from "antd";
 import React, { useState } from "react";
 
 const ProductFormCreate = ({
@@ -49,7 +57,22 @@ const ProductFormCreate = ({
       >
         <Input placeholder="Nhập Tên SP" />
       </Form.Item>
-
+      {!showType && (
+        <>
+          <Form.Item
+            label="Số lượng"
+            rules={[
+              {
+                required: true,
+                message: "Số lượng",
+              },
+            ]}
+            name={"quantity"}
+          >
+            <InputNumber min={0} max={10000000} placeholder="Số lượng" />
+          </Form.Item>
+        </>
+      )}
       <Form.Item
         label="Mã"
         rules={[

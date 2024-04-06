@@ -40,6 +40,10 @@ export class Product {
 
   @Prop({ default: true })
   isActive: boolean;
+  @Prop({ default: 0 })
+  quantity: number;
+  @Prop({ default: 0 })
+  current: number;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

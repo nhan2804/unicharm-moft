@@ -7,6 +7,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { StoresModule } from 'src/stores/stores.module';
 import { GiftClientsbillController } from './gift-clients.bill.controller';
+import { ProductsModule } from 'src/products/products.module';
 
 @Module({
   controllers: [GiftClientsbillController, GiftClientsController],
@@ -18,6 +19,7 @@ import { GiftClientsbillController } from './gift-clients.bill.controller';
     AuthModule,
     UsersModule,
     StoresModule,
+    ProductsModule,
   ],
 })
 export class GiftClientsModule {}

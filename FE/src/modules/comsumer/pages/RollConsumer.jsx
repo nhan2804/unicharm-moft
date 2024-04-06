@@ -14,6 +14,8 @@ import { isSafari } from "react-device-detect";
 import { useParams } from "react-router";
 import useShowGiftClients from "../hooks/query/useShowGiftClients";
 import CustomSkeleton from "@components/CustomSkeleton";
+
+import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
 const CustomWheel = lazy(() => import("../components/Wheel"));
 
 const { useToken } = theme;
@@ -35,7 +37,8 @@ const RollConsumer = () => {
   const parsed = qs.qsParsed2;
 
   const delay = parsed?.delay || undefined;
-  const { mutate: random, isLoading, data: dataRandom } = useRandomGift();
+  const { id } = useParams();
+  const { mutate: random, isLoading, data: dataRandom } = useRandomGift(id);
   const { data: user } = useGetProfile();
   const nav = useNavigate();
   const qc = useQueryClient();
@@ -55,11 +58,11 @@ const RollConsumer = () => {
 
   const point = user?.point;
   const handleSpinClick = useCallback(() => {
-    if (point > 0 && !isLoading) {
+    if (!isLoading) {
       console.log("start spin");
       onFinish();
     }
-  }, [onFinish, point, isLoading]);
+  }, [onFinish, isLoading]);
 
   const onEndWheel = async () => {
     // qc.cancelQueries(["userProfile"]);
@@ -113,11 +116,12 @@ const RollConsumer = () => {
     ),
     [handleSpinClick, isLoading, mustSpin]
   );
-  const { id } = useParams();
+
   // console.log(location);
   const { data: bill, isLoading: loadingBill } = useShowGiftClients(id, {
     refresh: true,
   });
+  const { data: gifts } = useGetProduct({ isGiftExternal: true });
   if (!bill && loadingBill) {
     return <CustomSkeleton />;
   }
@@ -174,8 +178,9 @@ const RollConsumer = () => {
         <Card>
           <Suspense fallback={<div>Loading....</div>}>
             <CustomWheel
+              gifts={gifts?.data}
               onEndWheel={onEndWheel}
-              data={dataRandom?.final}
+              data={dataRandom?.name}
               mustSpin={mustSpin}
               button={button}
             />
