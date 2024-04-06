@@ -102,7 +102,7 @@ export class AbstractService<T, S = T & Document> {
     return { data: documents, paginate };
   }
 
-  async updateOne(id: ID, data: T | { data: any }) {
+  async updateOne(id: ID, data: UpdateQuery<S>) {
     const result = await this.model.findByIdAndUpdate(id, data, {
       new: true,
     });

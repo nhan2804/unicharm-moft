@@ -3,104 +3,44 @@ import { Wheel } from "react-custom-roulette";
 // import uuid from "react-uuid";
 import "./index.css";
 import { useMemo } from "react";
-const _data = [
-  {
-    final: "10",
-    id: 1,
-    text: "10.000đ",
-    style: {
-      textColor: "#028342",
-      backgroundColor: "#ffffff",
-      fontSize: 28,
-      fontWeight: 800,
-    },
-  },
-  {
-    final: "20",
-    id: 2,
-    text: "20.000đ",
-    style: {
-      textColor: "#ffffff",
-      backgroundColor: "#028342",
-      fontSize: 28,
-      fontWeight: 800,
-    },
-  },
-  {
-    final: "50",
-    id: 3,
-    text: "50.000đ",
-    style: {
-      textColor: "#028342",
-      backgroundColor: "#ffffff",
-      fontSize: 28,
-      fontWeight: 800,
-    },
-  },
-  {
-    final: "goodluck",
-    id: 4,
-    text: "May mắn lần sau",
-    style: {
-      textColor: "#ffffff",
-      backgroundColor: "#028342",
-    },
-  },
-  {
-    final: "10",
-    id: 5,
-    text: "10.000đ",
-    style: {
-      textColor: "#028342",
-      backgroundColor: "#ffffff",
-      fontSize: 28,
-      fontWeight: 800,
-    },
-  },
-  {
-    final: "20",
-    id: 6,
-    text: "20.000đ",
-    style: {
-      textColor: "#ffffff",
-      backgroundColor: "#028342",
-      fontSize: 28,
-      fontWeight: 800,
-    },
-  },
-  {
-    final: "50",
-    id: 7,
-    text: "50.000đ",
-    style: {
-      textColor: "#028342",
-      backgroundColor: "#ffffff",
-      fontSize: 28,
-      fontWeight: 800,
-    },
-  },
-  {
-    final: "goodluck",
-    id: 8,
-    text: "May mắn lần sau",
-    style: {
-      textColor: "#ffffff",
-      backgroundColor: "#028342",
-    },
-  },
-].map((item) => {
-  return {
-    ...item,
-    completeOption: item.text,
-    option:
-      item.text.length >= 30
-        ? item.text.substring(0, 30).trimEnd() + "..."
-        : item.text,
-  };
-});
 
-const CustomWheel = ({ data, onEndWheel, button, mustSpin }) => {
-  const prizeNumber = _data?.findIndex((e) => e?.final === data);
+const arrBg = {
+  0: {
+    textColor: "#028342",
+    backgroundColor: "#ffffff",
+  },
+  1: {
+    textColor: "#ffffff",
+    backgroundColor: "#028342",
+  },
+};
+const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
+  const _data = useMemo(() => {
+    return gifts
+      ?.map((e, i) => {
+        return {
+          text: e?.name,
+          id: e?._id,
+          final: e?.name,
+          style: {
+            ...arrBg[i % 2],
+            fontSize: 28,
+            fontWeight: 800,
+          },
+        };
+      })
+      .map((item) => {
+        return {
+          ...item,
+          completeOption: item.text,
+          option:
+            item.text.length >= 30
+              ? item.text.substring(0, 30).trimEnd() + "..."
+              : item.text,
+        };
+      });
+  }, [gifts]);
+  const prizeNumber = _data?.findIndex((e) => e?.name === data);
 
   const wheel = useMemo(
     () => (

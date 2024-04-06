@@ -149,6 +149,22 @@ const GiftHomePage = () => {
       dataIndex: "name",
       key: "name",
     },
+    {
+      title: "Số lượng đã trúng",
+      dataIndex: "current",
+      key: "current",
+    },
+    {
+      title: "Số lượng",
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+    {
+      title: "SL còn lại",
+      dataIndex: "x",
+      key: "x",
+      render: (_, record) => record?.quantity - record?.current,
+    },
 
     {
       sortOrder: pagination?.tableSortOrder?.createdAt?.order,

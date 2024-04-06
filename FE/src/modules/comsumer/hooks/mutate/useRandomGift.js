@@ -1,9 +1,9 @@
 import { useMutation } from "react-query";
 import axios from "axios";
-const useRandomGift = () => {
+const useRandomGift = (id) => {
   return useMutation(
     async (formData) => {
-      const { data } = await axios.post(`gifts/get`, formData);
+      const { data } = await axios.post(`gift-clients/roll/${id}`, formData);
       return data;
     },
     {

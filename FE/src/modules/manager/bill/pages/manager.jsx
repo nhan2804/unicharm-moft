@@ -55,6 +55,7 @@ const ManagerBill = () => {
       tab: undefined,
       page: pagination?.current,
       perPage: pagination?.pageSize,
+      type: "SELLING",
     },
     tab === "PENDING"
   );
