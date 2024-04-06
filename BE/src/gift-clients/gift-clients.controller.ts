@@ -102,6 +102,11 @@ export class GiftClientsController {
     const token = await this.authService.login(user);
     return { login: token, justLogin: true, giftClient };
   }
+  @Get('store/:storeId/today')
+  async today(@Param('storeId') storeId) {
+    const data = await this.giftClientsService.getTodayByStoreId(storeId);
+    return data;
+  }
   @Post()
   create(@Body() createGiftClientDto: CreateGiftClientDto) {
     return this.giftClientsService.create(createGiftClientDto);

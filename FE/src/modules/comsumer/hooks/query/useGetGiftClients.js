@@ -3,7 +3,8 @@ import { useQuery } from "react-query";
 
 const useGetGiftClients = (query) => {
   return useQuery(["gift-clients", query], async () => {
-    return await axios.get(`gift-clients`, { params: query });
+    const {data} = await axios.get(`gift-clients`, { params: query })
+    return data;
   });
 };
 

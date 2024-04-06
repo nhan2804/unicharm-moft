@@ -28,7 +28,40 @@ export class ReportsubmitsController {
     private readonly reportsubmitsService: ReportsubmitsService,
     private readonly checkinService: CheckinService,
   ) {}
+  @Post('end-shift')
+  async endShiftReport(
+    @Body() createReportsubmitDto: CreateReportsubmitDto,
+    @Param('placeId', ParseObjectIdPipe) storeId: Types.ObjectId,
+    @Body('checkinId', ParseObjectIdPipe) checkinId: Types.ObjectId,
+    @Body('data') data: object,
+    @UserLoggin() user: UserDocument,
+  ) {
+    const currentCheckin = await this.checkinService.findOneById(checkinId);
+    const shiftId = currentCheckin?.shiftId;
 
+    const todayReport = await this.reportsubmitsService.getReportByStoreId(
+      storeId,
+      'end-shift',
+      shiftId,
+    );
+
+    createReportsubmitDto = {
+      ...createReportsubmitDto,
+      storeId: storeId,
+      type: 'end-shift',
+      shiftId: shiftId,
+    };
+    if (todayReport) {
+      return this.reportsubmitsService.updateOne(todayReport?._id, {
+        ...createReportsubmitDto,
+        updatorId: user?._id,
+      });
+    }
+    return this.reportsubmitsService.create({
+      ...createReportsubmitDto,
+      creatorId: user?._id,
+    });
+  }
   @Post('sale')
   async create(
     @Body() createReportsubmitDto: CreateReportsubmitDto,

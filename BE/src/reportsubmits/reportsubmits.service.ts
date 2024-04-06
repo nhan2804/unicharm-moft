@@ -13,7 +13,8 @@ export type TypeReport =
   | 'oos'
   | 'sampling'
   | 'sup'
-  | 'image';
+  | 'image'
+  | 'end-shift';
 @Injectable()
 export class ReportsubmitsService extends AbstractService<Reportsubmit> {
   constructor(

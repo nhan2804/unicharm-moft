@@ -38,6 +38,15 @@ export class Reportsubmit {
   @Prop({ type: Object })
   usingGift?: object;
 
+  @Prop({ type: Object })
+  endShiftSales?: object;
+  @Prop({ type: Object })
+  endShiftSamplings?: object;
+  @Prop({ type: Object })
+  endShiftGiftExternals?: object;
+  @Prop()
+  imgbbnt?: string;
+
   //OOS s
   @Prop({ type: Object })
   endShiftInventoryOOS?: object;

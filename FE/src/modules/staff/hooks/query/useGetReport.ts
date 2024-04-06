@@ -8,7 +8,8 @@ export type TypeReport =
   | "oos"
   | "sampling"
   | "sup"
-  | "image";
+  | "image"
+  | "end-shift";
 interface IUser {
   fullName: string;
   _id: string;

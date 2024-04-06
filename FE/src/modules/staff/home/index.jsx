@@ -9,6 +9,7 @@ import {
   LogoutOutlined,
   FundTwoTone,
   CalendarTwoTone,
+  ProfileTwoTone,
 } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
 import CustomPageHeader from "@components/CustomPageHeader";
@@ -57,6 +58,11 @@ const items = [
     to: "notification",
     icon: <NotificationTwoTone className="text-6xl" size={"large"} />,
     title: "Thông báo khẩn",
+  },
+  {
+    to: "report/end-shift",
+    icon: <ProfileTwoTone className="text-6xl" size={"large"} />,
+    title: "Báo cáo cuối ca",
   },
   // {
   //   to: "sampling",

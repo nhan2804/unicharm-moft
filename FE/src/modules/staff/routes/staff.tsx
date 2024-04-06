@@ -20,6 +20,7 @@ const SamplingHomePage = lazy(() => import("../sampling"));
 const GiftOtpPage = lazy(() => import("../gift/otp"));
 const ShowGiftPage = lazy(() => import("../gift/show-gift"));
 const UpdateClientImagePage = lazy(() => import("../gift/update-client-img"));
+const EndShiftReportPage = lazy(() => import("../report/endshift-report"));
 const GiftExchangeHome = lazy(() => import("../gift-exchange"));
 const Login = lazy(() => import("@modules/auth/pages/login"));
 // const ProjectPage = () => <div>dd</div>;
@@ -140,6 +141,12 @@ const staffRoutes: IRoute[] = [
       {
         component: GiftExchangeHome,
         path: "stores/:storeId/gift-exchange",
+        isPrivate: true,
+        exact: true,
+      },
+      {
+        component: EndShiftReportPage,
+        path: "stores/:storeId/report/end-shift",
         isPrivate: true,
         exact: true,
       },
