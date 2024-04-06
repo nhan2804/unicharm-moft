@@ -41,7 +41,7 @@ const GiftHomePage = () => {
         <div className="flex flex-col h-[300px] items-center justify-center gap-2">
           <Button
             onClick={() =>
-              nav(`/staff/stores/${storeId}/gift-otp`, { relative: false })
+              nav(`/staff/stores/${storeId}/gift-otp?type=sampling`, { relative: false })
             }
             className="w-[90%] font-bold text-xl h-[50px]"
           >
@@ -49,7 +49,7 @@ const GiftHomePage = () => {
           </Button>
           <Button
             onClick={() =>
-              nav(`/staff/stores/${storeId}/gift-otp`, { relative: false })
+              nav(`/staff/stores/${storeId}/gift-otp?type=selling`, { relative: false })
             }
             className="w-[90%] font-bold text-xl h-[50px]"
           >

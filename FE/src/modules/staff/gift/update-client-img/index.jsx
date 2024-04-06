@@ -3,19 +3,21 @@ import FormUpdateClientImage from "@modules/staff/components/FormUpdateClientIma
 import React from "react";
 import { Form, Space } from "antd";
 import useUpdateGiftClients from "@modules/comsumer/hooks/mutate/useUpdateGiftClients";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useQueryClient } from "react-query";
 
 const UpdateClientImage = () => {
-  const { giftId } = useParams();
+  const { giftId, storeId } = useParams();
   const { mutate: updateGiftClient } = useUpdateGiftClients();
   const qc = useQueryClient();
+  const nav = useNavigate();
   const onFinish = (values) => {
     updateGiftClient(
       { _id: giftId, formData: { ...values, status: "DONE" } },
       {
         onSuccess: () => {
           qc.invalidateQueries(["gift-clients"]);
+          nav(`/staff/stores/${storeId}`);
         },
       }
     );
