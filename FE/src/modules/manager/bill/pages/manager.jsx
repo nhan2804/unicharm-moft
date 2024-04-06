@@ -32,6 +32,8 @@ import useGetBill from "../hooks/query/useGetBill";
 import useUpdateBill from "../hooks/mutate/useUpdateBill";
 import useGetStore from "@modules/manager/stores/hooks/query/useGetStore";
 import FormAcceptBill from "../components/FormBill";
+import useCreateProduct from "@modules/manager/products/hooks/mutate/useCreateProduct";
+import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
 
 const ManagerBill = () => {
   const userId = useAppSelector((s) => s?.auth?.user?._id);
@@ -215,7 +217,10 @@ const ManagerBill = () => {
       { onSuccess: c }
     );
   };
-
+  const { data: products } = useGetProduct({
+    isSale: true,
+  });
+  console.log({ products });
   const idPlaces = bill?.idPlaces;
   const finalDataPlace = useMemo(() => {
     if (!idPlaces) return places;
@@ -223,6 +228,7 @@ const ManagerBill = () => {
   }, [idPlaces, places]);
   console.log({ finalDataPlace });
   //   const restPagi = useShowTotalTable();
+
   return (
     <>
       <Tabs
@@ -323,6 +329,7 @@ const ManagerBill = () => {
         {({ close }) => (
           <>
             <FormAcceptBill
+              products={products?.data}
               selected={selected}
               onFinish={(v) => handleAcceptBill(v, close)}
             />

@@ -10,7 +10,7 @@ import {
 import React from "react";
 
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-const FormAcceptBill = ({ onFinish, selected, type }) => {
+const FormAcceptBill = ({ onFinish, selected, type, products }) => {
   const [form] = Form.useForm();
   const onDone = (v) => {
     onFinish({ ...v, status: selected?.type });
@@ -148,7 +148,16 @@ const FormAcceptBill = ({ onFinish, selected, type }) => {
                                       style={{ width: 250 }}
                                       placeholder="Sản phẩm"
                                     >
-                                      []
+                                      {products?.map((e) => {
+                                        return (
+                                          <Select.Option
+                                            key={e?._id}
+                                            value={e?._id}
+                                          >
+                                            {e?.name}
+                                          </Select.Option>
+                                        );
+                                      })}
                                     </Select>
                                   </Form.Item>
                                 );

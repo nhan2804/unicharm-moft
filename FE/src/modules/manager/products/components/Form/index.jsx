@@ -7,6 +7,7 @@ const ProductFormCreate = ({
   onFinish,
   initialValues,
   okText = "Tạo",
+  showType = true,
 }) => {
   const [form] = Form.useForm();
 
@@ -63,34 +64,40 @@ const ProductFormCreate = ({
       </Form.Item>
       <SingleImageUpload label="Ảnh sản phẩm" name="image" />
 
-      <div className="grid grid-cols-3">
-        <Form.Item label="Số bán" valuePropName="checked" name={"isSale"}>
-          <Checkbox />
-        </Form.Item>
-        <Form.Item label="OOS" valuePropName="checked" name={"isOos"}>
-          <Checkbox />
-        </Form.Item>
-        <Form.Item
-          label="Đổi quà"
-          valuePropName="checked"
-          name={"isGiftExchange"}
-        >
-          <Checkbox />
-        </Form.Item>
-        <Form.Item label="Quà tặng" valuePropName="checked" name={"isGift"}>
-          <Checkbox />
-        </Form.Item>
-        <Form.Item
-          label="Quà ngoài"
-          valuePropName="checked"
-          name={"isGiftExternal"}
-        >
-          <Checkbox />
-        </Form.Item>
-        <Form.Item label="Sampling" valuePropName="checked" name={"isSampling"}>
-          <Checkbox />
-        </Form.Item>
-      </div>
+      {showType && (
+        <div className="grid grid-cols-3">
+          <Form.Item label="Số bán" valuePropName="checked" name={"isSale"}>
+            <Checkbox />
+          </Form.Item>
+          <Form.Item label="OOS" valuePropName="checked" name={"isOos"}>
+            <Checkbox />
+          </Form.Item>
+          <Form.Item
+            label="Đổi quà"
+            valuePropName="checked"
+            name={"isGiftExchange"}
+          >
+            <Checkbox />
+          </Form.Item>
+          <Form.Item label="Quà tặng" valuePropName="checked" name={"isGift"}>
+            <Checkbox />
+          </Form.Item>
+          <Form.Item
+            label="Quà ngoài"
+            valuePropName="checked"
+            name={"isGiftExternal"}
+          >
+            <Checkbox />
+          </Form.Item>
+          <Form.Item
+            label="Sampling"
+            valuePropName="checked"
+            name={"isSampling"}
+          >
+            <Checkbox />
+          </Form.Item>
+        </div>
+      )}
       <Form.Item label="Hoạt động" valuePropName="checked" name={"isActive"}>
         <Switch checkedChildren="Bật" unCheckedChildren="Tắt"></Switch>
       </Form.Item>

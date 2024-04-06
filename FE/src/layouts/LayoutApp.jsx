@@ -91,6 +91,9 @@ const AppLayout = () => {
                   <Menu.Item icon={<BuildOutlined />} key="products">
                     <Link to={`/manager/products`}>Sản phẩm</Link>
                   </Menu.Item>
+                  <Menu.Item icon={<BuildOutlined />} key="gift">
+                    <Link to={`/manager/gifts`}>Quà tặng</Link>
+                  </Menu.Item>
                   <Menu.Item icon={<FileImageOutlined />} key="group-image">
                     <Link to={`/manager/group-image`}>Group hình ảnh</Link>
                   </Menu.Item>

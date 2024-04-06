@@ -21,6 +21,7 @@ const ReportSalePage = lazy(() => import("../reports/sale"));
 const QuestionHomePage = lazy(() => import("../questions/pages"));
 const UserHomePage = lazy(() => import("../users/pages"));
 const ProductHomePage = lazy(() => import("../products/pages"));
+const GiftHomePage = lazy(() => import("../products/pages/gift"));
 const StoreHomePage = lazy(() => import("../stores/pages"));
 const AnnoucementHomePage = lazy(() => import("../annoucements/pages"));
 const ReportGiftExchangePage = lazy(() => import("../reports/gift-exchange"));
@@ -39,6 +40,12 @@ const managerRoutes: IRoute[] = [
       {
         component: ProductHomePage,
         path: "products",
+        isPrivate: true,
+        exact: true,
+      },
+      {
+        component: GiftHomePage,
+        path: "gifts",
         isPrivate: true,
         exact: true,
       },

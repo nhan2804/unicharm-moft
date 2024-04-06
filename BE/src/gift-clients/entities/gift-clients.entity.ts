@@ -33,6 +33,8 @@ export class GiftClient {
   products: object;
   @Prop()
   imgClient: string;
+  @Prop({ type: Object })
+  productsBill: object;
   @Prop()
   imgBill: string;
   @Prop()
