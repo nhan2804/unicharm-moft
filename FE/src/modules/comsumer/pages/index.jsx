@@ -60,19 +60,19 @@ const LoginComsumer = () => {
       {
         onSuccess: (data) => {
           dispatch(loginAction(data?.login));
-          // const str = data?.isShowCode ? `?code=${data?.code?.code}` : "";
-          // navigate(`/consumer/create-bill${str}`, {
-          //   replace: true,
-          // });
-          // if (!data?.isOkeLimit) {
-          //   Modal.info({
+          if (data?.giftClient?.type === "SELLING") {
+            navigate(`/consumer/roll/${data?.giftClient?._id}`);
+            return;
+          }
+          // if (data) {
+          //   Modal.success({
           //     type: "info",
           //     title: "Thông tin",
           //     centered: true,
           //     content: (
           //       <div>
-          //         <p className="text-yellow-500">
-          //           {"Mỗi ngày chỉ nhận được tối đa 1 lần MÃ DỰ THƯỞNG"}
+          //         <p className="text-xl">
+          //           Bạn vui lòng kiểm tra tin nhắn để lấy mã dự thưởng!
           //         </p>
           //       </div>
           //     ),
@@ -81,26 +81,8 @@ const LoginComsumer = () => {
           //     maskClosable: true,
           //     closeIcon: <div>X</div>,
           //   });
+          //   form.resetFields();
           // }
-          if (data) {
-            Modal.success({
-              type: "info",
-              title: "Thông tin",
-              centered: true,
-              content: (
-                <div>
-                  <p className="text-xl">
-                    Bạn vui lòng kiểm tra tin nhắn để lấy mã dự thưởng!
-                  </p>
-                </div>
-              ),
-              okText: "Ok",
-              closable: true,
-              maskClosable: true,
-              closeIcon: <div>X</div>,
-            });
-            form.resetFields();
-          }
         },
       }
     );

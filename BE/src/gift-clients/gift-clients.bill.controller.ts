@@ -219,9 +219,9 @@ export class GiftClientsbillController {
             'Mã của bill của siêu thị này đã được duyệt trong ngày, vui lòng xem lại danh sách bill đã duyệt',
           );
         }
-        // if (updateGiftClientDto?.data) {
-        //   bill.data = updateGiftClientDto?.data;
-        // }
+        if (updateGiftClientDto?.productsBill) {
+          bill.productsBill = updateGiftClientDto?.productsBill;
+        }
         // if (updateGiftClientDto?.shift) {
         //   bill.shift = updateGiftClientDto?.shift;
         // }

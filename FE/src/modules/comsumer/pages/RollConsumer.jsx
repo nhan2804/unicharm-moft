@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Modal, theme } from "antd";
+import { Button, Card, Form, Result, Modal, theme, Skeleton } from "antd";
 import classNames from "classnames";
 import React, { Suspense, lazy, useRef, useState } from "react";
 import { useEffect } from "react";
@@ -11,6 +11,9 @@ import spin1 from "@assets/spin.png";
 import spin2 from "@assets/spin2.png";
 import { useCallback } from "react";
 import { isSafari } from "react-device-detect";
+import { useParams } from "react-router";
+import useShowGiftClients from "../hooks/query/useShowGiftClients";
+import CustomSkeleton from "@components/CustomSkeleton";
 const CustomWheel = lazy(() => import("../components/Wheel"));
 
 const { useToken } = theme;
@@ -110,6 +113,54 @@ const RollConsumer = () => {
     ),
     [handleSpinClick, isLoading, mustSpin]
   );
+  const { id } = useParams();
+  // console.log(location);
+  const { data: bill, isLoading: loadingBill } = useShowGiftClients(id, {
+    refresh: true,
+  });
+  if (!bill && loadingBill) {
+    return <CustomSkeleton />;
+  }
+  if (!bill && !loadingBill) {
+    return (
+      <Result
+        status={"404"}
+        title="404 Bill Not Found!"
+        extra={
+          <Button onClick={() => nav("/c")} type="primary" key="console">
+            Về trang chủ
+          </Button>
+        }
+      />
+    );
+  }
+  if (bill?.status === "DONE") {
+    return (
+      <Result
+        status={"success"}
+        title="Bạn đã quay được phần quà, vui lòng quay về trang chủ!"
+        extra={
+          <Button onClick={() => nav("/c")} type="primary" key="console">
+            Về trang chủ
+          </Button>
+        }
+      />
+    );
+  }
+
+  if (bill?.status === "PENDING") {
+    return (
+      <Result
+        status={"warning"}
+        title="Bill đang chờ duyệt, vui lòng đợi!"
+        // extra={
+        //   <Button type="primary" key="console">
+        //     Go Console
+        //   </Button>
+        // }
+      />
+    );
+  }
   return (
     <div className="flex justify-center items-center">
       <div>

@@ -98,7 +98,7 @@ const FormAcceptBill = ({ onFinish, selected, type, products }) => {
               <div>
                 <Form.List
                   label="Danh sách sản phẩm"
-                  name={["data"]}
+                  name={["productsBill"]}
                   //   rules={[
                   //     {
                   //       validator: async (_, option) => {

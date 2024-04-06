@@ -18,33 +18,31 @@ const consumerRoutes: IRoute[] = [
     path: "/c/",
     component: LoginComsumer,
   },
-  // {
-  //   component: ConsumerLayout,
-  //   isPrivate: true,
-  //   accessRole: ["GUEST"],
-  //   children: [
-  //     {
-  //       path: "/consumer",
-  //       component: ConsumerRoll,
-  //     },
-  //     {
-  //       path: "/consumer/roll",
-  //       component: ConsumerRoll,
-  //     },
-  //     {
-  //       path: "/consumer/history",
-  //       component: ConsumerHistory,
-  //     },
+  {
+    component: ConsumerLayout,
+    isPrivate: false,
+    accessRole: ["GUEST"],
+    path: "/consumer",
+    children: [
+      {
+        path: "roll/:id",
+        component: ConsumerRoll,
+        isPrivate: false,
+      },
+      // {
+      //   path: "/consumer/history",
+      //   component: ConsumerHistory,
+      // },
 
-  //     {
-  //       path: "/consumer/bill",
-  //       component: ConsumerBill,
-  //     },
-  //     {
-  //       path: "/consumer/create-bill",
-  //       component: CreateBillCustomer,
-  //     },
-  //   ],
-  // },
+      // {
+      //   path: "/consumer/bill",
+      //   component: ConsumerBill,
+      // },
+      // {
+      //   path: "/consumer/create-bill",
+      //   component: CreateBillCustomer,
+      // },
+    ],
+  },
 ];
 export default consumerRoutes;
