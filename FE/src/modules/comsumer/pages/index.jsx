@@ -60,7 +60,6 @@ const LoginComsumer = () => {
       {
         onSuccess: (data) => {
           dispatch(loginAction(data?.login));
-          console.log({ data });
           // const str = data?.isShowCode ? `?code=${data?.code?.code}` : "";
           // navigate(`/consumer/create-bill${str}`, {
           //   replace: true,
@@ -83,24 +82,25 @@ const LoginComsumer = () => {
           //     closeIcon: <div>X</div>,
           //   });
           // }
-          // if (data?.dataRes) {
-          //   Modal.success({
-          //     type: "info",
-          //     title: "Thông tin",
-          //     centered: true,
-          //     content: (
-          //       <div>
-          //         <p className="text-xl">
-          //           Bạn vui lòng kiểm tra tin nhắn để lấy mã dự thưởng!
-          //         </p>
-          //       </div>
-          //     ),
-          //     okText: "Ok",
-          //     closable: true,
-          //     maskClosable: true,
-          //     closeIcon: <div>X</div>,
-          //   });
-          // }
+          if (data) {
+            Modal.success({
+              type: "info",
+              title: "Thông tin",
+              centered: true,
+              content: (
+                <div>
+                  <p className="text-xl">
+                    Bạn vui lòng kiểm tra tin nhắn để lấy mã dự thưởng!
+                  </p>
+                </div>
+              ),
+              okText: "Ok",
+              closable: true,
+              maskClosable: true,
+              closeIcon: <div>X</div>,
+            });
+            form.resetFields();
+          }
         },
       }
     );
