@@ -27,6 +27,8 @@ export class GiftClient {
   phone?: string;
   @Prop({ default: 'PENDING' })
   status?: string;
+  @Prop({ type: Types.ObjectId, ref: User.name })
+  creatorId: Types.ObjectId;
   @Prop({ type: SchemaTypes.ObjectId, ref: Store.name, index: true })
   storeId?: Types.ObjectId;
   @Prop({ type: Object })

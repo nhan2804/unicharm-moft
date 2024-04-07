@@ -46,6 +46,8 @@ export class Reportsubmit {
   endShiftGiftExternals?: object;
   @Prop()
   imgbbnt?: string;
+  @Prop()
+  note?: string;
 
   //OOS s
   @Prop({ type: Object })

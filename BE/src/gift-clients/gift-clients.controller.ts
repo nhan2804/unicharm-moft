@@ -26,8 +26,9 @@ import { UsersService } from 'src/users/users.service';
 import { AuthService } from 'src/auth/auth.service';
 import { StoresService } from 'src/stores/stores.service';
 import { customAlphabet, nanoid } from 'nanoid';
-import { User } from 'src/users/entities/user.entity';
+import { User, UserDocument } from 'src/users/entities/user.entity';
 import { ProductsService } from 'src/products/products.service';
+import { UserLoggin } from 'src/auth/decorators/user';
 @Controller('gift-clients')
 export class GiftClientsController {
   constructor(
@@ -50,6 +51,7 @@ export class GiftClientsController {
       products?: object;
       imageBill?: string;
     },
+    @UserLoggin() currentUser: UserDocument,
   ) {
     if (!data?.phone || !data?.storeId) {
       throw new BadRequestException('Có lỗi xảy ra, vui lòng thử lại!');
@@ -98,6 +100,7 @@ export class GiftClientsController {
       consumerId: user?._id,
       storeId: new Types.ObjectId(data?.storeId),
       type: data?.type,
+      creatorId: currentUser?._id,
       ...extraData,
     } as GiftClient);
 
@@ -137,6 +140,8 @@ export class GiftClientsController {
     if (!giftSelected) {
       throw new BadRequestException('Đã hết quà, vui lòng quay lại sau!');
     }
+    const otp = customAlphabet('1234567890qwertyuioplkjhgfdsaxxcvbnm', 6);
+    bill.code = otp();
     bill.status = 'DONE';
     bill.products = {
       [giftSelected?._id]: 1,
