@@ -18,6 +18,7 @@ const ReportSamplingPage = lazy(() => import("../reports/sampling"));
 const ReportOOSPage = lazy(() => import("../reports/oos"));
 const ReportGiftPage = lazy(() => import("../reports/gift"));
 const ReportSalePage = lazy(() => import("../reports/sale"));
+const ReportEndShiftPage = lazy(() => import("../reports/end-shift"));
 const QuestionHomePage = lazy(() => import("../questions/pages"));
 const UserHomePage = lazy(() => import("../users/pages"));
 const ProductHomePage = lazy(() => import("../products/pages"));
@@ -130,6 +131,12 @@ const managerRoutes: IRoute[] = [
       {
         component: ReportGiftPage,
         path: "report/gift",
+        isPrivate: true,
+        exact: true,
+      },
+      {
+        component: ReportEndShiftPage,
+        path: "report/end-shift",
         isPrivate: true,
         exact: true,
       },

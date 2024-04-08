@@ -10,7 +10,7 @@ export type TypeReport =
   | "sup"
   | "image"
   | "end-shift";
-interface IUser {
+export interface IUser {
   fullName: string;
   _id: string;
   username: string;

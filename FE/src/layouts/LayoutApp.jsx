@@ -174,9 +174,9 @@ const AppLayout = () => {
             {/* <Menu.Item icon={<FileDoneOutlined />} key="gift">
               <Link to={`/manager/report/gift`}>Report quà tặng</Link>
             </Menu.Item> */}
-            {/* <Menu.Item icon={<FileDoneOutlined />} key="sampling">
-              <Link to={`/manager/report/sampling`}>Report sampling</Link>
-            </Menu.Item> */}
+            <Menu.Item icon={<FileDoneOutlined />} key="sampling">
+              <Link to={`/manager/report/end-shift`}>Report cuối ca</Link>
+            </Menu.Item>
             <Menu.Item icon={<FileDoneOutlined />} key="image">
               <Link to={`/manager/report/image`}>Report hình ảnh</Link>
             </Menu.Item>

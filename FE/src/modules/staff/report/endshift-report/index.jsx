@@ -1,18 +1,26 @@
 import FormEndShiftReport from "@modules/staff/components/FormEndShiftReport";
 import React, { useEffect, useMemo } from "react";
 import useCreateReport from "@modules/staff/hooks/mutate/useCreateReport";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Form } from "antd";
 import useGetGiftClients from "@modules/comsumer/hooks/query/useGetGiftClients";
+import useGetReport from "@modules/staff/hooks/query/useGetReport";
 import useGetTodayGiftClients from "@modules/comsumer/hooks/query/useGetTodayGiftClients";
+import CustomPageHeader from "@components/CustomPageHeader";
 
 const EndShiftReportPage = () => {
   const { storeId } = useParams();
   const { mutate: createReport } = useCreateReport(storeId, "end-shift");
+  const nav = useNavigate();
   const onFinish = (values) => {
-    createReport(values);
+    createReport(values, {
+      onSuccess: () => {
+        nav(-1);
+      },
+    });
   };
   const { data: giftClientsToday } = useGetTodayGiftClients(storeId);
+  const { data: endShiftReportToday } = useGetReport(storeId, "end-shift");
   const initData = useMemo(() => {
     let endShiftSamplings = {};
     let endShiftGiftExternals = {};
@@ -45,14 +53,20 @@ const EndShiftReportPage = () => {
         });
       }
     });
-    return { endShiftSamplings, endShiftGiftExternals, endShiftSales };
-  }, [giftClientsToday]);
+    return {
+      ...endShiftReportToday,
+      endShiftSamplings,
+      endShiftGiftExternals,
+      endShiftSales,
+    };
+  }, [giftClientsToday, endShiftReportToday]);
   const [form] = Form.useForm();
   useEffect(() => {
     form.setFieldsValue(initData);
   }, [form, initData]);
   return (
     <div>
+      <CustomPageHeader title="Báo cáo cuối ca" />
       <FormEndShiftReport form={form} onFinish={onFinish} />
     </div>
   );

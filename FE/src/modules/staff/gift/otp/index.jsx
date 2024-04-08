@@ -32,6 +32,12 @@ const GiftOtpPage = () => {
           if (gift?.type === "SAMPLING") {
             nav(`/staff/stores/${gift?.storeId}/show-gift/${gift?._id}`);
           } else if (gift?.type === "SELLING") {
+            if (gift?.status === "ACCEPTED") {
+              toast.error(
+                "Khách hàng vẫn chưa quay thưởng, vui lòng quay thưởng!"
+              );
+              return;
+            }
             nav(`/staff/stores/${gift?.storeId}/update-image/${gift?._id}`);
           }
         } else {

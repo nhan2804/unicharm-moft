@@ -9,10 +9,13 @@ const useLoginAndGenerateCode = () => {
   // const navigate = useNavigate();
   // const dispatch = useAppDispatch();
 
-  return useMutation(async (requestData) => {
-    const { data } = await axios.post(`gift-clients/consumer`, requestData);
-    return data;
-  }, {});
+  return useMutation(
+    async (requestData) => {
+      const { data } = await axios.post(`gift-clients/consumer`, requestData);
+      return data;
+    },
+    { onSuccess: () => {} }
+  );
 };
 
 export default useLoginAndGenerateCode;

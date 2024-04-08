@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button, Form, Input, Modal, Select } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, Modal, Select, Result } from "antd";
 import useLogin from "@modules/auth/hooks/useLogin";
 import { useNavigate, useParams } from "react-router";
 import useQueryString2 from "@hooks/useQueryString2";
@@ -22,6 +22,7 @@ const LoginComsumer = () => {
   const { data: samplingProducts, isLoading: isLoadingPrd } = useGetProduct({
     isSampling: true,
   });
+  const [finished, setFinished] = useState(false);
   const user = useAppSelector((s) => s?.auth?.user);
   console.log({ user });
 
@@ -64,31 +65,46 @@ const LoginComsumer = () => {
             navigate(`/consumer/roll/${data?.giftClient?._id}`);
             return;
           }
-          // if (data) {
-          //   Modal.success({
-          //     type: "info",
-          //     title: "Thông tin",
-          //     centered: true,
-          //     content: (
-          //       <div>
-          //         <p className="text-xl">
-          //           Bạn vui lòng kiểm tra tin nhắn để lấy mã dự thưởng!
-          //         </p>
-          //       </div>
-          //     ),
-          //     okText: "Ok",
-          //     closable: true,
-          //     maskClosable: true,
-          //     closeIcon: <div>X</div>,
-          //   });
-          //   form.resetFields();
-          // }
+          if (data?.giftClient) {
+            setFinished(true);
+            Modal.success({
+              type: "info",
+              title: "Thông tin",
+              centered: true,
+              content: (
+                <div>
+                  <p className="text-xl">Dev code: {data?.giftClient?.code}</p>
+                </div>
+              ),
+              okText: "Ok",
+              closable: true,
+              maskClosable: true,
+              closeIcon: <div>X</div>,
+            });
+            form.resetFields();
+          }
         },
       }
     );
   };
   const [form] = Form.useForm();
   const watchType = useWatch("type", form);
+  if (finished)
+    return (
+      <Result
+        status={"success"}
+        title="Mã xác nhận đã được gửi đến số điện thoại, vui lòng kiểm tra và đưa nó cho nhân viên!"
+        extra={
+          <Button
+            onClick={() => setFinished(false)}
+            type="primary"
+            key="console"
+          >
+            Đồng ý
+          </Button>
+        }
+      />
+    );
   return (
     <div className="flex items-center justify-center h-full">
       <div>
