@@ -51,7 +51,7 @@ export class GiftClientsController {
       products?: object;
       imageBill?: string;
     },
-    @UserLoggin() currentUser: UserDocument,
+    // @UserLoggin() currentUser: UserDocument,
   ) {
     if (!data?.phone || !data?.storeId) {
       throw new BadRequestException('Có lỗi xảy ra, vui lòng thử lại!');
@@ -100,7 +100,7 @@ export class GiftClientsController {
       consumerId: user?._id,
       storeId: new Types.ObjectId(data?.storeId),
       type: data?.type,
-      creatorId: currentUser?._id,
+      // creatorId: currentUser?._id,
       ...extraData,
     } as GiftClient);
 
@@ -188,6 +188,7 @@ export class GiftClientsController {
       sortObj,
       query?.page,
       query?.perPage,
+      ['store', 'creator'],
     );
   }
 
@@ -200,8 +201,16 @@ export class GiftClientsController {
   update(
     @Param('id') id: string,
     @Body() updateGiftClientDto: UpdateGiftClientDto,
+    @UserLoggin() currentUser: UserDocument,
   ) {
-    return this.giftClientsService.updateOne(id, updateGiftClientDto);
+    let extraUpdate = {};
+    if (updateGiftClientDto?.imgClient) {
+      extraUpdate = { creator: currentUser?._id };
+    }
+    return this.giftClientsService.updateOne(id, {
+      ...updateGiftClientDto,
+      ...extraUpdate,
+    });
   }
 
   @Delete(':id')

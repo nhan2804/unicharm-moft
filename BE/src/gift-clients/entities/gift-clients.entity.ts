@@ -55,3 +55,22 @@ export class GiftClient {
 }
 
 export const GiftClientSchema = SchemaFactory.createForClass(GiftClient);
+
+GiftClientSchema.virtual('store', {
+  ref: Store.name,
+  localField: 'storeId',
+  foreignField: '_id',
+  justOne: true,
+});
+GiftClientSchema.virtual('updator', {
+  ref: User.name,
+  localField: 'updatorId',
+  foreignField: '_id',
+  justOne: true,
+});
+GiftClientSchema.virtual('creator', {
+  ref: User.name,
+  localField: 'creatorId',
+  foreignField: '_id',
+  justOne: true,
+});

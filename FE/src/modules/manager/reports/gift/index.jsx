@@ -1,5 +1,14 @@
 import CustomPageHeader from "@components/CustomPageHeader";
-import { Button, DatePicker, Form, Image, Input, Select, Table } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Image,
+  Input,
+  Select,
+  Table,
+  Tabs,
+} from "antd";
 import React, { lazy, useMemo } from "react";
 import {
   SearchOutlined,
@@ -21,6 +30,7 @@ import FormGift from "@modules/staff/components/FormGift";
 import initRangeToday from "@helper/getInitRangeToday";
 import filterOption from "@helper/filterOption";
 import useRole from "@hooks/useRole";
+import useGetGiftClients from "@modules/comsumer/hooks/query/useGetGiftClients";
 const ExportExcelReport = lazy(() => import("../components/ExportExcel"));
 const ReportGiftPage = () => {
   const [formSearch] = Form.useForm();
@@ -31,7 +41,8 @@ const ReportGiftPage = () => {
   const { canWrite } = useRole();
   const [form] = Form.useForm();
 
-  const { data: products } = useGetProduct({ isGift: true });
+  const { data: sampling } = useGetProduct({ isSampling: true });
+  const { data: giftExternal } = useGetProduct({ isGiftExternal: true });
   const { data: stores } = useGetStore();
 
   const pagination = usePagination({ reset: Object.values(search) });
@@ -43,24 +54,19 @@ const ReportGiftPage = () => {
     range: undefined,
     ...pagination?.sort,
   };
-  const { data: gifts, isLoading } = useManagerReport("gift", query);
-  const extraColumn = useMemo(() => {
+  const { data: giftClients, isLoading } = useGetGiftClients(query);
+  const sellingData = useMemo(() => {
+    return giftClients?.data?.filter((e) => e?.type === "SELLING");
+  }, [giftClients]);
+  const samplingData = useMemo(() => {
+    return giftClients?.data?.filter((e) => e?.type === "SAMPLING");
+  }, [giftClients]);
+  // const { data: gifts, isLoading } = useManagerReport("gift", query);
+  const extraColumnSampling = useMemo(() => {
     const moreData = [
       {
-        title: "Tồn đầu",
-        key: "startShiftInventory",
-      },
-      {
-        title: "Nhập thêm giữa ca",
-        key: "midShiftAddProduct",
-      },
-      {
-        title: "Sử dụng",
-        key: "usingGift",
-      },
-      {
-        title: "Tồn cuối",
-        key: "endShiftInventory",
+        title: "Quà tặng sampling",
+        key: "products",
       },
     ];
     return moreData?.map((data) => {
@@ -69,7 +75,7 @@ const ReportGiftPage = () => {
         dataIndex: [data.key],
         key: data.key,
         children:
-          products?.data?.map((e) => {
+          sampling?.data?.map((e) => {
             return {
               title: e?.name,
               dataIndex: [data.key, e?._id],
@@ -78,7 +84,66 @@ const ReportGiftPage = () => {
           }) || [],
       };
     });
-  }, [products]);
+  }, [sampling]).concat([
+    {
+      title: "H.động",
+      dataIndex: "action",
+      key: "action",
+      render: (_, record) => (
+        <Button
+          onClick={() => {
+            setSelected(record);
+            form.setFieldsValue(record);
+            ref?.current?.open?.();
+          }}
+          icon={<EditOutlined />}
+          type="primary"
+          disabled={!canWrite}
+        ></Button>
+      ),
+    },
+  ]);
+  const extraColumnSelling = useMemo(() => {
+    const moreData = [
+      {
+        title: "Quà tặng sampling",
+        key: "products",
+      },
+    ];
+    return moreData?.map((data) => {
+      return {
+        title: data.title,
+        dataIndex: [data.key],
+        key: data.key,
+        children:
+          giftExternal?.data?.map((e) => {
+            return {
+              title: e?.name,
+              dataIndex: [data.key, e?._id],
+              key: e?._id,
+            };
+          }) || [],
+      };
+    });
+  }, [giftExternal]).concat([
+    {
+      title: "H.động",
+      dataIndex: "action",
+      key: "action",
+      // render: (_, record) => (
+      //   <Button
+      //     onClick={() => {
+      //       setSelected(record);
+      //       form.setFieldsValue(record);
+      //       ref?.current?.open?.();
+      //     }}
+      //     icon={<EditOutlined />}
+      //     type="primary"
+      //     disabled={!canWrite}
+      //   ></Button>
+      // ),
+    },
+  ]);
   const columns = [
     {
       title: "No.",
@@ -112,20 +177,20 @@ const ReportGiftPage = () => {
         multiple: 1,
       },
     },
+    // {
+    //   title: "Ca",
+    //   dataIndex: ["shift", "name"],
+    //   key: "shift",
+    // },
     {
-      title: "Ca",
-      dataIndex: ["shift", "name"],
-      key: "shift",
-    },
-    {
-      title: "Người tạo",
+      title: "Người cập nhật ảnh",
       dataIndex: ["creator", "fullName"],
       key: ["creator", "fullName"],
     },
     {
-      title: "Hình ảnh",
-      dataIndex: "image1",
-      key: "image1",
+      title: "Ảnh khách hàng",
+      dataIndex: "imgClient",
+      key: "imgClient",
       render: (txt, record) => (
         <div>
           {txt && <Image width={40} src={txt} alt="" />}
@@ -133,27 +198,7 @@ const ReportGiftPage = () => {
         </div>
       ),
     },
-  ]
-    .concat(extraColumn)
-    .concat([
-      {
-        title: "H.động",
-        dataIndex: "action",
-        key: "action",
-        render: (_, record) => (
-          <Button
-            onClick={() => {
-              setSelected(record);
-              form.setFieldsValue(record);
-              ref?.current?.open?.();
-            }}
-            icon={<EditOutlined />}
-            type="primary"
-            disabled={!canWrite}
-          ></Button>
-        ),
-      },
-    ]);
+  ];
   const columnExport = [
     {
       title: "No.",
@@ -168,7 +213,7 @@ const ReportGiftPage = () => {
       render: (text) => dayjs(text).format("DD/MM/YYYY"),
     },
     {
-      title: "Outlet Code",
+      title: "Store Code",
       dataIndex: ["store", "code"],
       key: ["store", "code"],
     },
@@ -217,32 +262,25 @@ const ReportGiftPage = () => {
       dataIndex: ["creator", "fullName"],
       key: ["creator", "fullName"],
     },
+    // {
+    //   title: "Thời gian Check-in",
+    //   dataIndex: ["checkin", "timeCheckIn"],
+    //   key: ["checkin", "timeCheckIn"],
+    //   render: (text) => text && dayjs(text).format("HH:mm:ss"),
+    // },
+    // {
+    //   title: "Thời gian Check-out",
+    //   dataIndex: ["checkin", "timeCheckOut"],
+    //   key: ["checkin", "timeCheckOut"],
+    //   render: (text) => text && dayjs(text).format("HH:mm:ss"),
+    // },
     {
-      title: "Thời gian Check-in",
-      dataIndex: ["checkin", "timeCheckIn"],
-      key: ["checkin", "timeCheckIn"],
-      render: (text) => text && dayjs(text).format("HH:mm:ss"),
+      title: "Ảnh khách hàng",
+      dataIndex: "imgClient",
+      key: "imgClient",
+      render: (txt, record) => txt,
     },
-    {
-      title: "Thời gian Check-out",
-      dataIndex: ["checkin", "timeCheckOut"],
-      key: ["checkin", "timeCheckOut"],
-      render: (text) => text && dayjs(text).format("HH:mm:ss"),
-    },
-  ]
-    .concat(extraColumn)
-    .concat([
-      {
-        title: "Hình ảnh data đổi quà",
-        dataIndex: "image1",
-        key: "image1",
-      },
-      {
-        title: "Hình ảnh data đổi quà 2",
-        dataIndex: "image2",
-        key: "image2",
-      },
-    ]);
+  ];
   const ref = useRef();
   const [selected, setSelected] = useState(undefined);
   const { mutate: updateReport, isLoading: loadingUpdate } = useUpdateReport(
@@ -277,71 +315,149 @@ const ReportGiftPage = () => {
         noButton
       >
         {() => (
-          <FormGift
-            isLoading={loadingUpdate}
-            onFinish={handleEdit}
-            form={form}
-          />
+          <Form isLoading={loadingUpdate} onFinish={handleEdit} form={form} />
         )}
       </CustomModal>
       <CustomPageHeader title="Report quà tặng" />
-      <div className="flex justify-end mb-2">
-        <Form
-          onFinish={setSearch}
-          form={formSearch}
-          layout="inline"
-          initialValues={initSearchValues}
-          autoComplete="off"
-        >
-          <div className="flex flex-wrap items-center gap-x-1 gap-y-1 [&>*]:!m-0 !space-x-reverse form-no-margin">
-            <Form.Item name="range">
-              <DatePicker.RangePicker />
-            </Form.Item>
-            <Form.Item name="storeId">
-              <Select
-                filterOption={filterOption}
-                showSearch
-                style={{
-                  width: 200,
-                }}
-                allowClear
-                placeholder="Cửa hàng"
-              >
-                {stores?.data.map((e) => {
-                  return (
-                    <Select.Option value={e?._id}>{e?.name}</Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
+      <Tabs
+        defaultActiveKey="1"
+        items={[
+          {
+            label: "Quà tặng Sampling",
+            key: "1",
+            children: (
+              <>
+                <div className="flex justify-end mb-2">
+                  <Form
+                    onFinish={setSearch}
+                    form={formSearch}
+                    layout="inline"
+                    initialValues={initSearchValues}
+                    autoComplete="off"
+                  >
+                    <div className="flex flex-wrap items-center gap-x-1 gap-y-1 [&>*]:!m-0 !space-x-reverse form-no-margin">
+                      <Form.Item name="range">
+                        <DatePicker.RangePicker />
+                      </Form.Item>
+                      <Form.Item name="storeId">
+                        <Select
+                          filterOption={filterOption}
+                          showSearch
+                          style={{
+                            width: 200,
+                          }}
+                          allowClear
+                          placeholder="Cửa hàng"
+                        >
+                          {stores?.data.map((e) => {
+                            return (
+                              <Select.Option value={e?._id}>
+                                {e?.name}
+                              </Select.Option>
+                            );
+                          })}
+                        </Select>
+                      </Form.Item>
 
-            <Form.Item>
-              <Button
-                disabled={isLoading}
-                icon={<SearchOutlined />}
-                type="primary"
-                htmlType="submit"
-              >
-                Tìm
-              </Button>
-            </Form.Item>
-          </div>
-        </Form>
-        <ExportExcelReport
-          headerRows={[1, 2]}
-          type="report-gift"
-          columns={columnExport}
-          dataSource={gifts}
-        />
-      </div>
-      <Table
-        bordered
-        onChange={pagination.onChangeTable}
-        loading={isLoading}
-        scroll={{ x: "max-content" }}
-        columns={columns}
-        dataSource={gifts || []}
-      ></Table>
+                      <Form.Item>
+                        <Button
+                          disabled={isLoading}
+                          icon={<SearchOutlined />}
+                          type="primary"
+                          htmlType="submit"
+                        >
+                          Tìm
+                        </Button>
+                      </Form.Item>
+                    </div>
+                  </Form>
+                  <ExportExcelReport
+                    headerRows={[1, 2]}
+                    type="report-gift"
+                    columns={columnExport?.concat(extraColumnSampling)}
+                    dataSource={samplingData}
+                  />
+                </div>
+                <Table
+                  bordered
+                  onChange={pagination.onChangeTable}
+                  loading={isLoading}
+                  scroll={{ x: "max-content" }}
+                  columns={columns?.concat(extraColumnSampling)}
+                  dataSource={samplingData || []}
+                ></Table>
+              </>
+            ),
+          },
+          {
+            label: "Quà tặng Selling",
+            key: "2",
+            children: (
+              <>
+                <div className="flex justify-end mb-2">
+                  <Form
+                    onFinish={setSearch}
+                    form={formSearch}
+                    layout="inline"
+                    initialValues={initSearchValues}
+                    autoComplete="off"
+                  >
+                    <div className="flex flex-wrap items-center gap-x-1 gap-y-1 [&>*]:!m-0 !space-x-reverse form-no-margin">
+                      <Form.Item name="range">
+                        <DatePicker.RangePicker />
+                      </Form.Item>
+                      <Form.Item name="storeId">
+                        <Select
+                          filterOption={filterOption}
+                          showSearch
+                          style={{
+                            width: 200,
+                          }}
+                          allowClear
+                          placeholder="Cửa hàng"
+                        >
+                          {stores?.data.map((e) => {
+                            return (
+                              <Select.Option value={e?._id}>
+                                {e?.name}
+                              </Select.Option>
+                            );
+                          })}
+                        </Select>
+                      </Form.Item>
+
+                      <Form.Item>
+                        <Button
+                          disabled={isLoading}
+                          icon={<SearchOutlined />}
+                          type="primary"
+                          htmlType="submit"
+                        >
+                          Tìm
+                        </Button>
+                      </Form.Item>
+                    </div>
+                  </Form>
+                  <ExportExcelReport
+                    headerRows={[1, 2]}
+                    type="report-gift"
+                    columns={columnExport?.concat(extraColumnSelling)}
+                    dataSource={sellingData}
+                  />
+                </div>
+                <Table
+                  bordered
+                  onChange={pagination.onChangeTable}
+                  loading={isLoading}
+                  scroll={{ x: "max-content" }}
+                  columns={columns?.concat(extraColumnSelling)}
+                  dataSource={sellingData || []}
+                ></Table>
+              </>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 };
