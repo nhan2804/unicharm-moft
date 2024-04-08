@@ -10,7 +10,11 @@ import { useForm, useWatch } from "antd/es/form/Form";
 import SingleImageUpload from "@components/SingleImageUpload";
 import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
 const LoginComsumer = () => {
-  const { mutate: login, isLoading } = useLoginAndGenerateCode({});
+  const {
+    data: dataGiftClient,
+    mutate: login,
+    isLoading,
+  } = useLoginAndGenerateCode({});
   const querystring = useQueryString2();
   const qsParsed = querystring?.qsParsed;
   // alert("Không có ref và store trên qs");
@@ -64,6 +68,8 @@ const LoginComsumer = () => {
           if (data?.giftClient?.type === "SELLING") {
             navigate(`/consumer/roll/${data?.giftClient?._id}`);
             return;
+          } else {
+            alert("Mã OTP của bạn là : " + data?.giftClient?.code);
           }
           if (data?.giftClient) {
             setFinished(true);
@@ -105,6 +111,9 @@ const LoginComsumer = () => {
         }
       />
     );
+  if (!!dataGiftClient) {
+    return <Result status={"success"} title={"Bạn đã nhận được phần quà!"} />;
+  }
   return (
     <div className="flex items-center justify-center h-full">
       <div>

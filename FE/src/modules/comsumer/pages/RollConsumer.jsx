@@ -67,6 +67,8 @@ const RollConsumer = () => {
   const onEndWheel = async () => {
     // qc.cancelQueries(["userProfile"]);
     await new Promise((resolve) => setTimeout(resolve, 1000)); // 3 sec
+    alert(`OTP của bạn là ` + dataRandom?.code);
+    return;
     Modal.success({
       centered: true,
 

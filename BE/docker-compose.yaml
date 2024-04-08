@@ -1,8 +1,8 @@
 version: '3.8'
 services:
   app:
-    container_name: bayer-local
-    image: nhan2804/pg-heineken-v2:v1.0.0
+    container_name: app-unicharm-moft
+    image: nhan2804/unicharm-moft:v1.0.0
     pull_policy: if_not_present
     build:
       context: .

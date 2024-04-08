@@ -95,8 +95,8 @@ const ManagerBill = () => {
     },
     {
       title: "Ảnh bill",
-      dataIndex: "bill",
-      key: "bill",
+      dataIndex: "imgBill",
+      key: "imgBill",
       render: (text, record) => <Image width={100} src={text} />,
     },
     tab === "DENY"

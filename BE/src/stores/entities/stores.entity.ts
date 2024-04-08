@@ -59,6 +59,10 @@ export class Store {
   saleSup?: string;
   @Prop()
   kam?: string;
+  @Prop({ type: Object })
+  gifts?: object;
+  @Prop({ type: Object })
+  giftsCurrent?: object;
 }
 
 export const StoreSchema = SchemaFactory.createForClass(Store);

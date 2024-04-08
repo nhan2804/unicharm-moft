@@ -1,5 +1,6 @@
 import { IRoute } from "@routes/route.interface";
 import { lazy } from "react";
+const StoreGiftPage = lazy(() => import("../stores/pages/gift"));
 const ManagerBill = lazy(() => import("../bill/pages/manager"));
 const ReportCheckinSupPage = lazy(() => import("../reports/checkin-sup"));
 const ReportQuestion = lazy(() => import("../reports/question"));
@@ -59,6 +60,12 @@ const managerRoutes: IRoute[] = [
       {
         component: StoreHomePage,
         path: "stores",
+        isPrivate: true,
+        exact: true,
+      },
+      {
+        component: StoreGiftPage,
+        path: "stores-gift",
         isPrivate: true,
         exact: true,
       },

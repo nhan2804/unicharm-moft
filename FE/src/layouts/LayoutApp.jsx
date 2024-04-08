@@ -88,6 +88,11 @@ const AppLayout = () => {
                   <Menu.Item icon={<AppstoreOutlined />} key="stores">
                     <Link to={`/manager/stores`}>Cửa hàng</Link>
                   </Menu.Item>
+                  <Menu.Item icon={<AppstoreOutlined />} key="stores-gift">
+                    <Link to={`/manager/stores-gift`}>
+                      Cửa hàng - Kho topup
+                    </Link>
+                  </Menu.Item>
                   <Menu.Item icon={<BuildOutlined />} key="products">
                     <Link to={`/manager/products`}>Sản phẩm</Link>
                   </Menu.Item>
@@ -112,12 +117,12 @@ const AppLayout = () => {
                   {/* <Menu.Item icon={<AuditOutlined />} key="question-policy">
                     <Link to={`/manager/question-policy`}>Câu hỏi Policy</Link>
                   </Menu.Item> */}
-                  <Menu.Item
+                  {/* <Menu.Item
                     icon={<InsertRowLeftOutlined />}
                     key="form-schemas"
                   >
                     <Link to={`/manager/form-schemas`}>Scheme đổi quà</Link>
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Item icon={<UserSwitchOutlined />} key="users">
                     <Link to={`/manager/users`}>Nhân viên</Link>
                   </Menu.Item>

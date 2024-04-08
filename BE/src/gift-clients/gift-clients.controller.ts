@@ -49,7 +49,7 @@ export class GiftClientsController {
       fullName: string;
       type: 'SELLING' | 'SAMPLING';
       products?: object;
-      imageBill?: string;
+      imgBill?: string;
     },
     @UserLoggin() currentUser: UserDocument,
   ) {
@@ -101,6 +101,7 @@ export class GiftClientsController {
       storeId: new Types.ObjectId(data?.storeId),
       type: data?.type,
       creatorId: currentUser?._id,
+      imgBill: data?.imgBill,
       ...extraData,
     } as GiftClient);
 
@@ -126,32 +127,33 @@ export class GiftClientsController {
     if (bill?.type === 'SAMPLING' || bill?.status !== 'ACCEPTED') {
       throw new BadRequestException('Bill không hợp lệ');
     }
-    const gift = (
-      await this.productService.findAll(
-        {
-          isGiftExternal: true,
-        },
-        { name: 1, _id: 1, current: 1, quantity: 1 },
-      )
-    ).filter((e) => {
-      return e.current < e.quantity;
-    });
-    const giftSelected = gift?.[Math.floor(Math.random() * gift?.length)];
-    if (!giftSelected) {
+    const store = await this.storeService.findOne({ _id: bill?.storeId });
+    const gifts = Object.entries(store?.gifts || {}).filter(
+      (e) => !!e[1] && e[1] > 0,
+    );
+    if (gifts.length === 0)
       throw new BadRequestException('Đã hết quà, vui lòng quay lại sau!');
-    }
+    const giftSelected = gifts?.[Math.floor(Math.random() * gifts?.length)];
+
+    // const giftSelected = gift?.[Math.floor(Math.random() * gift?.length)];
+    // if (!giftSelected) {
+    //   throw new BadRequestException('Đã hết quà, vui lòng quay lại sau!');
+    // }
     const otp = customAlphabet('1234567890qwertyuioplkjhgfdsaxxcvbnm', 6);
     bill.code = otp();
-    bill.status = 'DONE';
+    bill.status = 'CONFIRM';
     bill.products = {
-      [giftSelected?._id]: 1,
+      [giftSelected?.[0]]: 1,
     };
     bill.save();
-    this.productService.updateOne(giftSelected?._id, {
-      $inc: {
-        current: 1,
-      },
+    this.storeService.updateOne(store?._id, {
+      $inc: { [`giftsCurrent.${giftSelected?.[0]}`]: 1 },
     });
+    // this.productService.updateOne(giftSelected?._id, {
+    //   $inc: {
+    //     current: 1,
+    //   },
+    // });
     return bill;
   }
   @Post('bulk/create')
