@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
 
 import useCreateStore from "../hooks/mutate/useCreateStore";
@@ -7,7 +7,7 @@ import useUpdateStore from "../hooks/mutate/useUpdateStore";
 import useDeleteStore from "../hooks/mutate/useDeleteStore";
 import useDeleteBulkStore from "../hooks/mutate/useDeleteBulkStore";
 import useGetStore from "../hooks/query/useGetStore";
-import StoreFormCreate from "../components/Form";
+import StoreFormUpdateGift from "../components/Form/gift";
 
 import {
   SearchOutlined,
@@ -16,6 +16,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 
+import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
 import usePagination from "@hooks/usePagination";
 import useSearchQuery from "@hooks/useSearchQuery";
 import { useParams } from "react-router";
@@ -39,19 +40,9 @@ import ExportExcelReport from "@modules/manager/reports/components/ExportExcel";
 export const downloadQRCode = async (query) => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   const qrs = document.querySelectorAll(query);
-  // const arrCanvas = [];
 
-  // for (const el of qrs) {
-  //   const ca = await new Promise((resolve) => {
-  //     html2canvas(el).then(function (canvas) {
-  //       resolve(canvas);
-  //     });
-  //   });
-  //   arrCanvas.push(ca);
-  // }
-  // console.log(arrCanvas);
   console.log({ qrs });
-  // return;
+
   for (const el of qrs) {
     const canvas = el.querySelector("canvas");
     if (canvas) {
@@ -68,7 +59,7 @@ export const downloadQRCode = async (query) => {
     }
   }
 };
-const StoreHomePage = () => {
+const StoreGiftPage = () => {
   const {} = useParams();
   const [formSearch] = Form.useForm();
   const { initSearchValues, search, setSearch } = useSearchQuery();
@@ -97,7 +88,27 @@ const StoreHomePage = () => {
     range: undefined,
     ...pagination?.sort,
   };
-
+  const { data: gifts } = useGetProduct({ isGiftExternal: true });
+  const extraColumn = useMemo(() => {
+    if (!gifts?.data) return [];
+    return gifts?.data
+      ?.map((data) => {
+        return {
+          title: data?.name,
+          dataIndex: ["giftsCurrent", data?._id],
+          key: ["giftsCurrent", data?._id],
+        };
+      })
+      ?.concat(
+        gifts?.data?.map((data) => {
+          return {
+            title: data?.name,
+            dataIndex: ["gifts", data?._id],
+            key: ["gifts", data?._id],
+          };
+        }) || []
+      );
+  }, [gifts]);
   const { mutate: createStoreFn, isLoading: isLoadingCreate } =
     useCreateStore();
   const { data: stores, isLoading: loadingFetch } = useGetStore(query);
@@ -206,7 +217,7 @@ const StoreHomePage = () => {
   };
   const columns = [
     {
-      title: "Tên",
+      title: "Tênxxx",
       dataIndex: "name",
       key: "name",
     },
@@ -226,46 +237,7 @@ const StoreHomePage = () => {
       dataIndex: "region",
       key: "region",
     },
-    {
-      title: "Số nhà",
-      dataIndex: "house_num",
-      key: "house_num",
-    },
-    {
-      title: "Đường",
-      dataIndex: "street",
-      key: "street",
-    },
-    {
-      title: "Huyện",
-      dataIndex: "district",
-      key: "district",
-    },
-    {
-      title: "Tỉnh",
-      dataIndex: "province",
-      key: "province",
-    },
-    {
-      title: "Miêu tả",
-      dataIndex: "desc",
-      key: "desc",
-    },
-    {
-      title: "Sale rep",
-      dataIndex: "saleRep",
-      key: "saleRep",
-    },
-    {
-      title: "Sale sup",
-      dataIndex: "saleSup",
-      key: "saleSup",
-    },
-    {
-      title: "KAM",
-      dataIndex: "kam",
-      key: "kam",
-    },
+    ...extraColumn,
     {
       title: "QR code",
       dataIndex: "qr",
@@ -375,10 +347,10 @@ const StoreHomePage = () => {
                 Tạo mới
               </Button>
             )}
-            title={"Tạo store"}
+            title={"Tạo storex"}
           >
             {({ close }) => (
-              <StoreFormCreate
+              <StoreFormUpdateGift
                 users={users}
                 okText={"Tạo"}
                 onFinish={(v) => onCreate(v, close)}
@@ -450,7 +422,7 @@ const StoreHomePage = () => {
         title={"Sửa store"}
       >
         {() => (
-          <StoreFormCreate
+          <StoreFormUpdateGift
             users={users}
             okText="Lưu thay đổi"
             initialValues={selectedRecord}
@@ -463,4 +435,4 @@ const StoreHomePage = () => {
   );
 };
 
-export default StoreHomePage;
+export default StoreGiftPage;

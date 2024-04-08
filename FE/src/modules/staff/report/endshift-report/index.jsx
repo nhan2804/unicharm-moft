@@ -65,8 +65,8 @@ const EndShiftReportPage = () => {
     form.setFieldsValue(initData);
   }, [form, initData]);
   return (
-    <div>
-      <CustomPageHeader title="Báo cáo cuối ca" />
+    <div className="p-2">
+      <CustomPageHeader title="Báo cáo cuối ca"></CustomPageHeader>
       <FormEndShiftReport form={form} onFinish={onFinish} />
     </div>
   );

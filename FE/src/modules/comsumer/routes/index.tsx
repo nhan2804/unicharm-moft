@@ -2,13 +2,13 @@ import { IRoute } from "@routes/route.interface";
 import { lazy } from "react";
 
 // const GroupQuestion = lazy(() => import("../pages/group-question"));
-const CreateBillCustomer = lazy(() => import("../pages/CreateBillCustomer"));
+// const CreateBillCustomer = lazy(() => import("../pages/CreateBillCustomer"));
 const ConsumerLayout = lazy(() => import("../layout/ConsumerLayout"));
 const LoginComsumer = lazy(() => import("../pages"));
 const ConsumerRoll = lazy(() => import("../pages/RollConsumer"));
-const ConsumerHistory = lazy(() => import("../pages/HistoryConsumer"));
+// const ConsumerHistory = lazy(() => import("../pages/HistoryConsumer"));
 
-const ConsumerBill = lazy(() => import("../pages/BillCustomer"));
+// const ConsumerBill = lazy(() => import("../pages/BillCustomer"));
 const consumerRoutes: IRoute[] = [
   {
     path: "/consumer/login",

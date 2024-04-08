@@ -6,12 +6,12 @@ import { useMemo } from "react";
 
 const arrBg = {
   0: {
-    textColor: "#028342",
+    textColor: "#F08100",
     backgroundColor: "#ffffff",
   },
   1: {
     textColor: "#ffffff",
-    backgroundColor: "#028342",
+    backgroundColor: "#F08100",
   },
 };
 const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
