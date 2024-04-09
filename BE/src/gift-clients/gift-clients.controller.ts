@@ -117,6 +117,7 @@ export class GiftClientsController {
   create(@Body() createGiftClientDto: CreateGiftClientDto) {
     return this.giftClientsService.create(createGiftClientDto);
   }
+  @Public()
   @Post('roll/:id')
   async roll(
     @Body() createGiftClientDto: CreateGiftClientDto,
@@ -194,6 +195,7 @@ export class GiftClientsController {
     );
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     return this.giftClientsService.findOneById(id);

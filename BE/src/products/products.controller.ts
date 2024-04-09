@@ -72,6 +72,7 @@ export class ProductsController {
     });
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     return this.productsService.findOneById(id);

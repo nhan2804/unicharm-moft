@@ -28,7 +28,6 @@ const LoginComsumer = () => {
   });
   const [finished, setFinished] = useState(false);
   const user = useAppSelector((s) => s?.auth?.user);
-  console.log({ user });
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -37,7 +36,7 @@ const LoginComsumer = () => {
         { phone },
         {
           onSuccess: (data) => {
-            dispatch(loginAction(data?.login));
+            // dispatch(loginAction(data?.login));
             const str = data?.isShowCode ? `?code=${data?.code?.code}` : "";
             console.log({ str });
             // navigate(`/consumer/create-bill${str}`, {
@@ -54,6 +53,13 @@ const LoginComsumer = () => {
   }, [staffId, storeId, phone, login, dispatch, navigate]);
 
   const onFinish = (values) => {
+    if (values["products"]) {
+      let products = {};
+      values?.["products"]?.forEach((id) => {
+        products[id] = 1; // Setting the value to 1 for each selected option
+      });
+      values["products"] = products;
+    }
     login(
       {
         ...values,
@@ -64,7 +70,7 @@ const LoginComsumer = () => {
       },
       {
         onSuccess: (data) => {
-          dispatch(loginAction(data?.login));
+          // dispatch(loginAction(data?.login));
           if (data?.giftClient?.type === "SELLING") {
             navigate(`/consumer/roll/${data?.giftClient?._id}`);
             return;
@@ -176,21 +182,27 @@ const LoginComsumer = () => {
             <Form.Item
               label="Quà"
               name="products"
-              getValueFromEvent={(event) => {
-                return { [event]: 1 };
-              }}
-              getValueProps={(value) => {
-                if (value) {
-                  return Object.keys(value)?.[0];
-                }
-              }}
+              // getValueFromEvent={(selectedIds) => {
+              //   const updatedOptions = {};
+              //   selectedIds.forEach((id) => {
+              //     updatedOptions[id] = 1; // Setting the value to 1 for each selected option
+              //   });
+              //   return updatedOptions;
+              // }}
+              // getValueProps={(value) => {
+              //   if (value)
+              //     // Here, you can customize how the value is displayed in the Select component if needed
+              //     return Object.keys(value); // For example, returning an array of selected IDs
+              // }}
               rules={[{ required: true, message: "Vui lòng chọn quà tặng!" }]}
+              initialValue={samplingProducts?.data?.map((e) => e?._id)}
             >
               <Select
                 options={samplingProducts?.data?.map((e) => ({
                   label: e?.name,
                   value: e?._id,
                 }))}
+                mode="multiple"
               ></Select>
             </Form.Item>
           )}
