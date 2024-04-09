@@ -139,6 +139,11 @@ const ManagerBill = () => {
       render: (text) => dayjs(text).format("DD/MM/YYYY H:m:s"),
     },
     {
+      title: "Số điện thoại",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
       title: "Kiểm tra lần cuối",
       dataIndex: "dateCheckingBill",
       key: "dateCheckingBill",

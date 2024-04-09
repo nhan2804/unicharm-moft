@@ -129,7 +129,7 @@ export class GiftClientsController {
     }
     const store = await this.storeService.findOne({ _id: bill?.storeId });
     const gifts = Object.entries(store?.gifts || {}).filter(
-      (e) => !!e[1] && e[1] > 0,
+      (e) => !!e[1] && e[1] > 0 && e[1] > (store?.giftsCurrent?.[e[0]] || 0),
     );
     if (gifts.length === 0)
       throw new BadRequestException('Đã hết quà, vui lòng quay lại sau!');

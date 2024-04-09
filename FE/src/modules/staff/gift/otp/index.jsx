@@ -51,7 +51,7 @@ const GiftOtpPage = () => {
     <div>
       <CustomPageHeader title="Nhập mã xác nhận của khách hàng" />
       <div className="mx-5">
-        <FormOTP form={form} onFinish={onFinish} />
+        <FormOTP isLoading={isCheckingCode} form={form} onFinish={onFinish} />
       </div>
     </div>
   );

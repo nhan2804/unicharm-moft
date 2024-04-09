@@ -57,22 +57,6 @@ const ProductFormCreate = ({
       >
         <Input placeholder="Nhập Tên SP" />
       </Form.Item>
-      {!showType && (
-        <>
-          <Form.Item
-            label="Số lượng"
-            rules={[
-              {
-                required: true,
-                message: "Số lượng",
-              },
-            ]}
-            name={"quantity"}
-          >
-            <InputNumber min={0} max={10000000} placeholder="Số lượng" />
-          </Form.Item>
-        </>
-      )}
       <Form.Item
         label="Mã"
         rules={[

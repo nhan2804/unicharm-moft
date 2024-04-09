@@ -78,21 +78,26 @@ const CheckoutPage = ({ initProject }) => {
       checkinId: currentCheckIn,
     }
   );
+  const { data: currentReportEndshift, isLoading: loadingCurrentEndShift } =
+    useGetReport(storeId, "end-shift", {
+      checkinId: currentCheckIn,
+    });
   // const { data: currentReportSampling, isLoading: loadingCurrentSampling } =
   //   useGetReport(storeId, "sampling", {
   //     checkinId: currentCheckIn,
   //   });
-  const { data: currentReportSale, isLoading: loadingCurrentSale } =
-    useGetReport(storeId, "sale", {
-      checkinId: currentCheckIn,
-    });
+  // const { data: currentReportSale, isLoading: loadingCurrentSale } =
+  //   useGetReport(storeId, "sale", {
+  //     checkinId: currentCheckIn,
+  //   });
   const loadingAll =
     loadingCurrent ||
     // loadingCurrentGift ||
     loadingCurrentOos ||
     loadingNoti ||
-    // loadingCurrentSampling ||
-    loadingCurrentSale;
+    loadingCurrentEndShift;
+  // loadingCurrentSampling ||
+  // loadingCurrentSale
   const validCheckIn = useMemo(() => {
     const valid = images?.every((e) => {
       return currentReport?.dataImage?.[e?._id];
@@ -129,12 +134,11 @@ const CheckoutPage = ({ initProject }) => {
 
   const allReportSubmited =
     (!!currentReport &&
-      // !!validReportGift &&
+      !!currentReportEndshift &&
       !!currentReportOos &&
       !!validCheckIn &&
-      !currentNotification &&
-      // !!validReportSampling &&
-      !!currentReportSale) ||
+      !currentNotification) ||
+    // !!validReportSampling &&
     __.isSup;
   console.log({
     x: !!currentReport,
@@ -249,7 +253,7 @@ const CheckoutPage = ({ initProject }) => {
                         ></Alert>
                       </div>
                     )}
-                    {!currentReportSale && (
+                    {/* {!currentReportSale && (
                       <div>
                         <Alert
                           message={
@@ -268,7 +272,7 @@ const CheckoutPage = ({ initProject }) => {
                           type="warning"
                         ></Alert>
                       </div>
-                    )}
+                    )} */}
                     {!currentReportOos && (
                       <div>
                         <Alert
@@ -278,6 +282,26 @@ const CheckoutPage = ({ initProject }) => {
                               <Link
                                 className="font-bold"
                                 to={`/staff/stores/${storeId}/oos`}
+                              >
+                                TẠI ĐÂY
+                              </Link>
+                              !
+                            </>
+                          }
+                          showIcon
+                          type="warning"
+                        ></Alert>
+                      </div>
+                    )}
+                    {!currentReportEndshift && (
+                      <div>
+                        <Alert
+                          message={
+                            <>
+                              Bạn chưa hoàn tất báo cáo cuối ca, báo cáo
+                              <Link
+                                className="font-bold"
+                                to={`/staff/stores/${storeId}/end-shift`}
                               >
                                 TẠI ĐÂY
                               </Link>

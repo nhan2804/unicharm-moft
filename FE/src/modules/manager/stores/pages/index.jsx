@@ -267,36 +267,6 @@ const StoreHomePage = () => {
       key: "kam",
     },
     {
-      title: "QR code",
-      dataIndex: "qr",
-      key: "qc",
-      render: (_, e) => {
-        const qr = `${window.origin}/c?store=${e?._id}`;
-        return (
-          <div id={"qr" + e?.id} className="list-qr" name={e?.name}>
-            <QRCode
-              size={100}
-              value={qr}
-              bgColor="#fff"
-              style={{
-                marginBottom: 16,
-              }}
-            />
-            <Button
-              size="small"
-              type="primary"
-              onClick={() => {
-                downloadQRCode("#qr" + e?.id);
-              }}
-            >
-              Download
-            </Button>
-          </div>
-        );
-      },
-    },
-
-    {
       sortOrder: pagination?.tableSortOrder?.createdAt?.order,
       title: "Ngày tạo",
       dataIndex: "createdAt",

@@ -146,7 +146,7 @@ const staffRoutes: IRoute[] = [
       },
       {
         component: EndShiftReportPage,
-        path: "stores/:storeId/report/end-shift",
+        path: "stores/:storeId/end-shift",
         isPrivate: true,
         exact: true,
       },

@@ -2,7 +2,7 @@ import FormEndShiftReport from "@modules/staff/components/FormEndShiftReport";
 import React, { useEffect, useMemo } from "react";
 import useCreateReport from "@modules/staff/hooks/mutate/useCreateReport";
 import { useNavigate, useParams } from "react-router";
-import { Form } from "antd";
+import { Form, Spin } from "antd";
 import useGetGiftClients from "@modules/comsumer/hooks/query/useGetGiftClients";
 import useGetReport from "@modules/staff/hooks/query/useGetReport";
 import useGetTodayGiftClients from "@modules/comsumer/hooks/query/useGetTodayGiftClients";
@@ -19,7 +19,7 @@ const EndShiftReportPage = () => {
       },
     });
   };
-  const { data: giftClientsToday } = useGetTodayGiftClients(storeId);
+  const { data: giftClientsToday, isLoading } = useGetTodayGiftClients(storeId);
   const { data: endShiftReportToday } = useGetReport(storeId, "end-shift");
   const initData = useMemo(() => {
     let endShiftSamplings = {};
@@ -67,7 +67,9 @@ const EndShiftReportPage = () => {
   return (
     <div className="p-2">
       <CustomPageHeader title="Báo cáo cuối ca"></CustomPageHeader>
-      <FormEndShiftReport form={form} onFinish={onFinish} />
+      <Spin spinning={isLoading}>
+        <FormEndShiftReport form={form} onFinish={onFinish} />
+      </Spin>
     </div>
   );
 };

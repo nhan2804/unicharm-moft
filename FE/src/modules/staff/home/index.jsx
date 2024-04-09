@@ -60,7 +60,7 @@ const items = [
     title: "Thông báo khẩn",
   },
   {
-    to: "report/end-shift",
+    to: "end-shift",
     icon: <ProfileTwoTone className="text-6xl" size={"large"} />,
     title: "Báo cáo cuối ca",
   },

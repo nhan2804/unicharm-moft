@@ -8,7 +8,7 @@ import { useQueryClient } from "react-query";
 
 const UpdateClientImage = () => {
   const { giftId, storeId } = useParams();
-  const { mutate: updateGiftClient } = useUpdateGiftClients();
+  const { mutate: updateGiftClient, isLoading } = useUpdateGiftClients();
   const qc = useQueryClient();
   const nav = useNavigate();
   const onFinish = (values) => {
@@ -28,7 +28,11 @@ const UpdateClientImage = () => {
       <CustomPageHeader title="Cập nhật hình ảnh nhận quà" />
 
       <div className="flex flex-col w-[100%] items-center gap-5 m-3">
-        <FormUpdateClientImage form={form} onFinish={onFinish} />
+        <FormUpdateClientImage
+          isLoading={isLoading}
+          form={form}
+          onFinish={onFinish}
+        />
       </div>
     </div>
   );

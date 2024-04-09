@@ -19,6 +19,7 @@ const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
     return gifts
       ?.map((e, i) => {
         return {
+          image: e?.image,
           text: e?.name,
           id: e?._id,
           final: e?.name,
@@ -30,6 +31,10 @@ const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
         };
       })
       .map((item) => {
+        //         cƯ
+        const img1 = new Image(); // Image constructor
+        img1.src = item?.image;
+        img1.alt = "alt";
         return {
           ...item,
           completeOption: item.text,
@@ -37,6 +42,9 @@ const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
             item.text.length >= 30
               ? item.text.substring(0, 30).trimEnd() + "..."
               : item.text,
+          image: {
+            uri: item?.image,
+          },
         };
       });
   }, [gifts]);
@@ -57,7 +65,8 @@ const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
           spinDuration={[0.2]}
           prizeNumber={prizeNumber}
           data={_data}
-          outerBorderColor={["#186732"]}
+          perpendicularText={true}
+          outerBorderColor={["#F08100"]}
           outerBorderWidth={[12]}
           innerBorderColor={["#f2f2f2"]}
           radiusLineColor={["tranparent"]}
@@ -71,7 +80,7 @@ const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
         />
       </>
     ),
-    [mustSpin, onEndWheel, prizeNumber]
+    [_data, mustSpin, onEndWheel, prizeNumber]
   );
 
   return (

@@ -1,4 +1,4 @@
-import { Button, Card, Form, Result, Modal, theme, Skeleton } from "antd";
+import { Button, Card, Form, Result, Modal, theme, Image } from "antd";
 import classNames from "classnames";
 import React, { Suspense, lazy, useRef, useState } from "react";
 import { useEffect } from "react";
@@ -16,6 +16,7 @@ import useShowGiftClients from "../hooks/query/useShowGiftClients";
 import CustomSkeleton from "@components/CustomSkeleton";
 
 import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
+import useShowProduct from "@modules/manager/products/hooks/query/useShowProduct";
 const CustomWheel = lazy(() => import("../components/Wheel"));
 
 const { useToken } = theme;
@@ -123,10 +124,13 @@ const RollConsumer = () => {
   const { data: bill, isLoading: loadingBill } = useShowGiftClients(id, {
     refresh: true,
   });
+  const imgGift = Object.entries(bill?.products || {})?.[0]?.[0];
+  const { data: gift } = useShowProduct(imgGift);
   const { data: gifts } = useGetProduct({ isGiftExternal: true });
   if (!bill && loadingBill) {
     return <CustomSkeleton />;
   }
+
   if (!bill && !loadingBill) {
     return (
       <Result
@@ -140,43 +144,66 @@ const RollConsumer = () => {
       />
     );
   }
-  if (bill?.status === "DONE") {
-    return (
-      <Result
-        status={"success"}
-        title="Bạn đã quay được phần quà, vui lòng quay về trang chủ!"
-        extra={
-          <Button onClick={() => nav("/c")} type="primary" key="console">
-            Về trang chủ
-          </Button>
-        }
-      />
-    );
-  }
+  if (true) {
+    if (bill?.status === "DONE") {
+      return (
+        <Result
+          status={"success"}
+          title="Bạn đã quay được phần quà, vui lòng quay về trang chủ!"
+          extra={
+            <Button onClick={() => nav("/c")} type="primary" key="console">
+              Về trang chủ
+            </Button>
+          }
+        />
+      );
+    }
+    if (bill?.status === "DENY") {
+      return (
+        <Result
+          status={"error"}
+          title="Bill của bạn đã bị từ chối "
+          children={<div>{bill?.reasonBill}</div>}
+        />
+      );
+    }
+    if (bill?.status === "CONFIRM") {
+      return (
+        <Result
+          status={"success"}
+          title="Bạn đã quay trúng phần quà"
+          children={
+            <div>
+              <Image src={gift?.image} />
+              <div className="text-center font-semibold text-2xl">
+                {gift?.name}
+              </div>
+              <div className="text-yellow-500">
+                Vui lòng đưa kết quả cho nhân viên xác nhận
+              </div>
+            </div>
+          }
+        />
+      );
+    }
 
-  if (bill?.status === "PENDING") {
-    return (
-      <Result
-        status={"warning"}
-        title="Bill đang chờ duyệt, vui lòng đợi!"
-        // extra={
-        //   <Button type="primary" key="console">
-        //     Go Console
-        //   </Button>
-        // }
-      />
-    );
+    if (bill?.status === "PENDING") {
+      return (
+        <Result
+          status={"warning"}
+          title="Bill đang chờ duyệt, vui lòng đợi!"
+          // extra={
+          //   <Button type="primary" key="console">
+          //     Go Console
+          //   </Button>
+          // }
+        />
+      );
+    }
   }
   return (
     <div className="flex justify-center items-center">
       <div>
-        <div className="text-red-500 text-2xl font-bold text-center mb-3">
-          {user?.point <= 0 && !mustSpin && (
-            <Button danger type="primary" size="large">
-              {"Bạn đã hết lượt quay"}
-            </Button>
-          )}
-        </div>
         <Card>
           <Suspense fallback={<div>Loading....</div>}>
             <CustomWheel

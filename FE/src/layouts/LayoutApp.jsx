@@ -89,9 +89,7 @@ const AppLayout = () => {
                     <Link to={`/manager/stores`}>Cửa hàng</Link>
                   </Menu.Item>
                   <Menu.Item icon={<AppstoreOutlined />} key="stores-gift">
-                    <Link to={`/manager/stores-gift`}>
-                      Cửa hàng - Kho topup
-                    </Link>
+                    <Link to={`/manager/stores-gift`}>Kho topup</Link>
                   </Menu.Item>
                   <Menu.Item icon={<BuildOutlined />} key="products">
                     <Link to={`/manager/products`}>Sản phẩm</Link>
@@ -154,7 +152,7 @@ const AppLayout = () => {
             {user?.type === "SUPER_ADMIN" && (
               <SubMenu title="Quản lý duyệt bill" icon={<BarcodeOutlined />}>
                 <>
-                  <Menu.Item icon={<BarcodeOutlined />} key="stores">
+                  <Menu.Item icon={<BarcodeOutlined />} key="bill-management">
                     <Link to={`/bill-management`}>Duyệt bill khách hàng</Link>
                   </Menu.Item>
                 </>

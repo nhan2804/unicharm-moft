@@ -30,6 +30,8 @@ import {
   DatePicker,
   message,
   QRCode,
+  Card,
+  theme,
 } from "antd";
 import CustomModal from "@components/CustomModal";
 import ImportFileModal from "@components/ImportFileModal";
@@ -37,6 +39,7 @@ import useGetUser from "@modules/manager/users/hooks/query/useGetUser";
 import CustomPageHeader from "@components/CustomPageHeader";
 import { array2Group, array2Object } from "@helper/array2Obj";
 import ExportExcelReport from "@modules/manager/reports/components/ExportExcel";
+const { useToken } = theme;
 export const downloadQRCode = async (query) => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   const qrs = document.querySelectorAll(query);
@@ -91,23 +94,23 @@ const StoreGiftPage = () => {
   const { data: gifts } = useGetProduct({ isGiftExternal: true });
   const extraColumn = useMemo(() => {
     if (!gifts?.data) return [];
-    return gifts?.data
-      ?.map((data) => {
-        return {
-          title: data?.name,
-          dataIndex: ["giftsCurrent", data?._id],
-          key: ["giftsCurrent", data?._id],
-        };
-      })
-      ?.concat(
-        gifts?.data?.map((data) => {
-          return {
-            title: data?.name,
-            dataIndex: ["gifts", data?._id],
-            key: ["gifts", data?._id],
-          };
-        }) || []
-      );
+    return gifts?.data?.map((data) => {
+      return {
+        title: data?.name,
+        dataIndex: ["giftsCurrent", data?._id],
+        key: ["giftsCurrent", data?._id],
+        render: (c = 0, r) => {
+          const total = r?.gifts?.[data?._id] || 0;
+          return (
+            <div>
+              <span className="text-blue-500">{total}</span> -{" "}
+              <span className="text-red-500">{c || 0}</span> ={" "}
+              <span className="text-yellow-500">{total - c}</span>
+            </div>
+          );
+        },
+      };
+    });
   }, [gifts]);
   const { mutate: createStoreFn, isLoading: isLoadingCreate } =
     useCreateStore();
@@ -238,35 +241,6 @@ const StoreGiftPage = () => {
       key: "region",
     },
     ...extraColumn,
-    {
-      title: "QR code",
-      dataIndex: "qr",
-      key: "qc",
-      render: (_, e) => {
-        const qr = `${window.origin}/c?store=${e?._id}`;
-        return (
-          <div id={"qr" + e?.id} className="list-qr" name={e?.name}>
-            <QRCode
-              size={100}
-              value={qr}
-              bgColor="#fff"
-              style={{
-                marginBottom: 16,
-              }}
-            />
-            <Button
-              size="small"
-              type="primary"
-              onClick={() => {
-                downloadQRCode("#qr" + e?.id);
-              }}
-            >
-              Download
-            </Button>
-          </div>
-        );
-      },
-    },
 
     {
       sortOrder: pagination?.tableSortOrder?.createdAt?.order,
@@ -309,14 +283,69 @@ const StoreGiftPage = () => {
       ),
     },
   ];
-
+  const { token } = useToken();
   const { data: users } = useGetUser();
   return (
     <div>
-      <CustomPageHeader title="Cửa hàng" />
+      <CustomPageHeader title="Kho topup" />
       <div className="flex justify-end">
         <div className="mb-2 flex space-x-2">
-          {hasSelected && (
+          <CustomModal
+            button={({ open }) => (
+              <Button onClick={open} type="primary">
+                Download QR
+              </Button>
+            )}
+            title={"Download QR"}
+            width={800}
+          >
+            {() => (
+              <>
+                <Button
+                  type="primary"
+                  onClick={() => downloadQRCode(".list-qr")}
+                >
+                  Download All
+                </Button>
+                <div className="grid grid-cols-2">
+                  {stores?.data
+                    // ?.filter((e) => e?.name?.includes("Mega"))
+                    ?.map((e) => {
+                      const qr = `${window.origin}/c?store=${e?._id}`;
+                      return (
+                        <Card
+                          extra={
+                            <Button
+                              type="dashed"
+                              onClick={() => {
+                                downloadQRCode("#qr" + e?.id);
+                              }}
+                            >
+                              Download
+                            </Button>
+                          }
+                          key={e?._id}
+                        >
+                          <div
+                            id={"qr" + e?.id}
+                            className="list-qr"
+                            name={e?.name}
+                          >
+                            <p className="text-center text-2xl">{e?.name}</p>
+                            <QRCode
+                              color={token.colorPrimary}
+                              size={300}
+                              value={qr}
+                            />
+                          </div>
+                        </Card>
+                      );
+                    })}
+                </div>
+              </>
+            )}
+          </CustomModal>
+          {/* {hasSelected && (
             <Popconfirm
               title="Xóa các record này, sẽ không thể hoàn tác được!"
               onConfirm={onDeleteBulk}
@@ -325,13 +354,13 @@ const StoreGiftPage = () => {
                 Xóa nhiều
               </Button>
             </Popconfirm>
-          )}
-          <ImportFileModal
+          )} */}
+          {/* <ImportFileModal
             link="https://drive.google.com/file/d/18U1WJ0ANphtdOa7TK1BsLKiC8kMXeKD1/view?usp=sharing"
             loading={isLoadingCreateBulk}
             title={`Tạo nhiều store`}
             onSubmit={onCreateBulk}
-          />
+          /> */}
 
           {/* <ImportFileModal
             link="https://drive.google.com/file/d/18U1WJ0ANphtdOa7TK1BsLKiC8kMXeKD1/view?usp=sharing"
@@ -339,7 +368,7 @@ const StoreGiftPage = () => {
             title={`User - Store`}
             onSubmit={onInsertUserIntoStore}
           /> */}
-          <CustomModal
+          {/* <CustomModal
             width={600}
             footer={false}
             button={({ open }) => (
@@ -357,12 +386,12 @@ const StoreGiftPage = () => {
                 loading={isLoadingCreate}
               />
             )}
-          </CustomModal>
-          <ExportExcelReport
+          </CustomModal> */}
+          {/* <ExportExcelReport
             type="store"
             columns={columns}
             dataSource={stores?.data}
-          />
+          /> */}
         </div>
       </div>
       <div className="flex justify-end mb-2">
