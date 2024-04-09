@@ -203,6 +203,7 @@ const LoginComsumer = () => {
                   value: e?._id,
                 }))}
                 mode="multiple"
+                disabled
               ></Select>
             </Form.Item>
           )}
