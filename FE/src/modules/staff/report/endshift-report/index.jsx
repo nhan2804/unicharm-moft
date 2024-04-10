@@ -7,6 +7,7 @@ import useGetGiftClients from "@modules/comsumer/hooks/query/useGetGiftClients";
 import useGetReport from "@modules/staff/hooks/query/useGetReport";
 import useGetTodayGiftClients from "@modules/comsumer/hooks/query/useGetTodayGiftClients";
 import CustomPageHeader from "@components/CustomPageHeader";
+import { useAppSelector } from "@hooks/reduxHook";
 
 const EndShiftReportPage = () => {
   const { storeId } = useParams();
@@ -20,7 +21,11 @@ const EndShiftReportPage = () => {
     });
   };
   const { data: giftClientsToday, isLoading } = useGetTodayGiftClients(storeId);
-  const { data: endShiftReportToday } = useGetReport(storeId, "end-shift");
+  const checkinId = useAppSelector((s) => s?.staff?.currentCheckIn);
+
+  const { data: endShiftReportToday } = useGetReport(storeId, "end-shift", {
+    checkinId,
+  });
   const initData = useMemo(() => {
     let endShiftSamplings = {};
     let endShiftGiftExternals = {};
