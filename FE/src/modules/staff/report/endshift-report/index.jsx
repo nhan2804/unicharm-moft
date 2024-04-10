@@ -13,13 +13,6 @@ const EndShiftReportPage = () => {
   const { storeId } = useParams();
   const { mutate: createReport } = useCreateReport(storeId, "end-shift");
   const nav = useNavigate();
-  const onFinish = (values) => {
-    createReport(values, {
-      onSuccess: () => {
-        nav(-1);
-      },
-    });
-  };
   const checkinId = useAppSelector((s) => s?.staff?.currentCheckIn);
   const { data: giftClientsToday, isLoading } = useGetTodayGiftClients(
     storeId,
@@ -27,6 +20,16 @@ const EndShiftReportPage = () => {
       checkinId,
     }
   );
+  const onFinish = (values) => {
+    createReport(
+      { ...values, checkinId },
+      {
+        onSuccess: () => {
+          nav(-1);
+        },
+      }
+    );
+  };
 
   const { data: endShiftReportToday } = useGetReport(storeId, "end-shift", {
     checkinId,

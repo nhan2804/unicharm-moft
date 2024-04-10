@@ -20,14 +20,11 @@ const FormEndShiftReport = ({ onFinish, form, isLoading }) => {
         onFinish={onFinish}
         form={form}
       >
-        <Collapse defaultActiveKey={["4"]} accordion>
+        <Collapse defaultActiveKey={["1", "2", "3", "4"]}>
           <Collapse.Panel header="Số bán" key="1">
             {products?.data?.map((e) => {
               return (
-                <Form.Item
-                  name={["endShiftSales", e?._id]}
-                  label={e?.name}
-                >
+                <Form.Item name={["endShiftSales", e?._id]} label={e?.name}>
                   <Input
                     defaultValue={0}
                     readOnly
@@ -41,10 +38,7 @@ const FormEndShiftReport = ({ onFinish, form, isLoading }) => {
           <Collapse.Panel header="Sampling" key="2">
             {samplings?.data?.map((e) => {
               return (
-                <Form.Item
-                  name={["endShiftSamplings", e?._id]}
-                  label={e?.name}
-                >
+                <Form.Item name={["endShiftSamplings", e?._id]} label={e?.name}>
                   <Input
                     defaultValue={0}
                     readOnly
