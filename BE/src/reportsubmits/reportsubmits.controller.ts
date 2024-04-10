@@ -361,7 +361,7 @@ export class ReportsubmitsController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateReportsubmitDto: UpdateReportsubmitDto,
     @UserLoggin() user: UserDocument,

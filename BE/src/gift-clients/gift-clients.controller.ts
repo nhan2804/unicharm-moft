@@ -29,6 +29,7 @@ import { customAlphabet, nanoid } from 'nanoid';
 import { User, UserDocument } from 'src/users/entities/user.entity';
 import { ProductsService } from 'src/products/products.service';
 import { UserLoggin } from 'src/auth/decorators/user';
+import { CheckinService } from 'src/checkin/checkin.service';
 @Controller('gift-clients')
 export class GiftClientsController {
   constructor(
@@ -37,6 +38,7 @@ export class GiftClientsController {
     private readonly authService: AuthService,
     private readonly storeService: StoresService,
     private readonly productService: ProductsService,
+    private readonly checkinService: CheckinService,
   ) {}
 
   @Public()
@@ -109,8 +111,15 @@ export class GiftClientsController {
     return { login: token, justLogin: true, giftClient };
   }
   @Get('store/:storeId/today')
-  async today(@Param('storeId') storeId) {
-    const data = await this.giftClientsService.getTodayByStoreId(storeId);
+  async today(
+    @Param('storeId') storeId,
+    @Query('checkinId', ParseObjectIdPipe) checkinId: Types.ObjectId,
+  ) {
+    const currentCheckin = await this.checkinService.findOneById(checkinId);
+    const shiftId = currentCheckin?.shiftId;
+    const data = await this.giftClientsService.getTodayByStoreId(storeId, {
+      shiftId,
+    });
     return data;
   }
   @Post()
@@ -202,11 +211,19 @@ export class GiftClientsController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateGiftClientDto: UpdateGiftClientDto,
+    @Body('checkinId') checkinId: string,
     @UserLoggin() currentUser: UserDocument,
   ) {
+    if (checkinId) {
+      const currentCheckin = await this.checkinService.findOneById(
+        new Types.ObjectId(checkinId),
+      );
+      const shiftId = currentCheckin?.shiftId;
+      updateGiftClientDto['shiftId'] = shiftId;
+    }
     let extraUpdate = {};
     if (updateGiftClientDto?.imgClient) {
       extraUpdate = { creator: currentUser?._id };

@@ -20,8 +20,13 @@ const EndShiftReportPage = () => {
       },
     });
   };
-  const { data: giftClientsToday, isLoading } = useGetTodayGiftClients(storeId);
   const checkinId = useAppSelector((s) => s?.staff?.currentCheckIn);
+  const { data: giftClientsToday, isLoading } = useGetTodayGiftClients(
+    storeId,
+    {
+      checkinId,
+    }
+  );
 
   const { data: endShiftReportToday } = useGetReport(storeId, "end-shift", {
     checkinId,

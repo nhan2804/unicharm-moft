@@ -8,6 +8,7 @@ import { UsersModule } from 'src/users/users.module';
 import { StoresModule } from 'src/stores/stores.module';
 import { GiftClientsbillController } from './gift-clients.bill.controller';
 import { ProductsModule } from 'src/products/products.module';
+import { CheckinModule } from 'src/checkin/checkin.module';
 
 @Module({
   controllers: [GiftClientsbillController, GiftClientsController],
@@ -20,6 +21,7 @@ import { ProductsModule } from 'src/products/products.module';
     UsersModule,
     StoresModule,
     ProductsModule,
+    CheckinModule,
   ],
 })
 export class GiftClientsModule {}

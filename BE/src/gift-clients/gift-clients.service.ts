@@ -12,7 +12,7 @@ export class GiftClientsService extends AbstractService<GiftClient> {
   ) {
     super(model);
   }
-  async getTodayByStoreId(storeId) {
+  async getTodayByStoreId(storeId, query) {
     const now = new Date();
     const startOfToday = new Date(
       now.getFullYear(),
@@ -23,6 +23,7 @@ export class GiftClientsService extends AbstractService<GiftClient> {
       storeId: new Types.ObjectId(storeId),
       createdAt: { $gte: startOfToday },
       status: 'DONE',
+      ...query,
     });
   }
 }
