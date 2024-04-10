@@ -201,7 +201,7 @@ export class CheckinController {
     if (!checkin) throw new BadRequestException();
     if (updatePlaceDto?.updateTimeCheckOut) {
       if (user?.type !== 'SUP') {
-        const arr = ['sale', 'oos'];
+        const arr = ['oos'];
         const rs = [];
         for (const typeReport of arr) {
           const check = await this.reportSubmitService.getReportByStoreId(
