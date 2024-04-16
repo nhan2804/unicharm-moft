@@ -70,6 +70,8 @@ export class Reportsubmit {
   //IMAGE
   @Prop({ type: Object })
   dataImage?: object;
+  @Prop({ type: Object })
+  extra?: object;
 
   @Prop({ type: SchemaTypes.ObjectId, ref: Store.name })
   storeId: Types.ObjectId;

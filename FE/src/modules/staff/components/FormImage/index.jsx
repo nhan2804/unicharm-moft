@@ -9,7 +9,7 @@ import React from "react";
 
 const FormImage = ({ onFinish, form, isLoading }) => {
   const { data: images, isLoading: loadingProduct } = useGetImage();
-  const { data: groups } = useGetGroupimage();
+  const { data: groups } = useGetGroupimage({ type: "IMAGE" });
   const mappingGroup = array2Object(groups, "_id");
   return (
     <div>

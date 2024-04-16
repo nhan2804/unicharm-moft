@@ -9,7 +9,7 @@ const useShowGiftClients = (id, options) => {
       return data;
     },
     {
-      refetchInterval: options?.refresh ? 1000 * 2 : false,
+      refetchInterval: options?.refresh ? 1000 * 4 : false,
     }
   );
 };

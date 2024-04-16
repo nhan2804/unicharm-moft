@@ -66,7 +66,7 @@ const UserHomePage = () => {
     range: undefined,
     ...pagination?.sort,
   };
-  const {canWrite} = useRole();
+  const { canWrite } = useRole();
 
   const { mutate: createUserFn, isLoading: isLoadingCreate } = useCreateUser();
   const { data: users, isLoading: loadingFetch } = useGetUser(query);
@@ -194,16 +194,16 @@ const UserHomePage = () => {
       key: "type",
       render: (t) => <MappingTypeUser t={t} />,
     },
-    {
-      sortOrder: pagination?.tableSortOrder?.createdAt?.order,
-      title: "Ngày tạo",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text) => dayjs(text).format("DD/MM/YYYY H:m:s"),
-      sorter: {
-        multiple: 1,
-      },
-    },
+    // {
+    //   sortOrder: pagination?.tableSortOrder?.createdAt?.order,
+    //   title: "Ngày tạo",
+    //   dataIndex: "createdAt",
+    //   key: "createdAt",
+    //   render: (text) => dayjs(text).format("DD/MM/YYYY HH:mm:ss"),
+    //   sorter: {
+    //     multiple: 1,
+    //   },
+    // },
     {
       title: "Hành động",
       dataIndex: "action",
@@ -264,7 +264,12 @@ const UserHomePage = () => {
             width={600}
             footer={false}
             button={({ open }) => (
-              <Button disabled={!canWrite} onClick={open} icon={<PlusOutlined />} type="primary">
+              <Button
+                disabled={!canWrite}
+                onClick={open}
+                icon={<PlusOutlined />}
+                type="primary"
+              >
                 Tạo mới
               </Button>
             )}

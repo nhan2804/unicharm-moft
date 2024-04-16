@@ -20,6 +20,10 @@ export class Groupimage {
   @IsString()
   @Prop()
   avatar?: string;
+  @IsOptional()
+  @IsString()
+  @Prop()
+  type?: string;
 }
 
 export const GroupimageSchema = SchemaFactory.createForClass(Groupimage);

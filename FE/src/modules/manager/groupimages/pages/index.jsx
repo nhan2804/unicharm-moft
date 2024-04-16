@@ -119,6 +119,11 @@ const GroupimageHomePage = () => {
       key: "name",
     },
     {
+      title: "Loại",
+      dataIndex: "type",
+      key: "type",
+    },
+    {
       sortOrder: pagination?.tableSortOrder?.createdAt?.order,
       title: "Ngày tạo",
       dataIndex: "createdAt",
@@ -162,7 +167,7 @@ const GroupimageHomePage = () => {
 
   return (
     <div>
-      <CustomPageHeader title="Group hình ảnh" />
+      <CustomPageHeader title="Group" />
       <div className="flex justify-end">
         <div className="mb-2 flex space-x-2">
           {hasSelected && (

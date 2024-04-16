@@ -10,6 +10,7 @@ export class User {
   username: string;
   @Prop()
   fullName: string;
+
   @Prop()
   ssoId?: string;
   @Prop()

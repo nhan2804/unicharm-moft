@@ -1,13 +1,11 @@
 import CustomPageHeader from "@components/CustomPageHeader";
-import { Button, DatePicker, Form, Image, Input, Select, Table } from "antd";
-import React, { lazy, useMemo, useRef, useState } from "react";
+import { Button, DatePicker, Form, Select, Table } from "antd";
+import React, { lazy, useMemo } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import useSearchQuery from "@hooks/useSearchQuery";
 import dayjs from "dayjs";
 import useGetStore from "@modules/manager/stores/hooks/query/useGetStore";
 import usePagination from "@hooks/usePagination";
-import useGetQuestionRating from "@modules/manager/questions/hooks/query/useGetQuestionStaff";
-import useGetRating from "@modules/manager/hooks/query/useGetRating";
 import { array2Object } from "@helper/array2Obj";
 import initRangeToday from "@helper/getInitRangeToday";
 import filterOption from "@helper/filterOption";

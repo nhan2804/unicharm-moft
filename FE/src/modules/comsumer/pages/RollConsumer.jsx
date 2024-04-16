@@ -17,6 +17,26 @@ import CustomSkeleton from "@components/CustomSkeleton";
 
 import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
 import useShowProduct from "@modules/manager/products/hooks/query/useShowProduct";
+import img1 from "@assets/gift/1.png";
+import img2 from "@assets/gift/2.png";
+import img3 from "@assets/gift/3.png";
+import img4 from "@assets/gift/4.png";
+import { toast } from "react-toastify";
+export const _getImg = (name) => {
+  let _n = name?.toLowerCase() || "";
+  if (_n.includes("khẩu trang")) {
+    return img4;
+  }
+  if (_n.includes("khăn giấy")) {
+    return img3;
+  }
+  if (_n.includes("bàn cào")) {
+    return img1;
+  }
+  if (_n.includes("cần câu")) {
+    return img2;
+  }
+};
 const CustomWheel = lazy(() => import("../components/Wheel"));
 
 const { useToken } = theme;
@@ -45,12 +65,12 @@ const RollConsumer = () => {
   const qc = useQueryClient();
   const onFinish = useCallback(() => {
     random(
-      { delay },
+      { delay, noMess: true },
       {
         onSuccess: (data) => {
-          // toast.dismiss();
-
+          console.log("xx");
           setMustSpin(true);
+
           return;
         },
       }
@@ -65,41 +85,15 @@ const RollConsumer = () => {
     }
   }, [onFinish, isLoading]);
 
-  const onEndWheel = async () => {
+  const onEndWheel = useCallback(async () => {
     // qc.cancelQueries(["userProfile"]);
     await new Promise((resolve) => setTimeout(resolve, 1000)); // 3 sec
-    alert(`OTP của bạn là ` + dataRandom?.code);
+    // alert(`OTP của bạn là ` + dataRandom?.code);
     return;
-    Modal.success({
-      centered: true,
 
-      title: "Quay thành công",
-      content: (
-        <div>
-          <p className="text-xl">
-            {dataRandom?.final !== "goodluck"
-              ? `Chúc mừng bạn đã trúng thẻ cào điện thoại ${dataRandom?.final}.000đ, vui lòng vào lịch sử trúng thưởng để sử dụng`
-              : "Chúc bạn may mắn lần sau"}
-          </p>
-        </div>
-      ),
-      okText: "Xem lịch trúng thưởng",
-      cancelText: "Ở lại",
-      onOk: () => {
-        nav(`/consumer/history`);
-      },
-      onCancel: () => {
-        window.location.reload();
-        // close?.();
-      },
-      closable: true,
-      maskClosable: true,
-      closeIcon: <div>X</div>,
-    });
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // 3 sec
-    qc.invalidateQueries(["userProfile"]);
     // setMustSpin(false);
-  };
+  }, []);
+
   const token = useToken();
   const refBtn = useRef();
   const button = useCallback(
@@ -130,15 +124,17 @@ const RollConsumer = () => {
   if (!bill && loadingBill) {
     return <CustomSkeleton />;
   }
-
+  const closeX = () => {
+    window.close();
+  };
   if (!bill && !loadingBill) {
     return (
       <Result
         status={"404"}
         title="404 Bill Not Found!"
         extra={
-          <Button onClick={() => nav("/c")} type="primary" key="console">
-            Về trang chủ
+          <Button onClick={closeX} type="primary" key="console">
+            Đóng
           </Button>
         }
       />
@@ -151,7 +147,7 @@ const RollConsumer = () => {
           status={"success"}
           title="Bạn đã quay được phần quà, vui lòng quay về trang chủ!"
           extra={
-            <Button onClick={() => nav("/c")} type="primary" key="console">
+            <Button onClick={closeX} type="primary" key="console">
               Về trang chủ
             </Button>
           }
@@ -173,13 +169,16 @@ const RollConsumer = () => {
           status={"success"}
           title="Bạn đã quay trúng phần quà"
           children={
-            <div>
-              <Image src={gift?.image} />
-              <div className="text-center font-semibold text-2xl">
-                {gift?.name}
-              </div>
-              <div className="text-yellow-500">
-                Vui lòng đưa kết quả cho nhân viên xác nhận
+            <div className="flex justify-center">
+              <div>
+                <Image src={_getImg(gift?.name)} />
+                <div className="text-center font-semibold text-2xl">
+                  {gift?.name}
+                </div>
+                <div className="text-primary text-center font-semibold">
+                  Vui lòng đưa OTP đã được gửi qua số điện thoại và kết quả phần
+                  quà cho nhân viên để xác nhận
+                </div>
               </div>
             </div>
           }
@@ -204,6 +203,14 @@ const RollConsumer = () => {
   return (
     <div className="flex justify-center items-center">
       <div>
+        <div className="text-2xl text-center text-primary font-semibold">
+          Quay quà
+        </div>
+        <div>
+          {[img1, img2, img3, img4].map((e) => {
+            return <img className="w-0 h-0" src={e} alt="" key={e} />;
+          })}
+        </div>
         <Card>
           <Suspense fallback={<div>Loading....</div>}>
             <CustomWheel

@@ -32,6 +32,9 @@ const UserFormCreate = ({
       <Form.Item label="Họ và tên" name={"fullName"}>
         <Input />
       </Form.Item>
+      <Form.Item label="SDT" name={"phone"}>
+        <Input />
+      </Form.Item>
       <Form.Item
         label="Tên đăng nhập"
         rules={[

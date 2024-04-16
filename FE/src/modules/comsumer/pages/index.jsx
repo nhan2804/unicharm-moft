@@ -71,28 +71,16 @@ const LoginComsumer = () => {
       {
         onSuccess: (data) => {
           // dispatch(loginAction(data?.login));
+
           if (data?.giftClient?.type === "SELLING") {
             navigate(`/consumer/roll/${data?.giftClient?._id}`);
             return;
           } else {
-            alert("Mã OTP của bạn là : " + data?.giftClient?.code);
+            // alert("Mã OTP của bạn là : " + data?.giftClient?.code);
           }
           if (data?.giftClient) {
             setFinished(true);
-            Modal.success({
-              type: "info",
-              title: "Thông tin",
-              centered: true,
-              content: (
-                <div>
-                  <p className="text-xl">Dev code: {data?.giftClient?.code}</p>
-                </div>
-              ),
-              okText: "Ok",
-              closable: true,
-              maskClosable: true,
-              closeIcon: <div>X</div>,
-            });
+
             form.resetFields();
           }
         },
@@ -108,7 +96,10 @@ const LoginComsumer = () => {
         title="Mã xác nhận đã được gửi đến số điện thoại, vui lòng kiểm tra và đưa nó cho nhân viên!"
         extra={
           <Button
-            onClick={() => setFinished(false)}
+            onClick={() => {
+              setFinished(false);
+              window.close();
+            }}
             type="primary"
             key="console"
           >
@@ -127,9 +118,9 @@ const LoginComsumer = () => {
         <Form
           form={form}
           name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
+          // labelCol={{ span: 8 }}
+          // wrapperCol={{ span: 16 }}
+          // style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
           autoComplete="off"
@@ -215,11 +206,14 @@ const LoginComsumer = () => {
             ></SingleImageUpload>
           )}
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button loading={isLoading} type="primary" htmlType="submit">
-              Tiếp tục
-            </Button>
-          </Form.Item>
+          <div className="flex justify-center">
+            {" "}
+            <Form.Item>
+              <Button loading={isLoading} type="primary" htmlType="submit">
+                Tiếp tục
+              </Button>
+            </Form.Item>
+          </div>
         </Form>
       </div>
     </div>

@@ -8,7 +8,7 @@ export const typeUser = [
   { value: "ADMIN", label: "Quản lý" },
   { value: "ADMIN_READONLY", label: "Quản lý(chỉ xem)" },
   { value: "RATING", label: "Đánh giá" },
-  { value: "RATING_POLICY", label: "Đánh giá Policy" },
+  // { value: "RATING_POLICY", label: "Đánh giá Policy" },
 ];
 const mappingUser = array2Object(typeUser, "value", "label");
 const MappingTypeUser = ({ t }) => {

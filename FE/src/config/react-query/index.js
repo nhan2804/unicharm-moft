@@ -37,8 +37,10 @@ export const configReactQuery = ({ store = {} }) => {
     mutations: {
       retry: false,
 
-      onSuccess: (data) => {
-        toast.success(data?.message || "Thành công");
+      onSuccess: (data, vari) => {
+        if (!vari?.noMess) {
+          toast.success(data?.message || "Thành công");
+        }
       },
       onError: (e) => {
         toast.error(

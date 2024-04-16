@@ -88,7 +88,7 @@ const ConsumerLayout = () => {
 
   return (
     <div className="">
-      <div className="bg-primary h-3 w-full"></div>
+      <div className="bg-primary h-3 min-w-full"></div>
 
       <Layout>
         <Layout className="site-layout">

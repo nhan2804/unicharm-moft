@@ -34,6 +34,8 @@ import useGetStore from "@modules/manager/stores/hooks/query/useGetStore";
 import FormAcceptBill from "../components/FormBill";
 import useCreateProduct from "@modules/manager/products/hooks/mutate/useCreateProduct";
 import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
+import useGetShift from "@modules/staff/hooks/query/useGetShift";
+import showNotiWebApi from "@helper/webPushApi";
 
 const ManagerBill = () => {
   const userId = useAppSelector((s) => s?.auth?.user?._id);
@@ -63,11 +65,10 @@ const ManagerBill = () => {
     const num = bill?.data?.filter((e) => e?.status === "PENDING")?.length;
     console.log({ num });
     if (num) {
-      //   showNotiWebApi({
-      //     title: `Thông báo bill chờ duyệt`,
-      //     content: `Có ${num} bill đang chờ duyệt`,
-      //     icon: logo,
-      //   });
+      showNotiWebApi({
+        title: `Thông báo bill chờ duyệt`,
+        content: `Có ${num} bill đang chờ duyệt`,
+      });
     }
   }, [bill]);
 
@@ -234,7 +235,7 @@ const ManagerBill = () => {
   }, [idPlaces, places]);
   console.log({ finalDataPlace });
   //   const restPagi = useShowTotalTable();
-
+  const { data: shifts } = useGetShift();
   return (
     <>
       <Tabs
@@ -335,6 +336,7 @@ const ManagerBill = () => {
         {({ close }) => (
           <>
             <FormAcceptBill
+              shifts={shifts}
               products={products?.data}
               selected={selected}
               onFinish={(v) => handleAcceptBill(v, close)}

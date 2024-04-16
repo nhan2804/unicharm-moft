@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
 
 import useCreateQuestion from "../hooks/mutate/useCreateQuestion";
@@ -34,6 +34,7 @@ import CustomModal from "@components/CustomModal";
 import CustomPageHeader from "@components/CustomPageHeader";
 import { array2Object } from "@helper/array2Obj";
 import { useQueryClient } from "react-query";
+import useGetGroupimage from "@modules/manager/groupimages/hooks/query/useGetGroupimage";
 export const statusQuestion = [
   {
     label: "Hoạt động",
@@ -137,6 +138,10 @@ const QuestionHomePage = () => {
       },
     });
   };
+  const { data: groups } = useGetGroupimage();
+  const groupmapping = useMemo(() => {
+    return array2Object(groups, "_id", "name");
+  }, [groups]);
   const qc = useQueryClient();
   const onUpdateStatusBulk = async (status) => {
     // const rs = selectedRowKeys?.map(e=>{
@@ -182,6 +187,20 @@ const QuestionHomePage = () => {
       key: "name",
       width: 300,
     },
+    typeQuestion === "RATING" && {
+      title: "Group",
+      dataIndex: "groupId",
+      key: "groupId",
+      width: 300,
+      render: (t) => groupmapping?.[t],
+    },
+    // typeQuestion === "WORK" && {
+    //   title: "Loại câu hỏi",
+    //   dataIndex: "category",
+    //   key: "category",
+    //   width: 100,
+    //   // render: (t) => groupmapping?.[t],
+    // },
     typeQuestion !== "POLICY" && {
       title: "Bắt buộc",
       dataIndex: "required",

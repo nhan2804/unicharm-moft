@@ -15,13 +15,13 @@ const FormOos = ({ isLoading, onFinish, form }) => {
   return (
     <div>
       <Form
-        labelCol={{ flex: "120px" }}
-        wrapperCol={{
-          flex: 1,
-        }}
+        // labelCol={{ flex: "120px" }}
+        // wrapperCol={{
+        //   flex: 1,
+        // }}
         labelAlign="left"
         labelWrap={true}
-        // layout="inline"
+        layout="vertical"
         onFinish={onFinish}
         form={form}
       >

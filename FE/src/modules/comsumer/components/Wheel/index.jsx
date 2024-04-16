@@ -3,6 +3,7 @@ import { Wheel } from "react-custom-roulette";
 // import uuid from "react-uuid";
 import "./index.css";
 import { useMemo } from "react";
+import { _getImg } from "@modules/comsumer/pages/RollConsumer";
 
 const arrBg = {
   0: {
@@ -14,12 +15,13 @@ const arrBg = {
     backgroundColor: "#F08100",
   },
 };
+
 const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
   const _data = useMemo(() => {
     return gifts
       ?.map((e, i) => {
         return {
-          image: e?.image,
+          // image: e?.image,
           text: e?.name,
           id: e?._id,
           final: e?.name,
@@ -32,9 +34,9 @@ const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
       })
       .map((item) => {
         //         cƯ
-        const img1 = new Image(); // Image constructor
-        img1.src = item?.image;
-        img1.alt = "alt";
+        // const img1 = new Image(); // Image constructor
+        // img1.src = img1;
+        // img1.alt = "alt";
         return {
           ...item,
           completeOption: item.text,
@@ -43,7 +45,11 @@ const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
               ? item.text.substring(0, 30).trimEnd() + "..."
               : item.text,
           image: {
-            uri: item?.image,
+            uri: _getImg(item?.text),
+            offsetY: 120,
+            offsetX: 10,
+            landscape: false,
+            // sizeMultiplier: 20,
           },
         };
       });
@@ -71,7 +77,7 @@ const CustomWheel = ({ data, onEndWheel, button, mustSpin, gifts }) => {
           innerBorderColor={["#f2f2f2"]}
           radiusLineColor={["tranparent"]}
           radiusLineWidth={[1]}
-          // textColors={["#f5f5f5"]}
+          textColors={["#f5f5f5"]}
           textDistance={55}
           disableInitialAnimation={true}
           onStopSpinning={() => {

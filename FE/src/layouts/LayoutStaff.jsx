@@ -1,4 +1,4 @@
-import { Layout, Menu, Segmented, Tabs } from "antd";
+import { Layout, Menu, Result, Segmented, Tabs } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Outlet,
@@ -106,6 +106,15 @@ const StaffLayout = () => {
       nav("/staff/questions");
     }
   }, [currentQues, loadingQues, match, nav, isRating, __]);
+
+  let agent = navigator.userAgent;
+  if (agent.includes("Zalo")) {
+    alert(
+      "Không hỗ trợ chạy trực tiếp trên Zalo, vui lòng copy link sang trình duyệt Google Chrome và thử lại"
+    );
+    window.close();
+    return <Result status={"warning"}></Result>;
+  }
   return (
     <div>
       <div className="mb-10">

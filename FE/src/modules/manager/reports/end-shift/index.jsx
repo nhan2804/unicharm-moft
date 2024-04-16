@@ -20,9 +20,12 @@ import { array2Object } from "@helper/array2Obj";
 import initRangeToday from "@helper/getInitRangeToday";
 import filterOption from "@helper/filterOption";
 import useRole from "@hooks/useRole";
-import FormEndShiftReport from "@modules/staff/components/FormEndShiftReport";
+import FormEndShiftReport, {
+  dataYesNo,
+} from "@modules/staff/components/FormEndShiftReport";
 const ExportExcelReport = lazy(() => import("../components/ExportExcel"));
 const mappingKindOOS = array2Object(optionsKindOOS, "value");
+const mappingYesNo = array2Object(dataYesNo, "value");
 const ReportEndShiftPage = () => {
   const [formSearch] = Form.useForm();
   const { initSearchValues, search, setSearch } = useSearchQuery({
@@ -181,6 +184,22 @@ const ReportEndShiftPage = () => {
       key: "imgbbnt",
       excelRender: (txt) => txt,
       render: (txt) => txt && <Image width={40} src={txt} alt="" />,
+    },
+    {
+      title: "Tổng số khách đến Outlet",
+      dataIndex: ["extra", "totalClientOutlet"],
+      key: ["extra", "totalClientOutlet"],
+    },
+    {
+      title: "Tổng Số khách tiếp cận",
+      dataIndex: ["extra", "totalClientReach"],
+      key: ["extra", "totalClientReach"],
+    },
+    {
+      title: "Đối thủ có CTKM",
+      dataIndex: ["extra", "hasPromotion"],
+      key: ["extra", "hasPromotion"],
+      render: (x) => mappingYesNo?.[x] || "",
     },
   ]
     .concat(extraColumn)

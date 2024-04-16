@@ -10,7 +10,7 @@ import {
 import React from "react";
 
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-const FormAcceptBill = ({ onFinish, selected, type, products }) => {
+const FormAcceptBill = ({ onFinish, selected, type, products, shifts }) => {
   const [form] = Form.useForm();
   const onDone = (v) => {
     onFinish({ ...v, status: selected?.type });
@@ -90,8 +90,15 @@ const FormAcceptBill = ({ onFinish, selected, type, products }) => {
                 name={"shift"}
               >
                 <Select>
-                  <Select.Option value="1">Ca sáng</Select.Option>
-                  <Select.Option value="2">Ca chiều</Select.Option>
+                  {shifts?.map((e) => {
+                    return (
+                      <Select.Option key={e?._id} value={e?._id}>
+                        {e?.name}
+                      </Select.Option>
+                    );
+                  })}
+                  {/* <Select.Option value="1">Ca sáng</Select.Option>
+                  <Select.Option value="2">Ca chiều</Select.Option> */}
                 </Select>
               </Form.Item>
 

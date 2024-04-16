@@ -1,8 +1,14 @@
-import { Button, Collapse, Form, Input } from "antd";
+import { Button, Collapse, Form, Input, InputNumber, Select } from "antd";
 import React from "react";
 import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
 import SingleImageUpload from "@components/SingleImageUpload";
-
+export const dataYesNo = [
+  { label: "Có", value: "YES" },
+  {
+    label: "Không",
+    value: "NO",
+  },
+];
 const FormEndShiftReport = ({ onFinish, form, isLoading }) => {
   const { data: products } = useGetProduct({ isSale: true });
   const { data: samplings } = useGetProduct({ isSampling: true });
@@ -70,6 +76,28 @@ const FormEndShiftReport = ({ onFinish, form, isLoading }) => {
           <Collapse.Panel header="Khác" key="4">
             <Form.Item label="Thuận lợi, khó khăn" name={"note"}>
               <Input.TextArea rows={4} />
+            </Form.Item>
+
+            <Form.Item
+              label="Tổng số khách đến Outlet"
+              name={["extra", "totalClientOutlet"]}
+            >
+              <InputNumber min={0} />
+            </Form.Item>
+            <Form.Item
+              label="Tổng Số khách tiếp cận"
+              name={["extra", "totalClientReach"]}
+            >
+              <InputNumber />
+            </Form.Item>
+            <Form.Item label="Đối thủ có CTKM" name={["extra", "hasPromotion"]}>
+              <Select>
+                {dataYesNo.map((e) => (
+                  <Select.Option value={e?.value} key={e.label}>
+                    {e.label}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
             <SingleImageUpload
               label="Hình BBNT"

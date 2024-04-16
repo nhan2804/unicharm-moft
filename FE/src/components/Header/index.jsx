@@ -33,6 +33,21 @@ const Header = () => {
   // )}
 
   const items = [
+    user?.type === "PG"
+      ? {
+          key: "x",
+          label: (
+            <div
+              className="text-blue-400"
+              aria-hidden
+              type="text"
+              onClick={() => nav("/profile")}
+            >
+              Thông tin nhân sự
+            </div>
+          ),
+        }
+      : null,
     user?.type === "SUPER_ADMIN"
       ? {
           key: "2",

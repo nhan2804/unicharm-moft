@@ -12,6 +12,7 @@ import {
   Rate,
   Spin,
   notification,
+  Collapse,
 } from "antd";
 import React, { useEffect } from "react";
 import dayjs from "dayjs";
@@ -25,6 +26,9 @@ import { array2Object } from "@helper/array2Obj";
 import { toast } from "react-toastify";
 import useShowDepartment from "@modules/manager/departments/hooks/query/useShowDepartment";
 import { Link } from "react-router-dom";
+import useGetGroupimage from "@modules/manager/groupimages/hooks/query/useGetGroupimage";
+
+import CollapsePanel from "antd/es/collapse/CollapsePanel";
 const ratingMappingValue = {
   1: -20,
   2: -20,
@@ -79,14 +83,14 @@ const RatingUserPage = () => {
     // const totalAns = questions?.filter((e) => !!e?.option)?.length;
 
     const total = Object.entries(v || {}).reduce((all, q) => {
-      // const question = mappingQuestion?.[q?.[0]];
-      // const option = array2Object(question?.option, "value");
-      // const point = option?.[q?.[1]]?.point || 0;
+      const question = mappingQuestion?.[q?.[0]];
+      const option = array2Object(question?.option, "value");
+      const point = option?.[q?.[1]]?.point || 0;
 
-      // all += point;
-      // return all;
-      all += +(ratingMappingValue?.[q[1]] || 0);
+      all += point;
       return all;
+      // all += +(ratingMappingValue?.[q[1]] || 0);
+      // return all;
     }, 0);
     return total;
     // if (!totalAns) return 0;
@@ -122,7 +126,7 @@ const RatingUserPage = () => {
       }
     );
   };
-
+  const { data: groups } = useGetGroupimage({ type: "RATING" });
   return (
     <div>
       <CustomPageHeader title="Đánh giá nhân viên" />
@@ -198,42 +202,47 @@ const RatingUserPage = () => {
             layout="vertical"
           >
             <div className="radio-group-block">
-              {questions?.map((e) => {
-                // const option = e?.option?.filter((e) => {
-                //   // if (!e?.exceptDepartmentIds) return true;
-                //   return !e?.exceptDepartmentIds?.includes(
-                //     currentDepartmentIdRating
-                //   );
-                // });
-                return (
-                  <Card className="mb-2" key={e?._id}>
-                    {/* <FormItem2
-                      isRating={true}
-                      nestedName={["data"]}
-                      question={{ ...e, option }}
-                    /> */}
-                    <Form.Item
-                      rules={[
-                        {
-                          required: !!e?.required,
-                          message: "Vui lòng trả lời câu hỏi này",
-                        },
-                      ]}
-                      name={["data", e?._id]}
-                      label={e?.name}
-                    >
-                      <Rate tooltips={Object.values(ratingMappingValue)} />
-                    </Form.Item>
-                  </Card>
-                );
-              })}
               <Card>
-                <SingleImageUpload
-                  capture="user"
-                  rules={[{ required: true, message: "Vui lòng upload ảnh" }]}
-                  label="Hình ảnh"
-                  name="image"
-                />
+                <div className="radio-group-block p-2">
+                  <Collapse accordion>
+                    {groups?.map((g) => {
+                      return (
+                        <CollapsePanel header={g?.name} key={g?.name}>
+                          {questions
+                            ?.filter((e) => e?.groupId === g?._id)
+                            ?.map((e) => {
+                              const option = e?.option?.filter((e) => {
+                                // if (!e?.exceptDepartmentIds) return true;
+                                return !e?.exceptDepartmentIds?.includes(
+                                  currentDepartmentIdRating
+                                );
+                              });
+                              return (
+                                <Card className="mb-2" key={e?._id}>
+                                  <FormItem2
+                                    isRating={true}
+                                    nestedName={["data"]}
+                                    question={{ ...e, option }}
+                                  />
+                                </Card>
+                              );
+                            })}
+                        </CollapsePanel>
+                      );
+                    })}
+                  </Collapse>
+
+                  <Card>
+                    <SingleImageUpload
+                      capture="user"
+                      rules={[
+                        { required: true, message: "Vui lòng upload ảnh" },
+                      ]}
+                      label="Hình ảnh"
+                      name="image"
+                    />
+                  </Card>
+                </div>
               </Card>
             </div>
             <div className="flex justify-center mt-2">

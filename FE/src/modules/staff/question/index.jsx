@@ -49,10 +49,10 @@ const StaffQuestionHomePage = () => {
           }
         }
       });
-      if (incorrectArray?.length > 0) {
+      if (incorrectArray?.length > 1) {
         setIncorrectQuestion(incorrectArray);
         refIncorrect.current?.open();
-        message.warning("Hãy trả lời đúng hết câu hỏi để tiếp tục!");
+        message.warning("Hãy trả lời đúng hết 4/5 câu hỏi để tiếp tục!");
         return;
       }
     }

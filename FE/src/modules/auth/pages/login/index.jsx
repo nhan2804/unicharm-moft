@@ -41,11 +41,13 @@ const Login = () => {
             <Input.Password />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button loading={isLoading} type="primary" htmlType="submit">
-              Đăng nhập.
-            </Button>
-          </Form.Item>
+          <div className="flex justify-center">
+            <Form.Item>
+              <Button loading={isLoading} type="primary" htmlType="submit">
+                Đăng nhập.
+              </Button>
+            </Form.Item>
+          </div>
         </Form>
       </div>
     </div>

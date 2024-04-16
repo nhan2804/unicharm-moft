@@ -14,6 +14,7 @@ import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { array2Object } from "@helper/array2Obj";
 import useGetDepartment from "@modules/manager/departments/hooks/query/useGetDepartment";
 import { statusQuestion } from "../../pages";
+import useGetGroupimage from "@modules/manager/groupimages/hooks/query/useGetGroupimage";
 export const typesDirection = [
   { label: "Chiều dọc", value: "VERTICAL" },
   {
@@ -101,6 +102,7 @@ const QuestionFormCreate = ({
   const onFinishFailed = (errorInfo) => {
     console.log("Form onFinishFailed:", errorInfo);
   };
+  const { data: groups } = useGetGroupimage({ type: "RATING" });
   const { data: departments } = useGetDepartment();
   const watchType = Form.useWatch("type", form);
   const watchKind = Form.useWatch("kind", form);
@@ -165,36 +167,47 @@ const QuestionFormCreate = ({
               </Select>
             </Form.Item>
           )}
-
-          {typeQuestion === "WORK" && (
-            <Form.Item
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng chọn loại kiểu câu hỏi",
-                },
-              ]}
-              label="Kiểu"
-              name={"type"}
-            >
-              <Radio.Group>
-                {listTypeOption?.map((e, i) => {
+          {typeQuestion === "RATING" && (
+            <Form.Item label="Group" name={"groupId"}>
+              <Select>
+                {groups?.map((e) => {
                   return (
-                    <Radio key={i} value={e?.value}>
-                      {e?.label || e?.name}
-                    </Radio>
+                    <Select.Option value={e?._id}>{e?.name}</Select.Option>
                   );
                 })}
-              </Radio.Group>
-              {/* <Select>
+              </Select>
+            </Form.Item>
+          )}
+
+          {/* {typeQuestion === "WORK" && ( */}
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn loại kiểu câu hỏi",
+              },
+            ]}
+            label="Kiểu"
+            name={"type"}
+          >
+            <Radio.Group>
+              {listTypeOption?.map((e, i) => {
+                return (
+                  <Radio key={i} value={e?.value}>
+                    {e?.label || e?.name}
+                  </Radio>
+                );
+              })}
+            </Radio.Group>
+            {/* <Select>
                             {listTypeOption.map((e, i) => (
                               <Select.Option value={e?.value} key={i}>
                                 {e?.label}
                               </Select.Option>
                             ))}
                           </Select> */}
-            </Form.Item>
-          )}
+          </Form.Item>
+          {/* )} */}
           {watchType && watchType !== "UPLOAD" && (
             <Form.Item
               rules={[

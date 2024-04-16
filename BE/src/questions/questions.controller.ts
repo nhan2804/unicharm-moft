@@ -109,12 +109,18 @@ export class QuestionsController {
       status: 'ACTIVE',
     });
     if (shouldRandom) {
-      const randomQ = pickRandomQuestion(question, counts);
-      user.questionOption = {
-        question: randomQ?.map((e) => e?._id)?.toString(),
-        date: new Date(),
-      };
-      user.save();
+      const randomQ = question
+        ?.sort(() => Math.random() - Math.random())
+        ?.slice(0, 5);
+      // pickRandomQuestion(question, counts);
+      if (randomQ.length > 0) {
+        user.questionOption = {
+          question: randomQ?.map((e) => e?._id)?.toString(),
+          date: new Date(),
+        };
+        user.save();
+      }
+
       return randomQ;
     }
     return question?.filter((e) => {

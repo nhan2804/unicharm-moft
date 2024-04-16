@@ -15,17 +15,17 @@ const OverviewTab = ({ initProject }) => {
   //   };
   //   console.log({ search });
   const items = [
-    {
-      key: "1",
-      label: "Đánh giá",
+    // {
+    //   key: "1",
+    //   label: "Đánh giá",
 
-      children: <OverviewRating month={month} />,
-    },
-    {
-      key: "2",
-      label: "Policy",
-      children: <OverviewPolicy month={month} />,
-    },
+    //   children: <OverviewRating month={month} />,
+    // },
+    // {
+    //   key: "2",
+    //   label: "Policy",
+    //   children: <OverviewPolicy month={month} />,
+    // },
     {
       key: "3",
       label: "Checkin",
@@ -45,7 +45,7 @@ const OverviewTab = ({ initProject }) => {
             value={month}
           ></DatePicker.MonthPicker>
         </div>
-        <Tabs defaultActiveKey="1" items={items} />
+        <Tabs defaultActiveKey="3" items={items} />
       </div>
     </div>
   );

@@ -42,6 +42,16 @@ export class AuthController {
     const u = await this.usersService.findOnePublic(user?._id);
     return u;
   }
+  @Post('/update-info')
+  async updateInfo(
+    @UserLoggin() user: UserDocument,
+    @Body('phone') phone: string,
+  ): Promise<User> {
+    const u = await this.usersService.findOne({ _id: user?._id });
+    u.phone = phone;
+    u.save();
+    return u;
+  }
   @Public()
   @Post('/sso')
   async sso(@Body('sso-token') ssoToken: string): Promise<any> {

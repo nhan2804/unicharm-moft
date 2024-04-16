@@ -95,9 +95,14 @@ export class GiftClientsController {
           );
       }
     }
+
     const otp = customAlphabet('1234567890qwertyuioplkjhgfdsaxxcvbnm', 6);
+    const otpCode = otp()?.toLocaleLowerCase();
+    if (data?.type === 'SAMPLING') {
+      await this.giftClientsService.sendOtp(data?.phone, otpCode);
+    }
     const giftClient = await this.giftClientsService.create({
-      code: otp()?.toLocaleLowerCase(),
+      code: otpCode,
       phone: data?.phone,
       consumerId: user?._id,
       storeId: new Types.ObjectId(data?.storeId),
@@ -107,8 +112,8 @@ export class GiftClientsController {
       ...extraData,
     } as GiftClient);
 
-    const token = await this.authService.login(user);
-    return { login: token, justLogin: true, giftClient };
+    // const token = await this.authService.login(user);
+    return { justLogin: true, giftClient };
   }
   @Get('store/:storeId/today')
   async today(
@@ -150,7 +155,9 @@ export class GiftClientsController {
     //   throw new BadRequestException('Đã hết quà, vui lòng quay lại sau!');
     // }
     const otp = customAlphabet('1234567890qwertyuioplkjhgfdsaxxcvbnm', 6);
+
     bill.code = otp();
+
     bill.status = 'CONFIRM';
     bill.products = {
       [giftSelected?.[0]]: 1,
@@ -164,6 +171,7 @@ export class GiftClientsController {
     //     current: 1,
     //   },
     // });
+    this.giftClientsService.sendOtp(bill?.phone, bill.code);
     return bill;
   }
   @Post('bulk/create')

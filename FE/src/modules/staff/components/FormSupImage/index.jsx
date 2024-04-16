@@ -1,7 +1,4 @@
 import SingleImageUpload from "@components/SingleImageUpload";
-import { array2Object } from "@helper/array2Obj";
-import useGetGroupimage from "@modules/manager/groupimages/hooks/query/useGetGroupimage";
-import useGetImage from "@modules/manager/images/hooks/query/useGetImage";
 import { Button, Card, Collapse, Form, Input } from "antd";
 import CollapsePanel from "antd/es/collapse/CollapsePanel";
 import React from "react";

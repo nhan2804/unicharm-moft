@@ -20,6 +20,7 @@ const FormUpdateClientImage = ({ onFinish, form, isLoading }) => {
           rules={[{ required: true, message: "Vui lòng chụp ảnh nhận quà!" }]}
           name="imgClient"
           label="Ảnh nhận quà"
+          capture={"user"}
         />
 
         <div className="flex justify-center mt-2">

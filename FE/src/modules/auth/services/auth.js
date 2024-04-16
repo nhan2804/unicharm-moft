@@ -18,6 +18,9 @@ export const register = (requestData) => {
 export const reset_password = (requestData) => {
   return axios.post("/auth/reset-password", requestData);
 };
+export const updateInfo = (requestData) => {
+  return axios.post("/auth/update-info", requestData);
+};
 export const getProfile = () => {
   return axios.get("/auth/profile");
 };

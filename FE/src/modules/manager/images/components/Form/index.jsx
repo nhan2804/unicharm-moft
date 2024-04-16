@@ -9,7 +9,7 @@ const ImageFormCreate = ({
   okText = "Tạo",
 }) => {
   const [form] = Form.useForm();
-  const { data: groups } = useGetGroupimage();
+  const { data: groups } = useGetGroupimage({ type: "IMAGE" });
   const _onFinish = (values) => {
     onFinish(values);
   };

@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
 import { IsOptional, IsString } from 'class-validator';
 import { Document, SchemaTypes, Types } from 'mongoose';
+import { Groupimage } from 'src/groupimages/entities/groupimages.entity';
 
 export type QuestionDocument = Question & Document;
 
@@ -40,6 +41,11 @@ export class Question {
   @Prop()
   //for policy
   point?: number;
+  @Transform(({ value }) =>
+    Types.ObjectId.isValid(value) ? new Types.ObjectId(value) : undefined,
+  )
+  @Prop({ type: Types.ObjectId, ref: Groupimage.name })
+  groupId?: Types.ObjectId;
 }
 
 export const QuestionSchema = SchemaFactory.createForClass(Question);
