@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsOptional, IsString } from 'class-validator';
 import { Document, SchemaTypes, Types } from 'mongoose';
+import { Checkin } from 'src/checkin/entities/checkin.entity';
 import { Shift } from 'src/shifts/entities/shifts.entity';
 import { Store } from 'src/stores/entities/stores.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -34,6 +35,8 @@ export class GiftClient {
   storeId?: Types.ObjectId;
   @Prop({ type: SchemaTypes.ObjectId, ref: Shift.name, index: true })
   shiftId?: Types.ObjectId;
+  @Prop({ type: SchemaTypes.ObjectId, ref: Checkin.name, index: true })
+  checkinId?: Types.ObjectId;
   @Prop({ type: Object })
   products: object;
   @Prop()

@@ -230,10 +230,11 @@ export class GiftClientsController {
       );
       const shiftId = currentCheckin?.shiftId;
       updateGiftClientDto['shiftId'] = shiftId;
+      updateGiftClientDto['checkinId'] = new Types.ObjectId(checkinId);
     }
     let extraUpdate = {};
     if (updateGiftClientDto?.imgClient) {
-      extraUpdate = { creator: currentUser?._id };
+      extraUpdate = { creatorId: currentUser?._id };
     }
     return this.giftClientsService.updateOne(id, {
       ...updateGiftClientDto,

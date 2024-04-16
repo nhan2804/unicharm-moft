@@ -8,6 +8,7 @@ import {
   Select,
   Table,
   Tabs,
+  Tag,
 } from "antd";
 import React, { lazy, useMemo } from "react";
 import {
@@ -31,12 +32,20 @@ import initRangeToday from "@helper/getInitRangeToday";
 import filterOption from "@helper/filterOption";
 import useRole from "@hooks/useRole";
 import useGetGiftClients from "@modules/comsumer/hooks/query/useGetGiftClients";
+import useGetShift from "@modules/staff/hooks/query/useGetShift";
+import { array2Object } from "@helper/array2Obj";
 const ExportExcelReport = lazy(() => import("../components/ExportExcel"));
 const ReportGiftPage = () => {
   const [formSearch] = Form.useForm();
   const { initSearchValues, search, setSearch } = useSearchQuery({
     range: initRangeToday,
   });
+  const mappingStatus = {
+    DONE: <Tag color="green">Hoàn thành</Tag>,
+    PENDING: <Tag color="orange">Đang chờ</Tag>,
+    CONFIRM: <Tag color="blue">Đã duyệt</Tag>,
+    DENY: <Tag color="red">Đã từ chối</Tag>,
+  };
 
   const { canWrite } = useRole();
   const [form] = Form.useForm();
@@ -44,6 +53,10 @@ const ReportGiftPage = () => {
   const { data: sampling } = useGetProduct({ isSampling: true });
   const { data: giftExternal } = useGetProduct({ isGiftExternal: true });
   const { data: stores } = useGetStore();
+  const { data: shifts } = useGetShift();
+  const mappingShift = useMemo(() => {
+    return array2Object(shifts, "_id");
+  }, [shifts]);
 
   const pagination = usePagination({ reset: Object.values(search) });
   const query = {
@@ -162,14 +175,8 @@ const ReportGiftPage = () => {
       key: ["store", "name"],
     },
     {
-      title: "Giờ tạo",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text) => dayjs(text).format("HH:mm:ss"),
-    },
-    {
       sortOrder: pagination?.tableSortOrder?.createdAt?.order,
-      title: "Ngày tạo",
+      title: "Ngày nhận",
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => dayjs(text).format("DD/MM/YYYY"),
@@ -177,11 +184,29 @@ const ReportGiftPage = () => {
         multiple: 1,
       },
     },
-    // {
-    //   title: "Ca",
-    //   dataIndex: ["shift", "name"],
-    //   key: "shift",
-    // },
+    {
+      title: "Giờ nhận",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text) => dayjs(text).format("HH:mm:ss"),
+    },
+    {
+      title: "Ca làm việc",
+      dataIndex: "shiftId",
+      key: "shiftId",
+      render: (text) => mappingShift?.[text]?.name,
+    },
+    {
+      title: "Số Đ.Thoại K.Hàng",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (text) => mappingStatus?.[text],
+    },
     {
       title: "Người cập nhật ảnh",
       dataIndex: ["creator", "fullName"],
@@ -207,10 +232,20 @@ const ReportGiftPage = () => {
       render: (_, __, index) => index + 1,
     },
     {
-      title: "Ngày thực hiện",
+      sortOrder: pagination?.tableSortOrder?.createdAt?.order,
+      title: "Ngày nhận",
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => dayjs(text).format("DD/MM/YYYY"),
+      sorter: {
+        multiple: 1,
+      },
+    },
+    {
+      title: "Giờ nhận",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text) => dayjs(text).format("HH:mm:ss"),
     },
     {
       title: "Store Code",
@@ -262,12 +297,23 @@ const ReportGiftPage = () => {
       dataIndex: ["creator", "fullName"],
       key: ["creator", "fullName"],
     },
-    // {
-    //   title: "Thời gian Check-in",
-    //   dataIndex: ["checkin", "timeCheckIn"],
-    //   key: ["checkin", "timeCheckIn"],
-    //   render: (text) => text && dayjs(text).format("HH:mm:ss"),
-    // },
+    {
+      title: "Ca làm việc",
+      dataIndex: "shiftId",
+      key: "shiftId",
+      render: (text) => mappingShift?.[text]?.name,
+    },
+    {
+      title: "Số Đ.Thoại K.Hàng",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (text) => mappingStatus?.[text],
+    },
     // {
     //   title: "Thời gian Check-out",
     //   dataIndex: ["checkin", "timeCheckOut"],
