@@ -5,7 +5,7 @@ const useCheckCode = () => {
   return useMutation(
     async (values) => {
       const { data } = await axios.get(`gift-clients`, {
-        params: { code: values?.otp },
+        params: { code: values?.otp, storeId: values?.storeId },
       });
       return data;
     },

@@ -190,10 +190,9 @@ export class GiftClientsController {
       ...(query?.name && {
         name: { $regex: query?.name?.normalize(), $options: 'i' },
       }),
-
-      // ...(query?.ownerId && {
-      //   ownerId: new Types.ObjectId(query?.ownerId),
-      // }),
+      ...(query?.storeId && {
+        storeId: new Types.ObjectId(query?.storeId),
+      }),
       ...(Number(query?.startTime) &&
         Number(query?.endTime) && {
           createdAt: {
