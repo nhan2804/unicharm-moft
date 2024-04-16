@@ -11,10 +11,12 @@ import { toast } from "react-toastify";
 const GiftOtpPage = () => {
   const { mutate: checkCode, isLoading: isCheckingCode } = useCheckCode();
   const nav = useNavigate();
+  const { storeId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const onFinish = (values) => {
     const type = searchParams.get("type");
+    values["storeId"] = storeId;
     checkCode(values, {
       onSuccess: (giftClients) => {
         const gift = giftClients?.data?.[0];
