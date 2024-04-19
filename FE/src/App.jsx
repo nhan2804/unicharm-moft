@@ -18,7 +18,7 @@ function App() {
   const darkMode = useAppSelector((state) => state.dark.isDark);
   return (
     <div className={`${darkMode ? "dark" : ""} h-full`}>
-      <div className="bg-[#eeecec] transition-colors h-full">
+      <div className="bg-[#eeecec] transition-colors min-h-full">
         {/* <LazyMotion features={loadFeatures} strict> */}
         <div style={{ position: "absolute" }} id="back-to-top-anchor" />
         <div className="flex flex-col flex-auto h-full min-h-0">

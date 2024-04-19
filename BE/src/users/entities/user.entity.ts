@@ -17,7 +17,7 @@ export class User {
   ssoEmail?: string;
   @Prop()
   password: string;
-  @Prop()
+  @Prop({ index: 1 })
   type: string;
   @Prop()
   mode?: string;

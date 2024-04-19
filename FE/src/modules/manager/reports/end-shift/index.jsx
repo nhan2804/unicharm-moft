@@ -54,40 +54,60 @@ const ReportEndShiftPage = () => {
     query
   );
   const extraColumn = useMemo(() => {
-    // const moreData = [
-    //   {
-    //     title: "Đầu ca OOS",
-    //     key: "startShiftInventoryOOS",
-    //   },
-    //   // {
-    //   //   title: "Cuối ca OOS",
-    //   //   key: "endShiftInventoryOOS",
-    //   // },
-    // ];
-    // return moreData?.map((data) => {
-    //   return {
-    //     title: data.title,
-    //     dataIndex: [data.key],
-    //     key: data.key,
-    //     children:
-    //       products?.data?.map((e) => {
-    //         return {
-    //           title: e?.name,
-    //           dataIndex: [data.key, e?._id],
-    //           key: e?._id,
-    //         };
-    //       }) || [],
-    //   };
-    // });
-    return (
-      products?.data?.map((e) => {
-        return {
-          title: e?.name,
-          dataIndex: ["startShiftInventoryOOS", e?._id],
-          key: e?._id,
-        };
-      }) || []
-    );
+    const moreData = [
+      {
+        title: "Số bán",
+        key: "endShiftSales",
+      },
+      {
+        title: "Sampling",
+        key: "endShiftSamplings",
+      },
+      {
+        title: "Quà tặng quay số",
+        key: "endShiftGiftExternals",
+      },
+      {
+        title: "Số bán thực tế",
+        key: "endShiftSalesActual",
+      },
+      {
+        title: "Sampling thực tế",
+        key: "endShiftSamplingsActual",
+      },
+      {
+        title: "Quà tặng quay số thực tế",
+        key: "endShiftGiftExternalsActual",
+      },
+      // {
+      //   title: "Cuối ca OOS",
+      //   key: "endShiftInventoryOOS",
+      // },
+    ];
+    return moreData?.map((data) => {
+      return {
+        title: data.title,
+        dataIndex: [data.key],
+        key: data.key,
+        children:
+          products?.data?.map((e) => {
+            return {
+              title: e?.name,
+              dataIndex: [data.key, e?._id],
+              key: e?._id,
+            };
+          }) || [],
+      };
+    });
+    // return (
+    //   products?.data?.map((e) => {
+    //     return {
+    //       title: e?.name,
+    //       dataIndex: ["startShiftInventoryOOS", e?._id],
+    //       key: e?._id,
+    //     };
+    //   }) || []
+    // );
   }, [products]);
   const columns = [
     {

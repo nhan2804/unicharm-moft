@@ -15,7 +15,7 @@ import {
   QuestionOutlined,
   UserSwitchOutlined,
   NotificationOutlined,
-  InsertRowAboveOutlined,
+  FileSearchOutlined,
   FileDoneOutlined,
   InsertRowLeftOutlined,
   DatabaseOutlined,
@@ -176,6 +176,9 @@ const AppLayout = () => {
             </Menu.Item>
             <Menu.Item icon={<FileDoneOutlined />} key="gift">
               <Link to={`/manager/report/gift`}>Report quà tặng</Link>
+            </Menu.Item>
+            <Menu.Item icon={<FileSearchOutlined />} key="gift-code">
+              <Link to={`/manager/report/gift-code`}>Mã code</Link>
             </Menu.Item>
             <Menu.Item icon={<FileDoneOutlined />} key="sampling">
               <Link to={`/manager/report/end-shift`}>Report cuối ca</Link>

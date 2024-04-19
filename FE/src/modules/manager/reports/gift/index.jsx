@@ -39,14 +39,16 @@ const ReportGiftPage = () => {
   const [formSearch] = Form.useForm();
   const { initSearchValues, search, setSearch } = useSearchQuery({
     range: initRangeToday,
+    status: "DONE",
   });
   const mappingStatus = {
-    DONE: <Tag color="green">Hoàn thành</Tag>,
-    PENDING: <Tag color="orange">Đang chờ</Tag>,
-    CONFIRM: <Tag color="blue">Đã duyệt</Tag>,
-    DENY: <Tag color="red">Đã từ chối</Tag>,
+    DONE: <span className="text-green-600">Hoàn thành</span>,
+    PENDING: <span className="text-orange-500"> Đang chờ</span>,
+    CONFIRM: <span className="text-blue-500"> Đã duyệt</span>,
+    DENY: <span className="text-red-500">Đã từ chối</span>,
   };
 
+  const [tab, setTab] = useState("SAMPLING");
   const { canWrite } = useRole();
   const [form] = Form.useForm();
 
@@ -58,22 +60,27 @@ const ReportGiftPage = () => {
     return array2Object(shifts, "_id");
   }, [shifts]);
 
-  const pagination = usePagination({ reset: Object.values(search) });
+  const pagination = usePagination({
+    reset: Object.values({ ...search, tab }),
+  });
   const query = {
     ...search,
 
     startTime: search?.range?.[0]?.valueOf(),
     endTime: search?.range?.[1]?.valueOf(),
     range: undefined,
+    type: tab,
+    page: pagination?.current,
+    perPage: pagination?.pageSize,
     ...pagination?.sort,
   };
   const { data: giftClients, isLoading } = useGetGiftClients(query);
-  const sellingData = useMemo(() => {
-    return giftClients?.data?.filter((e) => e?.type === "SELLING");
-  }, [giftClients]);
-  const samplingData = useMemo(() => {
-    return giftClients?.data?.filter((e) => e?.type === "SAMPLING");
-  }, [giftClients]);
+  // const sellingData = useMemo(() => {
+  //   return giftClients?.data?.filter((e) => e?.type === "SELLING");
+  // }, [giftClients]);
+  // const samplingData = useMemo(() => {
+  //   return giftClients?.data?.filter((e) => e?.type === "SAMPLING");
+  // }, [giftClients]);
   // const { data: gifts, isLoading } = useManagerReport("gift", query);
   const extraColumnSampling = useMemo(() => {
     const moreData = [
@@ -162,7 +169,8 @@ const ReportGiftPage = () => {
       title: "No.",
       dataIndex: "no",
       key: "no",
-      render: (_, __, index) => index + 1,
+      render: (text, record, index) =>
+        (pagination.current - 1) * pagination.pageSize + index + 1,
     },
     {
       title: "Mã Store",
@@ -197,7 +205,7 @@ const ReportGiftPage = () => {
       render: (text) => mappingShift?.[text]?.name,
     },
     {
-      title: "Số Đ.Thoại K.Hàng",
+      title: "SDT K.hàng",
       dataIndex: "phone",
       key: "phone",
     },
@@ -304,7 +312,7 @@ const ReportGiftPage = () => {
       render: (text) => mappingShift?.[text]?.name,
     },
     {
-      title: "Số Đ.Thoại K.Hàng",
+      title: "SDT K.hàng",
       dataIndex: "phone",
       key: "phone",
     },
@@ -366,11 +374,12 @@ const ReportGiftPage = () => {
       </CustomModal>
       <CustomPageHeader title="Report quà tặng" />
       <Tabs
+        onChange={setTab}
         defaultActiveKey="1"
         items={[
           {
             label: "Quà tặng Sampling",
-            key: "1",
+            key: "SAMPLING",
             children: (
               <>
                 <div className="flex justify-end mb-2">
@@ -404,7 +413,28 @@ const ReportGiftPage = () => {
                           })}
                         </Select>
                       </Form.Item>
-
+                      <Form.Item name="status">
+                        <Select
+                          filterOption={filterOption}
+                          showSearch
+                          style={{
+                            width: 200,
+                          }}
+                          // allowClear
+                          placeholder="Trạng thái"
+                        >
+                          {Object.entries({
+                            DONE: mappingStatus.DONE,
+                            PENDING: mappingStatus.PENDING,
+                          }).map((e) => {
+                            return (
+                              <Select.Option value={e?.[0]}>
+                                {e?.[1]}
+                              </Select.Option>
+                            );
+                          })}
+                        </Select>
+                      </Form.Item>
                       <Form.Item>
                         <Button
                           disabled={isLoading}
@@ -421,23 +451,28 @@ const ReportGiftPage = () => {
                     headerRows={[1, 2]}
                     type="report-gift"
                     columns={columnExport?.concat(extraColumnSampling)}
-                    dataSource={samplingData}
+                    dataSource={giftClients?.data}
                   />
                 </div>
                 <Table
+                  pagination={{
+                    ...pagination,
+                    total: giftClients?.paginate?.count,
+                    //   ...restPagi,
+                  }}
                   bordered
-                  onChange={pagination.onChangeTable}
+                  // onChange={pagination.onChangeTable}
                   loading={isLoading}
                   scroll={{ x: "max-content" }}
                   columns={columns?.concat(extraColumnSampling)}
-                  dataSource={samplingData || []}
+                  dataSource={giftClients?.data || []}
                 ></Table>
               </>
             ),
           },
           {
             label: "Quà tặng Selling",
-            key: "2",
+            key: "SELLING",
             children: (
               <>
                 <div className="flex justify-end mb-2">
@@ -469,6 +504,27 @@ const ReportGiftPage = () => {
                               </Select.Option>
                             );
                           })}
+                        </Select>
+                      </Form.Item>
+                      <Form.Item name="status">
+                        <Select
+                          filterOption={filterOption}
+                          showSearch
+                          style={{
+                            width: 200,
+                          }}
+                          // allowClear
+                          placeholder="Trạng thái"
+                        >
+                          {Object.entries({ DONE: mappingStatus.DONE }).map(
+                            (e) => {
+                              return (
+                                <Select.Option value={e?.[0]}>
+                                  {e?.[1]}
+                                </Select.Option>
+                              );
+                            }
+                          )}
                         </Select>
                       </Form.Item>
 
@@ -488,16 +544,21 @@ const ReportGiftPage = () => {
                     headerRows={[1, 2]}
                     type="report-gift"
                     columns={columnExport?.concat(extraColumnSelling)}
-                    dataSource={sellingData}
+                    dataSource={giftClients?.data}
                   />
                 </div>
                 <Table
                   bordered
-                  onChange={pagination.onChangeTable}
+                  pagination={{
+                    ...pagination,
+                    total: giftClients?.paginate?.count,
+                    //   ...restPagi,
+                  }}
+                  // onChange={pagination.onChangeTable}
                   loading={isLoading}
                   scroll={{ x: "max-content" }}
                   columns={columns?.concat(extraColumnSelling)}
-                  dataSource={sellingData || []}
+                  dataSource={giftClients?.data || []}
                 ></Table>
               </>
             ),

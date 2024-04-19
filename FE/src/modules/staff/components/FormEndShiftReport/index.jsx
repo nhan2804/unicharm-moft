@@ -26,7 +26,7 @@ const FormEndShiftReport = ({ onFinish, form, isLoading }) => {
         onFinish={onFinish}
         form={form}
       >
-        <Collapse defaultActiveKey={["1", "2", "3", "4"]}>
+        <Collapse defaultActiveKey={["1", "2", "3", "4", "5", "6", "7"]}>
           <Collapse.Panel header="Số bán" key="1">
             {products?.data?.map((e) => {
               return (
@@ -72,7 +72,57 @@ const FormEndShiftReport = ({ onFinish, form, isLoading }) => {
               );
             })}
           </Collapse.Panel>
-
+          <Collapse.Panel header="Số bán thực tế" key="5">
+            {products?.data?.map((e) => {
+              return (
+                <Form.Item
+                  rules={[{ required: true, message: "Vui lòng nhập!" }]}
+                  name={["endShiftSalesActual", e?._id]}
+                  label={e?.name}
+                >
+                  <Input
+                    // defaultValue={0}
+                    type="number"
+                    placeholder="Nhập số lượng"
+                  ></Input>
+                </Form.Item>
+              );
+            })}
+          </Collapse.Panel>
+          <Collapse.Panel header="Sampling thực tế" key="6">
+            {samplings?.data?.map((e) => {
+              return (
+                <Form.Item
+                  rules={[{ required: true, message: "Vui lòng nhập!" }]}
+                  name={["endShiftSamplingsActual", e?._id]}
+                  label={e?.name}
+                >
+                  <Input
+                    // defaultValue={0}
+                    type="number"
+                    placeholder="Nhập số lượng"
+                  ></Input>
+                </Form.Item>
+              );
+            })}
+          </Collapse.Panel>
+          <Collapse.Panel header="Quà tặng quay số thực tế" key="7">
+            {gifts?.data?.map((e) => {
+              return (
+                <Form.Item
+                  rules={[{ required: true, message: "Vui lòng nhập!" }]}
+                  name={["endShiftGiftExternalsActual", e?._id]}
+                  label={e?.name}
+                >
+                  <Input
+                    // defaultValue={0}
+                    type="number"
+                    placeholder="Nhập số lượng"
+                  ></Input>
+                </Form.Item>
+              );
+            })}
+          </Collapse.Panel>
           <Collapse.Panel header="Khác" key="4">
             <Form.Item label="Thuận lợi, khó khăn" name={"note"}>
               <Input.TextArea rows={4} />

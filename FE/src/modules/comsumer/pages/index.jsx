@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, Modal, Select, Result } from "antd";
+import { Button, Form, Input, Modal, Select, Result, Image } from "antd";
 import useLogin from "@modules/auth/hooks/useLogin";
 import { useNavigate, useParams } from "react-router";
 import useQueryString2 from "@hooks/useQueryString2";
@@ -9,6 +9,7 @@ import { login as loginAction } from "@modules/auth/slices";
 import { useForm, useWatch } from "antd/es/form/Form";
 import SingleImageUpload from "@components/SingleImageUpload";
 import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
+import imgSampling from "@assets/gift/sampling.jpg";
 const LoginComsumer = () => {
   const {
     data: dataGiftClient,
@@ -95,22 +96,31 @@ const LoginComsumer = () => {
         status={"success"}
         title="Mã xác nhận đã được gửi đến số điện thoại, vui lòng kiểm tra và đưa nó cho nhân viên!"
         extra={
-          <Button
-            onClick={() => {
-              setFinished(false);
-              window.close();
-            }}
-            type="primary"
-            key="console"
-          >
-            Đồng ý
-          </Button>
+          <div>
+            <p>Chúc mừng khách hàng nhận được các phần quà sau!</p>
+            <p>
+              <b>Gói Silver spoon 40g</b> và <b>Gói Max Well 40g</b>
+            </p>
+            <Image src={imgSampling} />
+            <div className="flex justify-center mt-2">
+              <Button
+                onClick={() => {
+                  setFinished(false);
+                  window.close();
+                }}
+                type="primary"
+                key="console"
+              >
+                Đồng ý
+              </Button>
+            </div>
+          </div>
         }
       />
     );
-  if (!!dataGiftClient) {
-    return <Result status={"success"} title={"Bạn đã nhận được phần quà!"} />;
-  }
+  // if (!!dataGiftClient) {
+  //   return <Result status={"success"} title={"Cảm ơn bạn đã nhận quà!"} />;
+  // }
   return (
     <div className="flex items-center justify-center h-full">
       <div>

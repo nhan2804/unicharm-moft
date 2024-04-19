@@ -36,6 +36,8 @@ import useCreateProduct from "@modules/manager/products/hooks/mutate/useCreatePr
 import useGetProduct from "@modules/manager/products/hooks/query/useGetProduct";
 import useGetShift from "@modules/staff/hooks/query/useGetShift";
 import showNotiWebApi from "@helper/webPushApi";
+import { array2Object } from "@helper/array2Obj";
+import ExportExcelReport from "@modules/manager/reports/components/ExportExcel";
 
 const ManagerBill = () => {
   const userId = useAppSelector((s) => s?.auth?.user?._id);
@@ -49,6 +51,15 @@ const ManagerBill = () => {
   const qstring = useQueryString2();
   const initTab = qstring.qsParsed?.tab || "PENDING";
   const [tab, setTab] = useState(initTab);
+  // const {data:shifts} = useGetShift()
+  const { data: shifts } = useGetShift();
+  const { data: stores } = useGetStore();
+  const mappingShift = useMemo(() => {
+    return array2Object(shifts, "_id", "name");
+  }, [shifts]);
+  const mappingStores = useMemo(() => {
+    return array2Object(stores?.data, "_id", "name");
+  }, [stores]);
   const { data: bill, isLoading: loadingBill } = useGetBill(
     {
       ...search,
@@ -98,6 +109,7 @@ const ManagerBill = () => {
       title: "Ảnh bill",
       dataIndex: "imgBill",
       key: "imgBill",
+      excelRender: (i) => i,
       render: (text, record) => <Image width={100} src={text} />,
     },
     tab === "DENY"
@@ -107,19 +119,19 @@ const ManagerBill = () => {
           key: "reasonBill",
         }
       : undefined,
-    tab === "ACCEPTED"
+    tab === "ACCEPTED" || tab === "DONE"
       ? {
           title: "Ca",
           dataIndex: "shift",
           key: "shift",
-          //   render: (t) => mappingShift?.[t] || "",
+          render: (t) => mappingShift?.[t] || "",
         }
       : undefined,
     {
       title: "Store",
-      dataIndex: "place",
-      key: "place",
-      render: (text) => text?.name,
+      dataIndex: "storeId",
+      key: "storeId",
+      render: (text) => mappingStores?.[text],
     },
     // {
     //   title: "Mã giới thiệu",
@@ -235,7 +247,7 @@ const ManagerBill = () => {
   }, [idPlaces, places]);
   console.log({ finalDataPlace });
   //   const restPagi = useShowTotalTable();
-  const { data: shifts } = useGetShift();
+
   return (
     <>
       <Tabs
@@ -253,6 +265,11 @@ const ManagerBill = () => {
           {
             label: <span>Bill đã duyệt</span>,
             key: "ACCEPTED",
+            children: <></>,
+          },
+          {
+            label: <span>Bill đã hoàn thành</span>,
+            key: "DONE",
             children: <></>,
           },
           {
@@ -318,6 +335,11 @@ const ManagerBill = () => {
                 Tìm
               </Button>
             </Form.Item>
+            <ExportExcelReport
+              dataSource={bill?.data}
+              columns={columns}
+              type={"bill-" + tab}
+            />
           </div>
         </Form>
       </div>

@@ -146,6 +146,7 @@ export class GiftClientsbillController {
       sortObj,
       query?.page,
       query?.perPage,
+      // 'store',
     );
   }
 
@@ -222,9 +223,13 @@ export class GiftClientsbillController {
         if (updateGiftClientDto?.productsBill) {
           bill.productsBill = updateGiftClientDto?.productsBill;
         }
-        // if (updateGiftClientDto?.shift) {
-        //   bill.shift = updateGiftClientDto?.shift;
-        // }
+        if (updateGiftClientDto?.shiftId) {
+          bill.shiftId = updateGiftClientDto?.shiftId;
+        } else {
+          throw new BadRequestException(
+            'Vui lòng chọn ca, nếu có lỗi. Vui lòng reload trình duyệt',
+          );
+        }
 
         bill.keyCodeBill = keyCode;
         bill.codeBill = updateGiftClientDto?.codeBill;

@@ -30,7 +30,7 @@ const UpdateClientImage = () => {
     <div>
       <CustomPageHeader title="Cập nhật hình ảnh nhận quà" />
 
-      <div className="flex flex-col w-[100%] items-center gap-5 m-3">
+      <div className="flex flex-col items-center gap-5 m-3">
         <FormUpdateClientImage
           isLoading={isLoading}
           form={form}

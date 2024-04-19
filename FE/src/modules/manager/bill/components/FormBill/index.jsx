@@ -87,7 +87,7 @@ const FormAcceptBill = ({ onFinish, selected, type, products, shifts }) => {
                     message: "Vui lòng chọn ca làm việc",
                   },
                 ]}
-                name={"shift"}
+                name={"shiftId"}
               >
                 <Select>
                   {shifts?.map((e) => {

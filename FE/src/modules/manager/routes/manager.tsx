@@ -1,5 +1,6 @@
 import { IRoute } from "@routes/route.interface";
 import { lazy } from "react";
+const CodeGiftClient = lazy(() => import("../reports/gift/code"));
 const StoreGiftPage = lazy(() => import("../stores/pages/gift"));
 const ManagerBill = lazy(() => import("../bill/pages/manager"));
 const ReportCheckinSupPage = lazy(() => import("../reports/checkin-sup"));
@@ -138,6 +139,12 @@ const managerRoutes: IRoute[] = [
       {
         component: ReportGiftPage,
         path: "report/gift",
+        isPrivate: true,
+        exact: true,
+      },
+      {
+        component: CodeGiftClient,
+        path: "report/gift-code",
         isPrivate: true,
         exact: true,
       },

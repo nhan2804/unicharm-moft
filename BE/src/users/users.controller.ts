@@ -84,9 +84,9 @@ export class UsersController {
         name: { $regex: query?.name?.normalize(), $options: 'i' },
       }),
 
-      ...(query?.type && {
-        type: query?.type,
-      }),
+      // ...(query?.type ?? {
+      type: query?.type || { $ne: 'CONSUMER' },
+      // }),
 
       ...(query?.fullName && {
         fullName: { $regex: query?.fullName?.normalize(), $options: 'i' },

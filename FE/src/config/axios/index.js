@@ -1,7 +1,7 @@
 import { logout } from "@modules/auth/slices";
 import axios from "axios";
 import { store } from "@app/store";
-// let BASE_URL = "https://pg2024.heineken-vn.com/";
+// let BASE_URL = "https://unicharm.work4u.tech/";
 let BASE_URL = window.location.origin + "/";
 // let BASE_URL = "http://localhost:4008/";
 let BASE_URL_EMBED = "http://localhost:8000/";

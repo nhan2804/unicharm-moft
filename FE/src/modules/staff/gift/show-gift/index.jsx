@@ -5,7 +5,7 @@ import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Image, Card, Button } from "antd";
 import CustomPageHeader from "@components/CustomPageHeader";
-
+import imgSampling from "@assets/gift/sampling.jpg";
 const ShowGiftPage = () => {
   const { giftId, storeId } = useParams();
   const { data: gift } = useShowGiftClients(giftId);
@@ -20,9 +20,13 @@ const ShowGiftPage = () => {
       {gift && (
         <>
           <CustomPageHeader title="Quà tặng" />
-          <div className="flex flex-col w-[100%] items-center gap-5 m-3">
+          <div className="flex flex-col items-center gap-5 m-3">
             <p>Chúc mừng khách hàng nhận được các phần quà sau!</p>
-            {Object.keys(gift?.products)?.map((e, i) => (
+            <p>
+              <b>Gói Silver spoon 40g</b> và <b>Gói Max Well 40g</b>
+            </p>
+            <Image src={imgSampling} />
+            {/* {Object.keys(gift?.products)?.map((e, i) => (
               <Card
                 title={`Quà tặng #${i + 1}`}
                 bordered={false}
@@ -38,8 +42,9 @@ const ShowGiftPage = () => {
                   }
                 />
               </Card>
-            ))}
+            ))} */}
             <Button
+              type="primary"
               className="font-bold"
               onClick={() =>
                 nav(`/staff/stores/${storeId}/update-image/${giftId}`, {
@@ -47,7 +52,7 @@ const ShowGiftPage = () => {
                 })
               }
             >
-              XÁC NHẬN
+              Xác nhận
             </Button>
           </div>
         </>

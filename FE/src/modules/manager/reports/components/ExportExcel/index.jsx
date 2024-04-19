@@ -31,7 +31,7 @@ const ExportExcelReport = ({
       .addSheet("sheet-1")
       .setTHeadStyle({
         background: "32a852",
-        color: "FFFFFF",
+        // color: "FFFFFF",
         v: "center",
         fontName: "Calibri",
         fontSize: 9,
@@ -100,6 +100,14 @@ const ExportExcelReport = ({
               console.log({ isLink: isLink, cell: cell.value });
             }
           });
+        } else {
+          // row.eachCell((cell, i2) => {
+          //   cell.fill = {
+          //     type: "pattern",
+          //     pattern: "solid",
+          //     fgColor: { argb: "000000" },
+          //   };
+          // });
         }
       });
     });
