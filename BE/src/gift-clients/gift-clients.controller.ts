@@ -128,8 +128,81 @@ export class GiftClientsController {
     return data;
   }
   @Post()
-  create(@Body() createGiftClientDto: CreateGiftClientDto) {
-    return this.giftClientsService.create(createGiftClientDto);
+  async create(
+    @Body()
+    data: {
+      phone: string;
+      storeId: string;
+      fullName: string;
+      type: 'SELLING' | 'SAMPLING';
+      products?: object;
+      imgBill?: string;
+      imgClient?: string;
+    },
+    @Body('checkinId') checkinId: string,
+    @UserLoggin() currentUser: UserDocument,
+  ) {
+    if (!data?.phone || !data?.storeId) {
+      throw new BadRequestException('Có lỗi xảy ra, vui lòng thử lại!');
+    }
+    let user = await this.userService.findOne({ phone: data?.phone });
+    const existStore = await this.storeService.findOne({
+      _id: data.storeId,
+    });
+    if (!existStore) {
+      throw new BadRequestException('Link tham gia sai, vui lòng thử lại!');
+    }
+    if (!user) {
+      const saltOrRounds = 10;
+      const hashedPassword = await bcrypt.hash('nhanxxxxx', saltOrRounds);
+      const username = nanoid(6);
+      user = await this.userService.create({
+        password: hashedPassword,
+        phone: data?.phone,
+        username: username,
+        fullName: data?.fullName,
+        type: 'CONSUMER',
+      } as User);
+    }
+    let extraData = {};
+    if (data?.type === 'SAMPLING') {
+      extraData = { products: data?.products, status: 'DONE' };
+      const existGift = await this.giftClientsService.findOne({
+        phone: data?.phone,
+        type: 'SAMPLING',
+      });
+      if (existGift) {
+        if (existGift?.status === 'PENDING')
+          throw new BadRequestException(
+            'Vui lòng kiểm tra OTP đã được gửi vào số điện thoại của bạn!',
+          );
+        else
+          throw new BadRequestException(
+            'Không đủ điều kiện tham gia chương trình Sampling!',
+          );
+      }
+    }
+    const currentCheckin = await this.checkinService.findOneById(
+      new Types.ObjectId(checkinId),
+    );
+    const shiftId = currentCheckin?.shiftId;
+
+    const otp = customAlphabet('1234567890qwertyuioplkjhgfdsaxxcvbnm', 6);
+    const otpCode = otp()?.toLocaleLowerCase();
+    const giftClient = await this.giftClientsService.create({
+      phone: data?.phone,
+      code: otpCode,
+      consumerId: user?._id,
+      storeId: new Types.ObjectId(data?.storeId),
+      type: data?.type,
+      creatorId: new Types.ObjectId(currentUser?._id),
+      imgBill: data?.imgBill,
+      imgClient: data?.imgClient,
+      shiftId: shiftId,
+      checkinId: currentCheckin?._id,
+      ...extraData,
+    } as GiftClient);
+    return giftClient;
   }
   @Public()
   @Post('roll/:id')
