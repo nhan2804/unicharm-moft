@@ -458,6 +458,8 @@ const ReportGiftPage = () => {
                   pagination={{
                     ...pagination,
                     total: giftClients?.paginate?.count,
+                    showSizeChanger: true,
+                    pageSizeOptions: [10, 20, 50, 100, 200, 500],
                     //   ...restPagi,
                   }}
                   bordered
@@ -547,11 +549,14 @@ const ReportGiftPage = () => {
                     dataSource={giftClients?.data}
                   />
                 </div>
+
                 <Table
                   bordered
                   pagination={{
                     ...pagination,
                     total: giftClients?.paginate?.count,
+                    showSizeChanger: true,
+                    pageSizeOptions: [10, 20, 50, 100, 200, 500],
                     //   ...restPagi,
                   }}
                   // onChange={pagination.onChangeTable}

@@ -72,16 +72,13 @@ export class AbstractService<T, S = T & Document> {
       };
     }
     sort = !sort || Object.keys(sort).length === 0 ? { createdAt: -1 } : sort;
+    const endFilter = { ...filter, ...finalSearchDate };
+    const getCount = this.model.countDocuments(endFilter);
+    const getDocuments = this.model.find(endFilter, projection, {
+      limit: perPage,
+      skip: (page - 1) * perPage,
+    });
 
-    const getCount = this.model.countDocuments(filter);
-    const getDocuments = this.model.find(
-      { ...filter, ...finalSearchDate },
-      projection,
-      {
-        limit: perPage,
-        skip: (page - 1) * perPage,
-      },
-    );
     if (sort) {
       getDocuments.sort(sort);
     }
@@ -98,7 +95,7 @@ export class AbstractService<T, S = T & Document> {
       totalPages: Math.ceil(count / perPage),
       perPage,
     };
-
+    console.log({ paginate, count, filter });
     return { data: documents, paginate };
   }
 

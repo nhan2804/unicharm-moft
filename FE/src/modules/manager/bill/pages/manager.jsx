@@ -268,6 +268,11 @@ const ManagerBill = () => {
             children: <></>,
           },
           {
+            label: <span>Bill đang chờ PG xác nhận</span>,
+            key: "CONFIRM",
+            children: <></>,
+          },
+          {
             label: <span>Bill đã hoàn thành</span>,
             key: "DONE",
             children: <></>,
