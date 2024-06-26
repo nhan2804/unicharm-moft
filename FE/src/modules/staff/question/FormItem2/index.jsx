@@ -1,5 +1,6 @@
 import WrapFormItem from "@components/WrapFormItem";
 import { listTypeValue } from "@modules/manager/questions/components/Form";
+import classNames from "classnames";
 import React, { memo } from "react";
 const shuffle = (arr) => {
   if (!arr?.length) return [];
@@ -9,7 +10,13 @@ const shuffle = (arr) => {
     .map(({ value }) => value);
 };
 
-const FormItem2 = ({ form, question, isShuffle, nestedName }) => {
+const FormItem2 = ({
+  form,
+  question,
+  isShuffle,
+  nestedName,
+  classNameLabel,
+}) => {
   const { type, kind, required, _id, name, option } = question || {};
 
   const multiple = type === "MULTI" ? "multiple" : "";
@@ -34,7 +41,11 @@ const FormItem2 = ({ form, question, isShuffle, nestedName }) => {
         options={!isShuffle ? option : shuffle(option)}
         name={nestedName ? nestedName?.concat([_id]) : _id}
         type={typeCompo}
-        label={<span className="font-bold">{name}</span>}
+        label={
+          <span className={(classNames("font-bold"), classNameLabel)}>
+            {name}
+          </span>
+        }
       />
     </div>
   );

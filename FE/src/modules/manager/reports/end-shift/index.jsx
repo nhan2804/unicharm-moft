@@ -216,6 +216,16 @@ const ReportEndShiftPage = () => {
       key: ["extra", "totalClientReach"],
     },
     {
+      title: "Tổng Số khách tiếp cận nuôi chó",
+      dataIndex: ["extra", "totalClientReachDog"],
+      key: ["extra", "totalClientReachDog"],
+    },
+    {
+      title: "Tổng Số khách tiếp cận nuôi mèo",
+      dataIndex: ["extra", "totalClientReachCat"],
+      key: ["extra", "totalClientReachCat"],
+    },
+    {
       title: "Đối thủ có CTKM",
       dataIndex: ["extra", "hasPromotion"],
       key: ["extra", "hasPromotion"],

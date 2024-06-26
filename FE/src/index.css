@@ -86,3 +86,10 @@ code {
 .radio-group-block .ant-radio-wrapper-in-form-item{
   display: block !important;
 }
+.group-vertical .ant-checkbox-group{
+  display: flex;
+  flex-direction: column;
+}
+.ant-checkbox-wrapper {
+  margin-inline-start: 0px !important;
+}

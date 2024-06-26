@@ -50,6 +50,10 @@ const mappingType = {
     value: "RATING",
     label: "Câu hỏi đánh giá",
   },
+  "question-survey": {
+    value: "SURVEY",
+    label: "Câu hỏi khảo sát",
+  },
   questions: {
     value: "WORK",
     label: "Câu hỏi đầu ca",

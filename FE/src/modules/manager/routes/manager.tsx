@@ -96,6 +96,12 @@ const managerRoutes: IRoute[] = [
       },
       {
         component: QuestionHomePage,
+        path: "question-survey",
+        isPrivate: true,
+        exact: true,
+      },
+      {
+        component: QuestionHomePage,
         path: "question-policy",
         isPrivate: true,
         exact: true,

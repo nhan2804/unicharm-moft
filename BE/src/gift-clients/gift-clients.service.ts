@@ -49,8 +49,9 @@ export class GiftClientsService extends AbstractService<GiftClient> {
     // console.log({ dataRes });
 
     if (dataRes?.status?.toString() !== '1') {
-      throw new BadRequestException(
-        'Có lỗi xảy ra, vui lòng thử lại!' + dataRes?.status?.toString(),
+      throw new Error(
+        'Có lỗi xảy ra khi gửi OTP, vui lòng thử lại!' +
+          dataRes?.status?.toString(),
       );
     }
   }

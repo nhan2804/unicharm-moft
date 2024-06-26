@@ -182,37 +182,37 @@ const ManagerBill = () => {
       title: "Hành động",
       dataIndex: "action",
       key: "action",
-      render: (text, record) => (
-        <div className="flex gap-x-1">
-          {/* && record?.status === "PENDING" */}
-          {record?.status === "PENDING" && (
-            <>
-              <Button
-                type="primary"
-                loading={isLoading}
-                onClick={() => {
-                  // update({ _id: record?._id, status: "ACCEPTED" });
-                  setSelected({ ...record, type: "ACCEPTED" });
-                  ref?.current?.open?.();
-                }}
-              >
-                Duyệt
-              </Button>
-              <Button
-                onClick={() => {
-                  // update({ _id: record?._id, status: "ACCEPTED" });
-                  setSelected({ ...record, type: "DENY" });
-                  ref?.current?.open?.();
-                }}
-                type="primary"
-                danger
-              >
-                Từ chối
-              </Button>
-            </>
-          )}
-        </div>
-      ),
+      // render: (text, record) => (
+      //   <div className="flex gap-x-1">
+      //     {/* && record?.status === "PENDING" */}
+      //     {record?.status === "PENDING" && (
+      //       <>
+      //         <Button
+      //           type="primary"
+      //           loading={isLoading}
+      //           onClick={() => {
+      //             // update({ _id: record?._id, status: "ACCEPTED" });
+      //             setSelected({ ...record, type: "ACCEPTED" });
+      //             ref?.current?.open?.();
+      //           }}
+      //         >
+      //           Duyệt
+      //         </Button>
+      //         <Button
+      //           onClick={() => {
+      //             // update({ _id: record?._id, status: "ACCEPTED" });
+      //             setSelected({ ...record, type: "DENY" });
+      //             ref?.current?.open?.();
+      //           }}
+      //           type="primary"
+      //           danger
+      //         >
+      //           Từ chối
+      //         </Button>
+      //       </>
+      //     )}
+      //   </div>
+      // ),
     },
   ].filter((e) => !!e);
   const ref = useRef();

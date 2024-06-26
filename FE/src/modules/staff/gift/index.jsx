@@ -38,7 +38,7 @@ const GiftHomePage = () => {
           >
             SELLING
           </Button>
-          <Button
+          {/* <Button
             onClick={() =>
               nav(`/staff/stores/${storeId}/gift-otp?type=selling`, {
                 relative: false,
@@ -47,7 +47,7 @@ const GiftHomePage = () => {
             className="w-[90%] font-bold text-xl h-[50px]"
           >
             SELLING OTP
-          </Button>
+          </Button> */}
         </div>
       </Spin>
     </div>

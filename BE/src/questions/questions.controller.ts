@@ -81,6 +81,18 @@ export class QuestionsController {
       { x: 1 },
     );
   }
+  @Get('survey')
+  findAllForSurvey(
+    @Query()
+    query: (Question & SortPaginate) | any,
+  ) {
+    return this.questionsService.findAll(
+      { ...query, typeQuestion: 'SURVEY', status: 'ACTIVE' },
+      undefined,
+      undefined,
+      { x: 1 },
+    );
+  }
   @Get('staff')
   async findAllForStaff(
     @UserLoggin()

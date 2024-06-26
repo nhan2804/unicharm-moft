@@ -30,6 +30,29 @@ import { User, UserDocument } from 'src/users/entities/user.entity';
 import { ProductsService } from 'src/products/products.service';
 import { UserLoggin } from 'src/auth/decorators/user';
 import { CheckinService } from 'src/checkin/checkin.service';
+import * as dayjs from 'dayjs';
+function getRandomElementByWeight(
+  arr: {
+    weight: number;
+    _id: string;
+    quantity: number;
+  }[],
+) {
+  // Calculate the total weight
+  const totalWeight = arr.reduce((sum, item) => sum + item.weight, 0);
+
+  // Generate a random number between 0 and the total weight
+  const randomNum = Math.random() * totalWeight;
+
+  // Iterate through the array to find which element corresponds to the random number
+  let cumulativeWeight = 0;
+  for (let i = 0; i < arr.length; i++) {
+    cumulativeWeight += arr[i].weight;
+    if (randomNum < cumulativeWeight) {
+      return arr[i];
+    }
+  }
+}
 @Controller('gift-clients')
 export class GiftClientsController {
   constructor(
@@ -51,6 +74,7 @@ export class GiftClientsController {
       fullName: string;
       type: 'SELLING' | 'SAMPLING';
       products?: object;
+      productsBill?: object;
       imgBill?: string;
     },
     // @UserLoggin() currentUser: UserDocument,
@@ -138,6 +162,9 @@ export class GiftClientsController {
       products?: object;
       imgBill?: string;
       imgClient?: string;
+      codeBill?: string;
+      productsBill?: object;
+      dataSurvey?: object;
     },
     @Body('checkinId') checkinId: string,
     @UserLoggin() currentUser: UserDocument,
@@ -166,7 +193,11 @@ export class GiftClientsController {
     }
     let extraData = {};
     if (data?.type === 'SAMPLING') {
-      extraData = { products: data?.products, status: 'DONE' };
+      extraData = {
+        products: data?.products,
+        status: 'DONE',
+        dataSurvey: data?.dataSurvey,
+      };
       const existGift = await this.giftClientsService.findOne({
         phone: data?.phone,
         type: 'SAMPLING',
@@ -181,6 +212,20 @@ export class GiftClientsController {
             'Không đủ điều kiện tham gia chương trình Sampling!',
           );
       }
+    }
+    if (data?.type === 'SELLING') {
+      const date = dayjs().format('DD-MM-YYYY');
+      extraData = {
+        keyCodeBill: `${data?.codeBill
+          ?.normalize?.()
+          ?.trim()
+          ?.toUpperCase()}-${date}-${data?.storeId?.toString()}`,
+        status: 'ACCEPTED',
+        dateCheckingBill: new Date(),
+        dateBill: date,
+        codeBill: data?.codeBill,
+        productsBill: data?.productsBill,
+      };
     }
     const currentCheckin = await this.checkinService.findOneById(
       new Types.ObjectId(checkinId),
@@ -216,35 +261,62 @@ export class GiftClientsController {
       throw new BadRequestException('Bill không hợp lệ');
     }
     const store = await this.storeService.findOne({ _id: bill?.storeId });
-    const gifts = Object.entries(store?.gifts || {}).filter(
-      (e) => !!e[1] && e[1] > 0 && e[1] > (store?.giftsCurrent?.[e[0]] || 0),
-    );
+
+    const mappingGiftX = {
+      //khẩu trang
+      '6614e27a54e655f76469dd8a': 20,
+      //Khăn giấy ướt Fressi
+      '6614e29a54e655f76469dd8f': 20,
+      //bÀN CÀO CHO MÈO
+      '6614e2b154e655f76469dd94': 5,
+      //Cần câu
+      '6614e2c654e655f76469dd99': 55,
+    };
+    const gifts = Object.entries(store?.gifts || {})
+      .filter(
+        (e) => !!e[1] && e[1] > 0 && e[1] > (store?.giftsCurrent?.[e[0]] || 0),
+      )
+      ?.map((e) => {
+        return {
+          weight: mappingGiftX?.[e?.[0]],
+          _id: e?.[0],
+          quantity: e?.[1],
+        };
+      });
     if (gifts.length === 0)
       throw new BadRequestException('Đã hết quà, vui lòng quay lại sau!');
-    const giftSelected = gifts?.[Math.floor(Math.random() * gifts?.length)];
+
+    const giftSelected = getRandomElementByWeight(gifts);
+    if (!giftSelected) throw new BadRequestException('Error!');
+    // console.log(randomElement);
 
     // const giftSelected = gift?.[Math.floor(Math.random() * gift?.length)];
     // if (!giftSelected) {
     //   throw new BadRequestException('Đã hết quà, vui lòng quay lại sau!');
     // }
+
     const otp = customAlphabet('1234567890qwertyuioplkjhgfdsaxxcvbnm', 6);
 
     bill.code = otp();
 
     bill.status = 'CONFIRM';
     bill.products = {
-      [giftSelected?.[0]]: 1,
+      [giftSelected?._id]: 1,
     };
-    bill.save();
+
     this.storeService.updateOne(store?._id, {
-      $inc: { [`giftsCurrent.${giftSelected?.[0]}`]: 1 },
+      $inc: { [`giftsCurrent.${giftSelected?._id}`]: 1 },
     });
     // this.productService.updateOne(giftSelected?._id, {
     //   $inc: {
     //     current: 1,
     //   },
     // });
-    this.giftClientsService.sendOtp(bill?.phone, bill.code);
+    //
+    bill.save();
+    this.giftClientsService.sendOtp(bill?.phone, bill.code).catch((e) => {
+      throw new BadRequestException(e?.message);
+    });
     return bill;
   }
   @Post('bulk/create')
@@ -280,7 +352,28 @@ export class GiftClientsController {
       sortObj,
       query?.page,
       query?.perPage,
-      ['store', 'creator'],
+      [
+        {
+          path: 'store',
+          select: {
+            name: 1,
+            code: 1,
+            region: 1,
+          },
+        },
+        {
+          path: 'creator',
+          select: {
+            fullName: 1,
+          },
+        },
+        {
+          path: 'client',
+          select: {
+            fullName: 1,
+          },
+        },
+      ],
     );
   }
 

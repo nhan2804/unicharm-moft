@@ -95,7 +95,6 @@ export class AbstractService<T, S = T & Document> {
       totalPages: Math.ceil(count / perPage),
       perPage,
     };
-    console.log({ paginate, count, filter });
     return { data: documents, paginate };
   }
 

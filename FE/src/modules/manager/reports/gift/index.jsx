@@ -34,6 +34,7 @@ import useRole from "@hooks/useRole";
 import useGetGiftClients from "@modules/comsumer/hooks/query/useGetGiftClients";
 import useGetShift from "@modules/staff/hooks/query/useGetShift";
 import { array2Object } from "@helper/array2Obj";
+import useGetQuestion from "@modules/manager/questions/hooks/query/useGetQuestion";
 const ExportExcelReport = lazy(() => import("../components/ExportExcel"));
 const ReportGiftPage = () => {
   const [formSearch] = Form.useForm();
@@ -82,6 +83,10 @@ const ReportGiftPage = () => {
   //   return giftClients?.data?.filter((e) => e?.type === "SAMPLING");
   // }, [giftClients]);
   // const { data: gifts, isLoading } = useManagerReport("gift", query);
+
+  const { data: sales } = useGetProduct({
+    isSale: true,
+  });
   const extraColumnSampling = useMemo(() => {
     const moreData = [
       {
@@ -130,7 +135,7 @@ const ReportGiftPage = () => {
         key: "products",
       },
     ];
-    return moreData?.map((data) => {
+    const d1 = moreData?.map((data) => {
       return {
         title: data.title,
         dataIndex: [data.key],
@@ -145,7 +150,29 @@ const ReportGiftPage = () => {
           }) || [],
       };
     });
-  }, [giftExternal]).concat([
+    const moreDataBilling = [
+      {
+        title: "Sản phẩm bán",
+        key: "productsBill",
+      },
+    ];
+    const d2 = moreDataBilling?.map((data) => {
+      return {
+        title: data.title,
+        dataIndex: [data.key],
+        key: data.key,
+        children:
+          sales?.data?.map((e) => {
+            return {
+              title: e?.name,
+              dataIndex: [data.key, e?._id],
+              key: e?._id,
+            };
+          }) || [],
+      };
+    });
+    return (d1 || [])?.concat(d2 || []);
+  }, [giftExternal, sales]).concat([
     {
       title: "H.động",
       dataIndex: "action",
@@ -208,6 +235,11 @@ const ReportGiftPage = () => {
       title: "SDT K.hàng",
       dataIndex: "phone",
       key: "phone",
+    },
+    {
+      title: "Tên K.hàng",
+      dataIndex: ["client", "fullName"],
+      key: ["client", "fullName"],
     },
     {
       title: "Trạng thái",
@@ -317,6 +349,11 @@ const ReportGiftPage = () => {
       key: "phone",
     },
     {
+      title: "Tên K.hàng",
+      dataIndex: ["client", "fullName"],
+      key: ["client", "fullName"],
+    },
+    {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
@@ -328,6 +365,104 @@ const ReportGiftPage = () => {
     //   key: ["checkin", "timeCheckOut"],
     //   render: (text) => text && dayjs(text).format("HH:mm:ss"),
     // },
+    {
+      title: "Ảnh khách hàng",
+      dataIndex: "imgClient",
+      key: "imgClient",
+      render: (txt, record) => txt,
+    },
+  ];
+  const { data: questions } = useGetQuestion({
+    typeQuestion: "SURVEY",
+    status: "ACTIVE",
+  });
+
+  const giftSelling = useMemo(() => {
+    const mappingQuestion = array2Object(questions, "_id");
+    const d = giftClients?.data?.map((e) => {
+      const total = Object.entries(e?.dataSurvey || {}).reduce(
+        (all, [idQues, value]) => {
+          const question = mappingQuestion?.[idQues];
+          const option = array2Object(question?.option, "value");
+          const label = option?.[value]?.label || value || "";
+          all[idQues] = label;
+          return all;
+        },
+        {}
+      );
+
+      return {
+        ...e,
+        data: total,
+      };
+    });
+    return { paginate: giftClients?.paginate, data: d };
+  }, [giftClients, questions]);
+  const extraColumnSurvey = useMemo(() => {
+    return (
+      questions?.map((data) => {
+        return {
+          title: data?.name,
+          dataIndex: ["data", data?._id],
+          key: ["data", data?._id],
+          width: 200,
+        };
+      }) || []
+    );
+  }, [questions]);
+  const columnExportSurvey = [
+    {
+      title: "No.",
+      dataIndex: "no",
+      key: "no",
+      render: (_, __, index) => index + 1,
+    },
+    {
+      sortOrder: pagination?.tableSortOrder?.createdAt?.order,
+      title: "Ngày nhận",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text) => dayjs(text).format("DD/MM/YYYY"),
+      sorter: {
+        multiple: 1,
+      },
+    },
+    {
+      title: "Giờ nhận",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text) => dayjs(text).format("HH:mm:ss"),
+    },
+    {
+      title: "Store Code",
+      dataIndex: ["store", "code"],
+      key: ["store", "code"],
+    },
+    {
+      title: "Store Name",
+      dataIndex: ["store", "name"],
+      key: ["store", "name"],
+    },
+    {
+      title: "SP Code",
+      dataIndex: ["creator", "username"],
+      key: ["creator", "username"],
+    },
+    {
+      title: "SP Name",
+      dataIndex: ["creator", "fullName"],
+      key: ["creator", "fullName"],
+    },
+    {
+      title: "SDT K.hàng",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Tên K.hàng",
+      dataIndex: ["client", "fullName"],
+      key: ["client", "fullName"],
+    },
     {
       title: "Ảnh khách hàng",
       dataIndex: "imgClient",
@@ -447,12 +582,21 @@ const ReportGiftPage = () => {
                       </Form.Item>
                     </div>
                   </Form>
-                  <ExportExcelReport
-                    headerRows={[1, 2]}
-                    type="report-gift"
-                    columns={columnExport?.concat(extraColumnSampling)}
-                    dataSource={giftClients?.data}
-                  />
+                  <div className="flex space-x-1">
+                    <ExportExcelReport
+                      headerRows={[1, 2]}
+                      type="report-survey"
+                      columns={columnExportSurvey?.concat(extraColumnSurvey)}
+                      dataSource={giftSelling?.data}
+                      titleBtn="Xuất Excel khảo sát"
+                    />
+                    <ExportExcelReport
+                      headerRows={[1, 2]}
+                      type="report-gift"
+                      columns={columnExport?.concat(extraColumnSampling)}
+                      dataSource={giftClients?.data}
+                    />{" "}
+                  </div>
                 </div>
                 <Table
                   pagination={{

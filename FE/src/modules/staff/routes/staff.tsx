@@ -1,5 +1,6 @@
 import { IRoute } from "@routes/route.interface";
 import { lazy } from "react";
+const RollStaff = lazy(() => import("../gift/roll"));
 const OverviewTab = lazy(() => import("../policy/tab"));
 const OverviewPolicy = lazy(() => import("../policy/overview"));
 const ImageSupHomePage = lazy(() => import("../sup"));
@@ -100,6 +101,12 @@ const staffRoutes: IRoute[] = [
       {
         component: GiftSubmitPage,
         path: "stores/:storeId/gift/:type",
+        isPrivate: true,
+        exact: true,
+      },
+      {
+        component: RollStaff,
+        path: "stores/:storeId/gift/:type/roll/:billId",
         isPrivate: true,
         exact: true,
       },

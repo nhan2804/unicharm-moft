@@ -15,6 +15,7 @@ const ExportExcelReport = ({
   columns,
   dataSource,
   headerRows = [1],
+  titleBtn = "Xuất Excel",
 }) => {
   const finalColumn = columns
     ?.filter((e) => e?.key !== "action")
@@ -152,7 +153,7 @@ const ExportExcelReport = ({
           onClick={open}
           type="primary"
         >
-          Xuất Excel
+          {titleBtn}
         </Button>
       )}
     >

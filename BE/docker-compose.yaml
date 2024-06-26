@@ -2,7 +2,7 @@ version: '3.8'
 services:
   app:
     container_name: app-unicharm-moft
-    image: nhan2804/unicharm-moft:v1.0.0
+    image: nhan2804/unicharm-moft:v1.0.2
     pull_policy: if_not_present
     build:
       context: .

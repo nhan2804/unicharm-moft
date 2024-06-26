@@ -112,6 +112,11 @@ const AppLayout = () => {
                       Câu hỏi đánh giá
                     </Link>
                   </Menu.Item>
+                  <Menu.Item icon={<QuestionOutlined />} key="question-survey">
+                    <Link to={`/manager/question-survey`}>
+                      Câu hỏi khảo sát
+                    </Link>
+                  </Menu.Item>
                   {/* <Menu.Item icon={<AuditOutlined />} key="question-policy">
                     <Link to={`/manager/question-policy`}>Câu hỏi Policy</Link>
                   </Menu.Item> */}

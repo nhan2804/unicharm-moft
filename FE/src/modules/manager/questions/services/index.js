@@ -17,6 +17,12 @@ export const getQuestionPolicy = async (query) => {
   );
   return data;
 };
+export const getQuestionSurvey = async (query) => {
+  const { data } = await axios.get(
+    stringifyUrl({ url: `questions/survey`, query })
+  );
+  return data;
+};
 export const showQuestion = async (id) => {
   const { data } = await axios.get(`questions/${id}`);
   return data;

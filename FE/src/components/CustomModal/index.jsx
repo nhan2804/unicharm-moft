@@ -15,6 +15,7 @@ const CustomModal = (
     onOk,
     onClose,
     isRealModal = false,
+    closable = true,
   },
   ref
 ) => {
@@ -56,9 +57,9 @@ const CustomModal = (
           }}
           footer={footer}
           width={width}
-          maskClosable={true}
+          maskClosable={closable}
           destroyOnClose={destroyOnClose}
-          closable={true}
+          closable={closable}
           onOk={onOk || close}
           title={title || "Tiêu đề"}
           // onClose={close}
@@ -71,7 +72,7 @@ const CustomModal = (
         <Drawer
           width={width}
           destroyOnClose={true}
-          closable={true}
+          closable={closable}
           title={title || "Tiêu đề"}
           placement={placement}
           onClose={() => {

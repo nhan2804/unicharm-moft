@@ -131,16 +131,36 @@ const FormEndShiftReport = ({ onFinish, form, isLoading }) => {
             <Form.Item
               label="Tổng số khách đến Outlet"
               name={["extra", "totalClientOutlet"]}
+              rules={[{ required: true, message: "Vui lòng nhập!" }]}
             >
               <InputNumber min={0} />
             </Form.Item>
             <Form.Item
               label="Tổng Số khách tiếp cận"
+              rules={[{ required: true, message: "Vui lòng nhập!" }]}
               name={["extra", "totalClientReach"]}
             >
               <InputNumber />
             </Form.Item>
-            <Form.Item label="Đối thủ có CTKM" name={["extra", "hasPromotion"]}>
+            <Form.Item
+              label="Tổng Số khách tiếp cận nuôi chó"
+              rules={[{ required: true, message: "Vui lòng nhập!" }]}
+              name={["extra", "totalClientReachDog"]}
+            >
+              <InputNumber />
+            </Form.Item>
+            <Form.Item
+              label="Tổng Số khách tiếp cận nuôi mèo"
+              rules={[{ required: true, message: "Vui lòng nhập!" }]}
+              name={["extra", "totalClientReachCat"]}
+            >
+              <InputNumber />
+            </Form.Item>
+            <Form.Item
+              rules={[{ required: true, message: "Vui lòng chọn!" }]}
+              label="Đối thủ có CTKM"
+              name={["extra", "hasPromotion"]}
+            >
               <Select>
                 {dataYesNo.map((e) => (
                   <Select.Option value={e?.value} key={e.label}>

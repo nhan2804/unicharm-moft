@@ -39,6 +39,8 @@ export class GiftClient {
   checkinId?: Types.ObjectId;
   @Prop({ type: Object })
   products: object;
+  @Prop({ type: Object })
+  dataSurvey: object;
   @Prop()
   imgClient: string;
   @Prop({ type: Object })
@@ -77,6 +79,12 @@ GiftClientSchema.virtual('updator', {
 GiftClientSchema.virtual('creator', {
   ref: User.name,
   localField: 'creatorId',
+  foreignField: '_id',
+  justOne: true,
+});
+GiftClientSchema.virtual('client', {
+  ref: User.name,
+  localField: 'consumerId',
   foreignField: '_id',
   justOne: true,
 });
